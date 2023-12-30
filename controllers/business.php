@@ -2233,7 +2233,7 @@ function searchBusinessFilter($request = null)
                 <div class="py-3 px-2 pb-1 border-bottom">
                 <div class="row">
                     <div class="col-lg-4">
-                    <img src="img/property/listing-07.jpg" style="border-radius: 20px;" alt="">
+                    <img src="img/logo/'.$row['Businesslogo'].'" style="border-radius: 20px;" alt="no pic">
                     </div>
                     <div class="col-lg-8">
                     <div class="d-md-flex align-items-md-center">
