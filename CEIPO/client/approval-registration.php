@@ -646,7 +646,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             
             console.log('Current Ethereum address:', currentAccount);
 
-            const contractAddress = '0x3d928c4302F79913a95337A35215F9C7b746462a';
+            const contractAddress = '0xCfAFBec9a41041C01b35d6ef14A09126a3879683';
             
             const contractAbi =  [
     {

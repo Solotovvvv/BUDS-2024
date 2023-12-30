@@ -7097,12 +7097,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x3d928c4302F79913a95337A35215F9C7b746462a",
-      "transactionHash": "0x4caf6d270b2546d07d36ded6136abc5798dd5a60762993abdee86e49880a60a3"
+      "address": "0xCfAFBec9a41041C01b35d6ef14A09126a3879683",
+      "transactionHash": "0x66df083e847b1befad81652fab13b96c7a218c228f1b68b4223ac56c2801a3f5"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2023-11-28T10:16:13.835Z",
+  "updatedAt": "2023-12-26T06:39:22.559Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
