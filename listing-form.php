@@ -289,6 +289,7 @@ if ($rs = $conn->query($sql)) {
 
                     <!-- <input name="BusinessTwitter" type="text" placeholder="Twitter"> -->
                     <input name="BusinessIg" id="BusinessIg" type="text" placeholder="Instagram">
+                    <input name="BusinessIg" id="BusinessTiktok" type="text" placeholder="Tiktok">
                   </div>
                 </div>
               </div>
@@ -522,6 +523,7 @@ if ($rs = $conn->query($sql)) {
       var businessZone = $('#BusinessZone').val();
       var businessDistrict = $('#BusinessDistrict').val();
       var businessCapital = $('#BusinessCapital').val();
+      var businessTiktok = $('#BusinessTiktok').val();
 
       // Check if any of the required fields is empty
       if (
@@ -576,7 +578,8 @@ if ($rs = $conn->query($sql)) {
         subCategory: subCategory,
         businessZone: businessZone,
         businessDistrict: businessDistrict,
-        businessCapital: businessCapital
+        businessCapital: businessCapital,
+        businessTiktok: businessTiktok
       };
 
       var formData = new FormData();

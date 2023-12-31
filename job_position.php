@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 // echo $_SESSION['ownerId'];
@@ -238,6 +239,12 @@ $bus_id = $_GET['a'];
                                 </div>
                               </div>
                               <div class="row">
+                                <div class="col mb-3">
+                                  <label for="nameWithTitle" class="form-label">Salary</label>
+                                  <input class="form-control" id="edtSalary" ></input>
+                                </div>
+                              </div>
+                              <div class="row">
                                 <div class="col">
                                   <label for="exampleFormControlTextarea2" class="form-label">Job Specification</label>
                                   <div id="uiJobDesc1">
@@ -290,6 +297,12 @@ $bus_id = $_GET['a'];
                                 <div class="col mb-3">
                                   <label for="nameWithTitle" class="form-label">Description</label>
                                   <textarea class="form-control" id="jobDescription" rows="3"></textarea>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col mb-3">
+                                  <label for="nameWithTitle" class="form-label">Salary</label>
+                                  <input class="form-control" id="jobSalary" ></input>
                                 </div>
                               </div>
                               <div class="row">
@@ -484,6 +497,7 @@ $bus_id = $_GET['a'];
         function addJob() {
           var jobTitle = $("#jobTitle").val();
           var jobDesc = $('#jobDescription').val();
+          var jobSalary = $('#jobSalary').val();
           var jobSpecificationsValue = [];
           $(".addJobSpec2").each(function() {
             var jobSpecificationValue = $(this).val().trim();
@@ -502,6 +516,7 @@ $bus_id = $_GET['a'];
             jobSpecifications: jobSpecificationsValue,
             degree: degree,
             experience: experience,
+            jobSalary: jobSalary
           }
 
           $.ajax({
@@ -531,6 +546,7 @@ $bus_id = $_GET['a'];
           var pos = $('#edtPos').val();
           var jobDescEdt = $('#edtjobDesc').val();
           var degreeEdt = $('#degree').val();
+          var edtSalary = $('#edtSalary').val();
           var expEdt = $('#experience').val();
           var id = $('#hidden_id').val();
           let edtJobSpec = [];
@@ -548,6 +564,7 @@ $bus_id = $_GET['a'];
             jobDescEdt: jobDescEdt,
             degreeEdt: degreeEdt,
             edtJobSpec: edtJobSpec,
+            edtSalary: edtSalary,
             expEdt: expEdt,
             id: id
           };
@@ -575,11 +592,12 @@ $bus_id = $_GET['a'];
           });
         };
 
-        function editJob(id, pos, jobdesc, jobspec, degree, exp) {
+        function editJob(id, pos, jobdesc, jobspec, degree, salary, exp) {
           $('#modalPos').modal('show');
           $('#edtPos').val(pos.replaceAll('_', ' '));
           $('#edtjobDesc').val(jobdesc.replaceAll('_', ' '));
           $('#degree').val(degree.replaceAll('_', ' '));
+          $('#edtSalary').val(salary.replaceAll('_', ' '));
           $('#experience').val(exp.replaceAll('_', ' '));
           $('#hidden_id').val(id);
 

@@ -24,7 +24,7 @@ if ($stmt->execute()) {
             $subarray[] = "<td><span class='badge rounded-pill bg-danger'>Inactive</span></td>";
         }
 
-        $subarray[] = "<td><button type='button' class='btn btn-warning btn-sm' onclick=editJob(" . $row['bus_applicant'] . ",'" . str_replace(' ', '_', $row['pos_vacant']) . "','" . str_replace(' ', '_', $row['job_desc']) . "','" . str_replace(' ', '_', $row['job_spec']) . "','" . str_replace(' ', '_', $row['degree']) . "','" . str_replace(' ', '_', $row['year_exp']) . "')>
+        $subarray[] = "<td><button type='button' class='btn btn-warning btn-sm' onclick=editJob(" . $row['bus_applicant'] . ",'" . str_replace(' ', '_', $row['pos_vacant']) . "','" . str_replace(' ', '_', $row['job_desc']) . "','" . str_replace(' ', '_', $row['job_spec']) . "','" . str_replace(' ', '_', $row['degree']) . "','" . str_replace(' ', '_', $row['salary']) . "','" . str_replace(' ', '_', $row['year_exp']) . "')>
                 <i class='bx bxs-edit-alt'></i>
                 </button>
                 <button type='button' class='btn btn-danger btn-sm' onclick=edtJobStatus(" . $row['bus_applicant'] . "," . $row['status'] . ")>

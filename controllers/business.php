@@ -543,7 +543,7 @@ function addBusiness($request = null)
             return;
         }
 
-        $sqlLinks = "INSERT INTO business_links (bus_id, bus_fb, bus_ig) VALUES (:id, :fb, :ig)";
+        $sqlLinks = "INSERT INTO business_links (bus_id, bus_fb, bus_ig, bus_tiktok) VALUES (:id, :fb, :ig, :tiktok)";
         $stmtLinks = $pdo->prepare($sqlLinks);
 
         $stmtLinks->execute(
@@ -551,6 +551,7 @@ function addBusiness($request = null)
                 ':id' => $id,
                 ':fb' => $request->businessFb,
                 ':ig' => $request->businessIg,
+                ':tiktok' => $request->businessTiktok
             )
         );
 
@@ -1252,6 +1253,7 @@ function addJob($request = null)
     $jobTitle = $request->jobTitle;
     $jobDesc = $request->jobDesc;
     $degree = $request->degree;
+    $jobSalary = $request->jobSalary;
     $experience = $request->experience;
     $id = $_SESSION['bus_id'];
     $msg = array();
@@ -1272,8 +1274,8 @@ function addJob($request = null)
     //status 
     //0-open
     //1-closed
-    $sql = "INSERT INTO business_applicant(bus_id,pos_vacant,job_desc,job_spec,degree,year_exp,status)
-    VALUES (:id, :jobTile, :jobDesc, :jobSpec, :degree, :year_exp, :status)";
+    $sql = "INSERT INTO business_applicant(bus_id,pos_vacant,job_desc,job_spec,degree,year_exp,salary,status)
+    VALUES (:id, :jobTile, :jobDesc, :jobSpec, :degree, :year_exp, :salary, :status)";
     $pdo = Database::connection();
     $stmt = $pdo->prepare($sql);
     $stmt->execute(
@@ -1284,6 +1286,7 @@ function addJob($request = null)
             ':jobSpec' => $commaSeparatedStringJobSpeci,
             ':degree' => $degree,
             ':year_exp' => $experience,
+            ':salary' => $jobSalary,
             ':status' => 1 // Assuming 1 represents a certain status
         )
     );
@@ -1310,6 +1313,7 @@ function edtJob($request = null)
     $pos = $request->pos;
     $jobDescEdt = $request->jobDescEdt;
     $degreeEdt = $request->degreeEdt;
+    $edtSalary = $request->edtSalary;
     $expEdt = $request->expEdt;
     $id = $request->id;
     $msg = array();
@@ -1333,7 +1337,8 @@ function edtJob($request = null)
         job_desc = :jobdesc,
         job_spec = :job_spec,
         degree = :degree,
-        year_exp = :exp
+        year_exp = :exp,
+        salary = :edtSalary
     WHERE bus_applicant = :id;";
 
 
@@ -1346,6 +1351,7 @@ function edtJob($request = null)
             ':job_spec' => $commaSeparatedStringJobSpeci,
             ':degree' => $degreeEdt,
             ':exp' => $expEdt,
+            ':edtSalary' => $edtSalary,
             ':id' => $id
         )
     );
