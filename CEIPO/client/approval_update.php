@@ -1,8 +1,8 @@
-<?php 
-  include '../../includes../config.php';
+<?php
+include '../../includes../config.php';
 $pdo = DATABASE::connection();
 
-$response = array(); 
+$response = array();
 
 if (isset($_POST['views'])) {
     $id = $_POST['views'];
@@ -16,7 +16,7 @@ if (isset($_POST['views'])) {
     WHERE bl.bus_id = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-    
+
     if ($stmt->execute()) {
         $userData = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($userData) {
@@ -33,18 +33,24 @@ if (isset($_POST['views'])) {
             'error' => $stmt->errorInfo()
         );
     }
-}  elseif (isset($_POST['hiddendata'])) {
+} elseif (isset($_POST['hiddendata'])) {
     $hiddendata = $_POST['hiddendata'];
-    $status = $_POST['status'];
-    $remarks =$_POST['remarks'];
+    $remarksDataStep2 = $_POST['remarksDataStep2'];
+    $remarksDataStep3 = $_POST['remarksDataStep3'];
+    $remarksDataStep4 = $_POST['remarksDataStep4'];
+    $remarksDataStep5 = $_POST['remarksDataStep5'];
+    $remarksDataStep6 = $_POST['remarksDataStep6'];
 
-    $sql = "UPDATE business_list SET BusinessStatus = :status , BusinessRemarks = :remarks WHERE bus_id = :hiddendata ";
+    // Calculate the sum of remarksDataStep2 to remarksDataStep6
+    $totalRemarks = ($remarksDataStep2 + $remarksDataStep3 + $remarksDataStep4 + $remarksDataStep5 + $remarksDataStep6)/5;
+
+    $sql = "UPDATE business_list SET BusinessStatus = :status WHERE bus_id = :hiddendata";
+
     $stmt = $pdo->prepare($sql);
-  
+
     if ($stmt->execute([
-        ':status' => $status,
+        ':status' => ($totalRemarks == 1) ? 1 : 3, // Update BusinessStatus to 1 if the total remarks is 1
         ':hiddendata' => $hiddendata,
-        ':remarks'=> $remarks
     ])) {
         $response = array(
             'status' => 'success'
@@ -63,5 +69,5 @@ if (isset($_POST['views'])) {
 }
 
 
+
 echo json_encode($response);
-?>
