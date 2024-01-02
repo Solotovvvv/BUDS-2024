@@ -2,6 +2,24 @@
 require_once "includes/config.php";
 session_start();
 
+$sql = "SELECT *
+FROM category_list";
+
+$pdo = Database::connection();
+$stmt = $pdo->prepare($sql);
+
+$stmt->execute();
+
+if ($stmt->errorCode() !== '00000') {
+    $errorInfo = $stmt->errorInfo();
+    // Log or handle the error appropriately.
+    // Example: error_log("SQL Error: " . $errorInfo[2]);
+} else {
+    $datas = $stmt->fetchAll();
+    $numRows = $stmt->rowCount();
+}
+
+
 // echo $_SESSION['ownerId'];
 
 ?>
@@ -175,7 +193,7 @@ session_start();
                                 </div>
                             </div>
 
-                            <div class="container">
+                            <!-- <div class="container">
                                 <div class="row">
                                     <div class="col-lg-12 col-md-8 col-sm-10 col-12 order-2">
                                         <div class="input-group mb-3">
@@ -186,25 +204,39 @@ session_start();
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
+                            <?php if ($numRows > 0) {
+                                foreach ($datas as $data) {
+                                    $catid = $data['ID'];
+                                    $sql1 = "SELECT * FROM subcategory_list WHERE catid = $catid";
+                                    $stmt1 = $pdo->prepare($sql1);
+                                    $stmt1->execute();
 
-                            <div class="mt-3 bg-white border rounded px-2 py-3 p-md-4">
-                                <!-- Category 1 -->
-                                <div class="col-lg-12">
-                                    <h3><a href="#" class="category-link"><i class="fa fa-car circular-icon" style="font-size: 25px;"></i> Automotive</a></h3><br>
-                                    <div class="subcategory">
-                                        <a href="#" class="subcategory-link">Subcategory 1.1</a>
-                                        <a href="#" class="subcategory-link">Subcategory 1.2</a>
-                                        <a href="#" class="subcategory-link">Subcategory 1.3</a>
-                                        <a href="#" class="subcategory-link">Subcategory 1.4</a>
-                                        <a href="#" class="subcategory-link">Subcategory 1.5</a>
-                                        <a href="#" class="subcategory-link">Subcategory 1.6</a>
-                                        <a href="#" class="subcategory-link">Subcategory 1.7</a>
-                                        <a href="#" class="subcategory-link">Subcategory 1.8</a>
-                                        <a href="#" class="subcategory-link">Subcategory 1.9</a>
+                                    if ($stmt1->errorCode() !== '00000') {
+                                        $errorInfo = $stmt1->errorInfo();
+                                        // Log or handle the error appropriately.
+                                        // Example: error_log("SQL Error: " . $errorInfo[2]);
+                                    } else {
+                                        $datas1 = $stmt1->fetchAll();
+                                        $numRows1 = $stmt1->rowCount();
+                                    }
+                            ?>
+                                    <div class="mt-3 bg-white border rounded px-2 py-3 p-md-4">
+                                        <!-- Category 1 -->
+                                        <div class="col-lg-12">
+                                            <h3><a href="#" class="category-link"><i class="fa fa-car circular-icon" style="font-size: 25px;"></i><?php echo $data['category'] ?></a></h3><br>
+                                            <?php if ($numRows1 > 0) {
+                                                foreach ($datas1 as $data1) {
+                                            ?>
+                                                    <div class="subcategory">
+                                                        <a href="<?php echo "listing.php?c=".$data1['ID'] ?>" class="subcategory-link"><?php echo $data1['subCategory'] ?></a>
+                                                    </div>
+                                            <?php }
+                                            } ?>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
+                            <?php }
+                            } ?>
                         </div>
                     </div>
                 </div>

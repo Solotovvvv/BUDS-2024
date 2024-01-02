@@ -75,6 +75,33 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
       echo "No results found.";
     } 
   }
+}elseif (isset($_GET['c']) && $_GET['c'] != null) {
+  $subcat = $_GET['c'];
+  $sql = "SELECT DISTINCT bl.*, cl.*,blg.*
+  FROM business_list AS bl
+  INNER JOIN category_list AS cl ON bl.BusinessCategory = cl.ID
+  -- INNER JOIN subcategory_list AS scl ON scl.catid = cl.ID
+  INNER JOIN brgyzone_list AS blg ON bl.BusinessBrgy = blg.ID
+  WHERE bl.BusinessSubCategory = :subcat 
+  AND (bl.BusinessStatus = 1 OR bl.BusinessStatus = 4)
+  LIMIT 4";
+
+
+
+  // Assuming you have previously created a PDO object named $pdo
+  $stmt = $pdo->prepare($sql);
+  $stmt->bindParam(':subcat', $subcat, PDO::PARAM_STR);
+
+  if (!$stmt->execute()) {
+    $errorInfo = $stmt->errorInfo();
+    echo "SQL Error: " . $errorInfo[2];
+  } else {
+    $datas = $stmt->fetchAll();
+
+    if (empty($datas)) {
+      echo "No results found.";
+    } 
+  }
 } else {
   // die("No search query provided.");
   $counter1 =0; 
@@ -89,7 +116,7 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
           <div class="py-3 px-2 pb-1 border-bottom">
           <div class="row">
             <div class="col-lg-4">
-              <img src="img/property/listing-07.jpg" style="border-radius: 20px;" alt="">
+              <img src="img/logo/'.$row['Businesslogo'].'" style="border-radius: 20px;" alt="no pic">
             </div>
             <div class="col-lg-8">
               <div class="d-md-flex align-items-md-center">
@@ -477,12 +504,13 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
               <div class="col-lg-8 bg-white p-2 border">
                 <div class="py-3 px-2 pb-1 border-bottom">
                 <div id="newFilteredUi">
-                  <?php if ((isset($_GET['a']) && $_GET['a'] != null) || (isset($_GET['b']) && $_GET['b'] != null)) { ?>
+                  <?php if ((isset($_GET['a']) && $_GET['a'] != null) || (isset($_GET['b']) && $_GET['b'] != null)
+                   || (isset($_GET['c']) && $_GET['c'] != null)) { ?>
                     <?php foreach ($datas as $data) {
                     ?>
                       <div class="row">
                         <div class="col-lg-4">
-                          <img src="img/property/listing-07.jpg" style="border-radius: 20px;" alt="">
+                          <img src="<?php echo "../img/logo/". $data['Businesslogo'] ?>" style="border-radius: 20px;" alt="no pic">
                         </div>
                         <div class="col-lg-8">
                           <div class="d-md-flex align-items-md-center">

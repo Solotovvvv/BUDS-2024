@@ -746,6 +746,7 @@ if (isset($_SESSION['ownerId'])) {
                                     $modalId = 'modal_' . $index; // Generate a unique modal ID
                                     $jobSpec = $data['job_spec'];
                                     $degree = $data['degree'];
+                                    $salary = $data['salary'];
                                     $yearExp = $data['year_exp'];
                                     $bus_applicant_id = $data['bus_applicant'];
                                     $user_id = $_SESSION['ownerId'];
@@ -760,7 +761,7 @@ if (isset($_SESSION['ownerId'])) {
                                                             <?php echo $data['pos_vacant'] ?>
                                                         </a></h6>
                                                     <!-- Pass the JavaScript variables as separate parameters to openModal -->
-                                                    <button onclick="openModal('<?php echo $businessLogo ?>', '<?php echo $pos ?>', '<?php echo $jobDes ?>', '<?php echo $modalId ?>', '<?php echo $jobSpec ?>', '<?php echo $degree ?>', '<?php echo $yearExp ?>', `<?php echo $bus_applicant_id ?>`)" class="btn btn-success">Apply</button>
+                                                    <button onclick="openModal('<?php echo $businessLogo ?>', '<?php echo $pos ?>', '<?php echo $jobDes ?>', '<?php echo $modalId ?>', '<?php echo $jobSpec ?>', '<?php echo $degree ?>', '<?php echo $yearExp ?>', '<?php echo $salary ?>', `<?php echo $bus_applicant_id ?>`)" class="btn btn-success">Apply</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -802,6 +803,10 @@ if (isset($_SESSION['ownerId'])) {
                                                                 </div>
                                                                 <div class="col">
                                                                     <p class="experience"><strong>Years of
+                                                                            Experience:</strong> 3 years</p>
+                                                                </div>
+                                                                <div class="col">
+                                                                    <p class="salary"><strong>Years of
                                                                             Experience:</strong> 3 years</p>
                                                                 </div>
                                                             </div>
@@ -1111,7 +1116,7 @@ if (isset($_SESSION['ownerId'])) {
         }
 
         // Function to open the modal
-        function openModal(logo, pos, des, modalId, jobspec, degree, exp, id) {
+        function openModal(logo, pos, des, modalId, jobspec, degree, exp, salary, id) {
             // console.log(logo);
             // console.log(pos);
             // console.log(id);
@@ -1153,6 +1158,10 @@ if (isset($_SESSION['ownerId'])) {
 
             var expElement = $("#" + modalId).find(".experience");
             expElement.html('<strong>Experience:</strong> ' + exp);
+
+
+            var expElement = $("#" + modalId).find(".salary");
+            expElement.html('<strong>Salary:</strong> ' + salary);
 
 
 
