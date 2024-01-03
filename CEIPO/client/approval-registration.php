@@ -827,11 +827,12 @@ if (empty($_SESSION['ownerId'])) {
     function update() {
 
 
-      remarksDataStep2 = $("#remarksStep2").val();
-      remarksDataStep3 = $("#remarksStep3").val();
-      remarksDataStep4 = $("#remarksStep4").val();
-      remarksDataStep5 = $("#remarksStep5").val();
-      remarksDataStep6 = $("#remarksStep6").val();
+      remarksDataStep2 = $("#remarksStep2").val() || null;
+      remarksDataStep3 = $("#remarksStep3").val() || null;
+      remarksDataStep4 = $("#remarksStep4").val() || null;
+      remarksDataStep5 = $("#remarksStep5").val() || null;
+      remarksDataStep6 = $("#remarksStep6").val() || null;
+
       hiddendata = $('#hiddendata').val();
 
       //   console.log(remarksDataStep2);

@@ -35,31 +35,68 @@ if (isset($_POST['views'])) {
     }
 } elseif (isset($_POST['hiddendata'])) {
     $hiddendata = $_POST['hiddendata'];
-    $remarksDataStep2 = $_POST['remarksDataStep2'];
-    $remarksDataStep3 = $_POST['remarksDataStep3'];
-    $remarksDataStep4 = $_POST['remarksDataStep4'];
-    $remarksDataStep5 = $_POST['remarksDataStep5'];
-    $remarksDataStep6 = $_POST['remarksDataStep6'];
+
+
+
+
+    $remarksDataStep1 = ($_POST['remarksDataStep2']);
+    $remarksDataStep2 = ($_POST['remarksDataStep3']);
+    $remarksDataStep3 = ($_POST['remarksDataStep4']);
+    $remarksDataStep4 = ($_POST['remarksDataStep5']);
+    $remarksDataStep5 = ($_POST['remarksDataStep6']);
+
+
+    $total1 = intval($_POST['remarksDataStep2']);
+    $total2 = intval($_POST['remarksDataStep3']);
+    $total3 = intval($_POST['remarksDataStep4']);
+    $total4 = intval($_POST['remarksDataStep5']);
+    $total5 = intval($_POST['remarksDataStep6']);
 
     // Calculate the sum of remarksDataStep2 to remarksDataStep6
-    $totalRemarks = ($remarksDataStep2 + $remarksDataStep3 + $remarksDataStep4 + $remarksDataStep5 + $remarksDataStep6)/5;
+    $totalRemarks = ($total1 + $total2 + $total3 + $total4 + $total5) / 5;
 
-    $sql = "UPDATE business_list SET BusinessStatus = :status WHERE bus_id = :hiddendata";
+  
+   // Update BusinessStatus in the business_list table
+    $updateBusinessListSql = "UPDATE business_list SET BusinessStatus = :status WHERE bus_id = :hiddendata";
+    $updateBusinessListStmt = $pdo->prepare($updateBusinessListSql);
 
-    $stmt = $pdo->prepare($sql);
-
-    if ($stmt->execute([
-        ':status' => ($totalRemarks == 1) ? 1 : 3, // Update BusinessStatus to 1 if the total remarks is 1
+    if ($updateBusinessListStmt->execute([
+        ':status' => ($totalRemarks == 1) ? 1 : 3,
         ':hiddendata' => $hiddendata,
     ])) {
-        $response = array(
-            'status' => 'success'
-        );
-    } else {
-        $response = array(
-            'status' => 'failed',
-            'error' => $stmt->errorInfo()
-        );
+            // Update remarks fields in the business_requirement table
+            $updateBusinessRequirementSql = "UPDATE business_requirement 
+                                             SET remarks_brgyClearance = :remarks_brgyClearance, 
+                                                 remarks_dti = :remarks_dti, 
+                                                 remarks_sanitary = :remarks_sanitary, 
+                                                 remarks_cedula = :remarks_cedula, 
+                                                 remarks_mayorsPermit = :remarks_mayorsPermit
+                                             WHERE bus_id = :hiddendata";
+
+            $updateBusinessRequirementStmt = $pdo->prepare($updateBusinessRequirementSql);
+
+            if ($updateBusinessRequirementStmt->execute([
+                ':remarks_brgyClearance' => ($totalRemarks == 1) ? null : $remarksDataStep1,
+                ':remarks_dti' => ($totalRemarks == 1) ? null : $remarksDataStep2,
+                ':remarks_sanitary' => ($totalRemarks == 1) ? null : $remarksDataStep3,
+                ':remarks_cedula' => ($totalRemarks == 1) ? null : $remarksDataStep4,
+                ':remarks_mayorsPermit' => ($totalRemarks == 1) ? null : $remarksDataStep5,
+                ':hiddendata' => $hiddendata,
+            ])) {
+                $response = array(
+                    'status' => 'success'
+                );
+            } else {
+                $response = array(
+                    'status' => 'failed',
+                    'error' => $updateBusinessRequirementStmt->errorInfo()
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'failed',
+                'error' => $updateBusinessListStmt->errorInfo()
+            );
     }
 } else {
     $response = array(
@@ -67,6 +104,7 @@ if (isset($_POST['views'])) {
         'message' => 'Invalid request'
     );
 }
+
 
 
 
