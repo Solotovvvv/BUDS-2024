@@ -1,3 +1,25 @@
+<?php
+session_start();
+
+// Include your database connection code here (modify it according to your setup)
+include 'includes/config.php';
+
+if (isset($_SESSION['ownerId'])) {
+    $ownerId = $_SESSION['ownerId'];
+
+    // Fetch the file path from the database based on app_id (ownerId)
+    // Modify this query according to your database schema
+    $query = "SELECT `file` FROM `user_resume` WHERE `app_id` = '$ownerId'";
+    $result = mysqli_query($conn, $query); // Use $conn instead of $your_db_connection
+
+    if ($result) {
+        $row = mysqli_fetch_assoc($result);
+        $filePath = $row['file'];
+    }
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -36,6 +58,7 @@
                 <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
+               
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
@@ -67,7 +90,7 @@
                         <li class="nav-item">
                             <a href="Resume_Viewer_User.php" class="nav-link" id="active">
                                 <i class="nav-icon fa-solid fa-magnifying-glass"></i>
-                                <p>Resume</p>
+                                <p>Resumes</p>
                             </a>
                         </li>
                     </ul>
@@ -81,72 +104,76 @@
                     <label for="fileInput">Upload Resume (PDF or DOCX only):</label>
                     <input type="file" class="form-control-file" id="fileInput" name="resumeFile" accept=".pdf" required>
                 </div>
-                <button type="button" class="btn btn-primary" id="uploadBtn" data-toggle="modal" data-target="#fileViewerModal">Upload</button>
+                <button type="button" class="btn btn-primary" id="uploadBtn">Upload</button>
                 <div id="uploadMessage"></div>
             </form>
+           
         </div>
 
-        <div class="modal fade" id="fileViewerModal" tabindex="-1" role="dialog" aria-labelledby="fileViewerModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl" role="document">
-                <div class="modal-content">
-                    
-                    <div class="modal-body">
-                        <div id="fileViewer"></div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div id="fileViewer"></div> <!-- Move the viewer outside the modal -->
 
 
 
-        
+
+
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bs-stepper@1.7.0/dist/js/bs-stepper.min.js"></script>
 
         <script>
             $(document).ready(function() {
-                $('#uploadBtn').click(function() {
-                    var fileInput = $('#fileInput')[0].files[0];
 
-                    if (!fileInput) {
-                        alert('Please choose a file to upload.');
-                        return;
-                    }
+                <?php if (isset($filePath) && !empty($filePath)) { ?>
+                    var filePath = '<?php echo $filePath; ?>';
 
-                    var formData = new FormData();
-                    formData.append('resumeFile', fileInput);
-                    $.ajax({
-                        url: 'upload.php',
-                        type: 'POST',
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        success: function(response) {
-                            $('#uploadMessage').html('<div class="alert alert-success" role="alert">File uploaded successfully!</div>');
-
-                            var fileExtension = response.fileExtension.toLowerCase();
-                            var filePath = response.filePath;
-
-                            if (fileExtension === 'pdf') {
-                                $('#fileViewer').html('<iframe src="' + filePath + '" width="100%" height="800px" style="border: none;"></iframe>');
-                            } else {
-                                $('#fileViewer').html('<p>Unsupported file format.</p>');
-                            }
-
-                            // Open the modal after setting the content
-                            $('#fileViewerModal').modal('show');
-                        },
-                        error: function(xhr, status, error) {
-                            $('#uploadMessage').html('<div class="alert alert-danger" role="alert">Error uploading file: ' + error + '</div>');
-                        }
-                    });
-                });
+                    // Display the file in the viewer
+                    $('#fileViewer').html('<iframe src="' + filePath + '" width="100%" height="800px" style="border: none;"></iframe>');
+                <?php } ?>
             });
+            $('#uploadBtn').click(function() {
+            var fileInput = $('#fileInput')[0].files[0];
+
+            if (!fileInput) {
+                alert('Please choose a file to upload.');
+                return;
+            }
+
+            var formData = new FormData();
+            formData.append('resumeFile', fileInput);
+
+            $.ajax({
+                url: 'upload.php',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    if (response.hasOwnProperty('error')) {
+                        // Handle server-side error
+                        $('#uploadMessage').html('<div class="alert alert-danger" role="alert">Error uploading file: ' + response.error + '</div>');
+                    } else {
+                        // Display success message and show the file in the viewer
+                        $('#uploadMessage').html('<div class="alert alert-success" role="alert">File uploaded successfully!</div>');
+
+                        var fileExtension = response.fileExtension.toLowerCase();
+                        var filePath = response.filePath;
+
+                        if (fileExtension === 'pdf') {
+                            $('#fileViewer').html('<iframe src="' + filePath + '" width="100%" height="800px" style="border: none;"></iframe>');
+                        } else {
+                            $('#fileViewer').html('<p>Unsupported file format.</p>');
+                        }
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Handle client-side error (e.g., network issues)
+                    $('#uploadMessage').html('<div class="alert alert-danger" role="alert">Error uploading file: ' + error + '</div>');
+                }
+            });
+            });
+          
         </script>
+
 
         <script src="plugins/jquery/jquery.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

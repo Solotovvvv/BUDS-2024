@@ -804,26 +804,7 @@ if (empty($_SESSION['ownerId'])) {
       }
     }
 
-    // // Save changes button click event
-    // $("#saveChangesButton").click(function() {
-
-
-
-    //   // Log the remarks data before sending it to the server
-    //   console.log(remarksDataStep2);
-    //   console.log(remarksDataStep3);
-    //   console.log(remarksDataStep4);
-    //   console.log(remarksDataStep5);
-    //   console.log(remarksDataStep6);
-
-    //   update(remarksDataStep2, remarksDataStep3, remarksDataStep4, remarksDataStep5, remarksDataStep6, hiddendata);
-
-    //   $('#view').modal("hide");
-    //   for (var i = 2; i <= 6; i++) {
-    //     $("#remarksStep" + i).val("");
-    //   }
-    // });
-
+   
     function update() {
 
 
@@ -835,18 +816,14 @@ if (empty($_SESSION['ownerId'])) {
 
       hiddendata = $('#hiddendata').val();
 
-      //   console.log(remarksDataStep2);
-      //   console.log(remarksDataStep3);
-      //   console.log(remarksDataStep4);
-      //   console.log(remarksDataStep5);
-      //   console.log(remarksDataStep6);
 
-      console.log(remarksDataStep2)
-      console.log(remarksDataStep3)
-      console.log(remarksDataStep4)
-      console.log(remarksDataStep5)
-      console.log(remarksDataStep6)
-      console.log(hiddendata)
+
+      // console.log(remarksDataStep2)
+      // console.log(remarksDataStep3)
+      // console.log(remarksDataStep4)
+      // console.log(remarksDataStep5)
+      // console.log(remarksDataStep6)
+      // console.log(hiddendata)
 
       $('#view').modal("hide");
       for (var i = 2; i <= 6; i++) {
@@ -985,7 +962,7 @@ if (empty($_SESSION['ownerId'])) {
       $('#blockchain').modal("show");
     }
 
-    //function save without blockchain
+    // function save without blockchain
 
     // function Save() {
     //   var hiddendata1 = $('#hiddendata1').val();
