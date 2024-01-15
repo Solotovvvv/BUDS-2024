@@ -4,7 +4,9 @@ session_start();
 if (empty($_SESSION['ownerId']) || empty($_GET['a'])) {
     header('Location: manage.php');
 }
-$bus_id = $_GET['a'];
+ $bus_id = $_GET['a'];
+ $_SESSION['bus_id'] = $_GET['a'];
+
 ?>
 <!DOCTYPE html>
 <html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="plugins/assets/" data-template="vertical-menu-template-free">
@@ -33,7 +35,7 @@ $bus_id = $_GET['a'];
         <div class="layout-container">
             <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
                 <div class="app-brand demo">
-                    <a href="index.php" class="app-brand-link">
+                    <a href="http://localhost/BUDS-2024/index.php" class="app-brand-link">
                         <span class="app-brand-logo demo">
                             <img src="img/logo-main.png" alt="" class="brand-image" width="45" height="50">
                         </span>

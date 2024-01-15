@@ -76,11 +76,11 @@ if (isset($_POST['views'])) {
             $updateBusinessRequirementStmt = $pdo->prepare($updateBusinessRequirementSql);
 
             if ($updateBusinessRequirementStmt->execute([
-                ':remarks_brgyClearance' => ($totalRemarks == 1) ? null : $remarksDataStep1,
-                ':remarks_dti' => ($totalRemarks == 1) ? null : $remarksDataStep2,
-                ':remarks_sanitary' => ($totalRemarks == 1) ? null : $remarksDataStep3,
-                ':remarks_cedula' => ($totalRemarks == 1) ? null : $remarksDataStep4,
-                ':remarks_mayorsPermit' => ($totalRemarks == 1) ? null : $remarksDataStep5,
+                ':remarks_brgyClearance' => ($totalRemarks == 1) ? "1" : $remarksDataStep1,
+                ':remarks_dti' => ($totalRemarks == 1) ? "1" : $remarksDataStep2,
+                ':remarks_sanitary' => ($totalRemarks == 1) ? "1" : $remarksDataStep3,
+                ':remarks_cedula' => ($totalRemarks == 1) ? "1" : $remarksDataStep4,
+                ':remarks_mayorsPermit' => ($totalRemarks == 1) ? "1" : $remarksDataStep5,
                 ':hiddendata' => $hiddendata,
             ])) {
                 $response = array(

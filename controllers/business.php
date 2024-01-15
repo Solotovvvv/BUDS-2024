@@ -827,7 +827,7 @@ function edtBusinessBrgyClear($request = null)
                 $msg['icon'] = "error";
                 echo json_encode($msg);
             } else {
-                $sql2 = "UPDATE business_list set BusinessStatus = 2, BusinessRemarks = null WHERE bus_id = :id";
+                $sql2 = "UPDATE business_list set BusinessStatus = 2 WHERE bus_id = :id";
                 $stmt1 = $pdo->prepare($sql2);
                 $stmt1->execute();
                 if ($stmt->errorCode() !== '00000') {
@@ -914,7 +914,7 @@ function edtDTIPermit($request = null)
                 $msg['icon'] = "error";
                 echo json_encode($msg);
             } else {
-                $sql2 = "UPDATE business_list set BusinessStatus = 2, BusinessRemarks = null WHERE bus_id = :id";
+                $sql2 = "UPDATE business_list set BusinessStatus = 2 WHERE bus_id = :id";
                 $stmt1 = $pdo->prepare($sql2);
                 $stmt1->execute();
                 if ($stmt->errorCode() !== '00000') {
@@ -1001,7 +1001,7 @@ function edtSanitaryPermit($request = null)
                 $msg['icon'] = "error";
                 echo json_encode($msg);
             } else {
-                $sql2 = "UPDATE business_list set BusinessStatus = 2, BusinessRemarks = null WHERE bus_id = :id";
+                $sql2 = "UPDATE business_list set BusinessStatus = 2 WHERE bus_id = :id";
                 $stmt1 = $pdo->prepare($sql2);
                 $stmt1->execute();
                 if ($stmt->errorCode() !== '00000') {
@@ -1088,7 +1088,7 @@ function edtCedulaPermit($request = null)
                 $msg['icon'] = "error";
                 echo json_encode($msg);
             } else {
-                $sql2 = "UPDATE business_list set BusinessStatus = 2, BusinessRemarks = null WHERE bus_id = :id";
+                $sql2 = "UPDATE business_list set BusinessStatus = 2 WHERE bus_id = :id";
                 $stmt1 = $pdo->prepare($sql2);
                 $stmt1->execute();
                 if ($stmt->errorCode() !== '00000') {
@@ -1175,7 +1175,7 @@ function edtMayorPermit($request = null)
                 $msg['icon'] = "error";
                 echo json_encode($msg);
             } else {
-                $sql2 = "UPDATE business_list set BusinessStatus = 2, BusinessRemarks = null WHERE bus_id = :id";
+                $sql2 = "UPDATE business_list set BusinessStatus = 2 WHERE bus_id = :id";
                 $stmt1 = $pdo->prepare($sql2);
                 $stmt1->execute();
                 if ($stmt->errorCode() !== '00000') {

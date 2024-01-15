@@ -6,6 +6,7 @@ if (empty($_SESSION['ownerId']) || empty($_GET['a'])) {
     header('Location: manage.php');
 }
 $bus_id = $_GET['a'];
+$_SESSION['bus_id'] = $_GET['a'];
 ?>
 <!DOCTYPE html>
 <html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="plugins/assets/" data-template="vertical-menu-template-free">
