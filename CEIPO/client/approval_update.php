@@ -13,6 +13,7 @@ if (isset($_POST['views'])) {
     INNER JOIN brgyzone_list AS bz ON bl.BusinessBrgy = bz.ID
     INNER JOIN category_list as c ON bl.BusinessCategory = c.ID
     INNER JOIN subcategory_list as sc ON bl.BusinessSubCategory = sc.ID
+    INNER JOIN business_requirement as bsr on bl.bus_id = bsr.bus_id
     WHERE bl.bus_id = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
@@ -55,8 +56,8 @@ if (isset($_POST['views'])) {
     // Calculate the sum of remarksDataStep2 to remarksDataStep6
     $totalRemarks = ($total1 + $total2 + $total3 + $total4 + $total5) / 5;
 
-  
-   // Update BusinessStatus in the business_list table
+
+    // Update BusinessStatus in the business_list table
     $updateBusinessListSql = "UPDATE business_list SET BusinessStatus = :status WHERE bus_id = :hiddendata";
     $updateBusinessListStmt = $pdo->prepare($updateBusinessListSql);
 
@@ -64,8 +65,8 @@ if (isset($_POST['views'])) {
         ':status' => ($totalRemarks == 1) ? 1 : 3,
         ':hiddendata' => $hiddendata,
     ])) {
-            // Update remarks fields in the business_requirement table
-            $updateBusinessRequirementSql = "UPDATE business_requirement 
+        // Update remarks fields in the business_requirement table
+        $updateBusinessRequirementSql = "UPDATE business_requirement 
                                              SET remarks_brgyClearance = :remarks_brgyClearance, 
                                                  remarks_dti = :remarks_dti, 
                                                  remarks_sanitary = :remarks_sanitary, 
@@ -73,30 +74,30 @@ if (isset($_POST['views'])) {
                                                  remarks_mayorsPermit = :remarks_mayorsPermit
                                              WHERE bus_id = :hiddendata";
 
-            $updateBusinessRequirementStmt = $pdo->prepare($updateBusinessRequirementSql);
+        $updateBusinessRequirementStmt = $pdo->prepare($updateBusinessRequirementSql);
 
-            if ($updateBusinessRequirementStmt->execute([
-                ':remarks_brgyClearance' => ($totalRemarks == 1) ? null : $remarksDataStep1,
-                ':remarks_dti' => ($totalRemarks == 1) ? null : $remarksDataStep2,
-                ':remarks_sanitary' => ($totalRemarks == 1) ? null : $remarksDataStep3,
-                ':remarks_cedula' => ($totalRemarks == 1) ? null : $remarksDataStep4,
-                ':remarks_mayorsPermit' => ($totalRemarks == 1) ? null : $remarksDataStep5,
-                ':hiddendata' => $hiddendata,
-            ])) {
-                $response = array(
-                    'status' => 'success'
-                );
-            } else {
-                $response = array(
-                    'status' => 'failed',
-                    'error' => $updateBusinessRequirementStmt->errorInfo()
-                );
-            }
+        if ($updateBusinessRequirementStmt->execute([
+            ':remarks_brgyClearance' => ($totalRemarks == 1) ? 1 : $remarksDataStep1,
+            ':remarks_dti' => ($totalRemarks == 1) ? 1 : $remarksDataStep2,
+            ':remarks_sanitary' => ($totalRemarks == 1) ? 1 : $remarksDataStep3,
+            ':remarks_cedula' => ($totalRemarks == 1) ? 1 : $remarksDataStep4,
+            ':remarks_mayorsPermit' => ($totalRemarks == 1) ? 1 : $remarksDataStep5,
+            ':hiddendata' => $hiddendata,
+        ])) {
+            $response = array(
+                'status' => 'success'
+            );
         } else {
             $response = array(
                 'status' => 'failed',
-                'error' => $updateBusinessListStmt->errorInfo()
+                'error' => $updateBusinessRequirementStmt->errorInfo()
             );
+        }
+    } else {
+        $response = array(
+            'status' => 'failed',
+            'error' => $updateBusinessListStmt->errorInfo()
+        );
     }
 } else {
     $response = array(

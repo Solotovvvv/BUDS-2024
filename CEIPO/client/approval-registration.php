@@ -317,17 +317,23 @@ if (empty($_SESSION['ownerId'])) {
 
                 <!-- Step 2 -->
                 <div class="stepper-content" id="step2">
+                  
                   <h3>Brgy Clearance</h3>
                   <img id="busBrgyClearanceImage" src="" alt="Barangay Clearance" style="max-width: 100%; max-height: 100%; width: auto; height: auto;">
                   <p class="no-image-text" style="display: none;">No requirements found</p>
                   <!-- Other content for Step 2 here -->
-
+                
                   <br>
+                 
                   <div class="mt-4">
                     <button type="button" class="btn btn-success" id="passedStep2">Approve</button>
                     <button type="button" class="btn btn-danger" id="failedStep2">Decline</button>
+                    <span id="step2_Status" style="font-size: 100px; display: none;">APPROVED</span>
                     <input type="text" class="form-control" id="remarksStep2" placeholder="Enter remarks" style="display: none;">
+                    
                   </div>
+
+
 
                 </div>
 
@@ -342,6 +348,7 @@ if (empty($_SESSION['ownerId'])) {
                   <div class="mt-4">
                     <button type="button" class="btn btn-success" id="passedStep3">Approve</button>
                     <button type="button" class="btn btn-danger" id="failedStep3">Decline</button>
+                    <span id="step3_Status" style="font-size: 100px; display: none;">APPROVED</span>
                     <input type="text" class="form-control" id="remarksStep3" placeholder="Enter remarks" style="display: none;">
                   </div>
                 </div>
@@ -357,6 +364,7 @@ if (empty($_SESSION['ownerId'])) {
                   <div class="mt-4">
                     <button type="button" class="btn btn-success" id="passedStep4">Approve</button>
                     <button type="button" class="btn btn-danger" id="failedStep4">Decline</button>
+                    <span id="step4_Status" style="font-size: 100px; display: none;">APPROVED</span>
                     <input type="text" class="form-control" id="remarksStep4" placeholder="Enter remarks" style="display: none;">
                   </div>
                 </div>
@@ -372,6 +380,7 @@ if (empty($_SESSION['ownerId'])) {
                   <div class="mt-4">
                     <button type="button" class="btn btn-success" id="passedStep5">Approve</button>
                     <button type="button" class="btn btn-danger" id="failedStep5">Decline</button>
+                    <span id="step5_Status" style="font-size: 100px; display: none;">APPROVED</span>
                     <input type="text" class="form-control" id="remarksStep5" placeholder="Enter remarks" style="display: none;">
                   </div>
                 </div>
@@ -388,6 +397,7 @@ if (empty($_SESSION['ownerId'])) {
                     <button type="button" class="btn btn-success" id="passedStep6">Approve</button>
                     <button type="button" class="btn btn-danger " id="failedStep6">Decline</button>
                     <br>
+                    <span id="step6_Status" style="font-size: 100px; display: none;">APPROVED</span>
                     <input type="text" class="form-control" id="remarksStep6" placeholder="Enter remarks" style="display: none; ">
                   </div>
                 </div>
@@ -804,7 +814,7 @@ if (empty($_SESSION['ownerId'])) {
       }
     }
 
-   
+
     function update() {
 
 
@@ -897,18 +907,54 @@ if (empty($_SESSION['ownerId'])) {
 
         }
 
-        // Add an event listener to the #status element
-        $('#status').on('change', function() {
-          // Check if the selected value is 3 and hide or show the #remarks field accordingly
-          if ($(this).val() === '3') {
-            $('#remarksRow').show();
 
-          } else {
-            $('#remarksRow').hide();
-            $('#remarks').val("");
+        if (userid.remarks_brgyClearance === "1") {
+          $('#passedStep2').hide();
+          $('#failedStep2').hide();
+          $("#step2_Status").show();
+          $('#remarksStep2').val("1");
+        }
+     
+        if (userid.remarks_dti === "1") {
+          $('#passedStep3').hide();
+          $('#failedStep3').hide();
+          $("#step3_Status").show();
+          $('#remarksStep3').val("1");
+        }
 
-          }
-        });
+        if (userid.remarks_sanitary === "1") {
+          $('#passedStep4').hide();
+          $('#failedStep4').hide();
+          $("#step4_Status").show();
+          $('#remarksStep4').val("1");
+        }
+
+        if (userid.remarks_cedula === "1") {
+          $('#passedStep5').hide();
+          $('#failedStep5').hide();
+          $("#step5_Status").show();
+          $('#remarksStep5').val("1");
+        }
+        
+        if (userid.remarks_mayorsPermit === "1") {
+          $('#passedStep6').hide();
+          $('#failedStep6').hide();
+          $("#step6_Status").show();
+          $('#remarksStep6').val("1");
+        }
+        
+        // // Add an event listener to the #status element
+        // $('#status').on('change', function() {
+        //   // Check if the selected value is 3 and hide or show the #remarks field accordingly
+        //   if ($(this).val() === '3') {
+        //     $('#remarksRow').show();
+
+        //   } else {
+        //     $('#remarksRow').hide();
+        //     $('#remarks').val("");
+
+        //   }
+        // });
         // Function to handle displaying images or "No requirements found" text
         function displayImageOrText(imageId, imageName) {
           var $imageElement = $('#' + imageId);
