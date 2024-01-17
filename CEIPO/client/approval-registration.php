@@ -411,7 +411,7 @@ if (empty($_SESSION['ownerId'])) {
 
               </div>
               <div class="modal-footer">
-                <input type="text" id="hiddendata">
+                <input type="hidden" id="hiddendata">
                 <button type="button" class="btn btn-primary" id="prevStep">Previous</button>
                 <button type="button" class="btn btn-primary" id="nextStep">Next</button>
 
@@ -525,150 +525,150 @@ if (empty($_SESSION['ownerId'])) {
     let contract;
     let currentAccount;
 
-    // document.addEventListener('DOMContentLoaded', async () => {
-    //   const web3 = new Web3(Web3.givenProvider || 'http://127.0.0.1:7545');
+    document.addEventListener('DOMContentLoaded', async () => {
+      const web3 = new Web3(Web3.givenProvider || 'http://127.0.0.1:7545');
 
-    //   if (typeof window.ethereum !== 'undefined') {
+      if (typeof window.ethereum !== 'undefined') {
 
-    //     const web3 = new Web3(window.ethereum);
+        const web3 = new Web3(window.ethereum);
 
-    //     try {
-    //       const accounts = await ethereum.request({
-    //         method: 'eth_requestAccounts'
-    //       });
-    //       currentAccount = accounts[0]; // Assign to the higher-scoped variable
+        try {
+          const accounts = await ethereum.request({
+            method: 'eth_requestAccounts'
+          });
+          currentAccount = accounts[0]; // Assign to the higher-scoped variable
 
-    //       console.log('Current Ethereum address:', currentAccount);
+          console.log('Current Ethereum address:', currentAccount);
 
-    //       const contractAddress = '0xCfAFBec9a41041C01b35d6ef14A09126a3879683';
+          const contractAddress = '0xfd6d0CcBd98143fB0B784176A023833d842ff23f';
 
-    //       const contractAbi = [{
-    //           "inputs": [{
-    //               "internalType": "string",
-    //               "name": "_id",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "_businessName",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "_businessBranch",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "_ownerName",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "_cedula",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "_businessPermit",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "_brgyClearance",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "_sanitaryPermit",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "_mayorsPermit",
-    //               "type": "string"
-    //             }
-    //           ],
-    //           "name": "storeData",
-    //           "outputs": [],
-    //           "stateMutability": "nonpayable",
-    //           "type": "function"
-    //         },
-    //         {
-    //           "inputs": [{
-    //             "internalType": "address",
-    //             "name": "user",
-    //             "type": "address"
-    //           }],
-    //           "name": "getData",
-    //           "outputs": [{
-    //               "internalType": "string",
-    //               "name": "",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "uint256",
-    //               "name": "",
-    //               "type": "uint256"
-    //             }
-    //           ],
-    //           "stateMutability": "view",
-    //           "type": "function",
-    //           "constant": true
-    //         }
-    //       ];;
+          const contractAbi = [{
+              "inputs": [{
+                  "internalType": "string",
+                  "name": "_id",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "_businessName",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "_businessBranch",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "_ownerName",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "_cedula",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "_businessPermit",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "_brgyClearance",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "_sanitaryPermit",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "_mayorsPermit",
+                  "type": "string"
+                }
+              ],
+              "name": "storeData",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [{
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+              }],
+              "name": "getData",
+              "outputs": [{
+                  "internalType": "string",
+                  "name": "",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "",
+                  "type": "string"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function",
+              "constant": true
+            }
+          ];;
 
-    //       contract = new web3.eth.Contract(contractAbi, contractAddress);
+          contract = new web3.eth.Contract(contractAbi, contractAddress);
 
-    //       ethereum.on('accountsChanged', newAccounts => {
-    //         console.log('Accounts changed:', newAccounts);
-    //         currentAccount = newAccounts[0]; // Update the higher-scoped variable
-    //         console.log('Updated Ethereum address:', currentAccount);
-    //       });
+          ethereum.on('accountsChanged', newAccounts => {
+            console.log('Accounts changed:', newAccounts);
+            currentAccount = newAccounts[0]; // Update the higher-scoped variable
+            console.log('Updated Ethereum address:', currentAccount);
+          });
 
-    //       ethereum.on('chainChanged', chainId => {
-    //         console.log('Network changed:', chainId);
-    //       });
+          ethereum.on('chainChanged', chainId => {
+            console.log('Network changed:', chainId);
+          });
 
     $('#approval_tbl').DataTable({
       'serverside': true,
@@ -684,13 +684,13 @@ if (empty($_SESSION['ownerId'])) {
 
       },
     });
-    //     } catch (error) {
-    //       console.error('Error fetching accounts:', error);
-    //     }
-    //   } else {
-    //     console.log('MetaMask or an Ethereum-compatible wallet is not installed.');
-    //   }
-    // });
+        } catch (error) {
+          console.error('Error fetching accounts:', error);
+        }
+      } else {
+        console.log('MetaMask or an Ethereum-compatible wallet is not installed.');
+      }
+    });
 
     $(document).ready(function() {
 
