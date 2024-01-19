@@ -72,6 +72,7 @@ module.exports = {
     //  network_id: "*",       // Any network (default: none)
     // },
     
+    //sepolia testnetwork
     sepolia: {
       provider: () => new HDWalletProvider(METAMASK_MNEMONIC, `https://sepolia.infura.io/v3/${INFURA_PROJECT_ID}`),
       network_id: "*", // Use a wildcard as you don't have a specific network ID for Sepolia
