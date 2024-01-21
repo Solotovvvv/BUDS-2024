@@ -907,7 +907,7 @@ if (empty($_SESSION['ownerId'])) {
 
         }
 
-
+//fetching of appoving and declining of every requirements 
         if (userid.remarks_brgyClearance === "1") {
           $('#passedStep2').hide();
           $('#failedStep2').hide();
