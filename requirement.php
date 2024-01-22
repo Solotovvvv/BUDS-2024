@@ -218,24 +218,26 @@ foreach ($datas as $data) {
                                                             alt="Card image cap" />
                                                         <br>
                                                     <?php } ?>
-                                                    <div class="mb-3 row align-items-center">
-                                                        <label for="fileUpload" class="form-label">Upload File</label>
-                                                        <div class="col-sm-8">
-                                                            <input type="file" name="barangayClearance"
-                                                                class="form-control" id="fileUpload">
+                                                    <?php if ($remarks_brgyClearance != 1) { ?>
+                                                        <div class="mb-3 row align-items-center">
+                                                            <label for="fileUpload" class="form-label">Upload File</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="file" name="barangayClearance"
+                                                                    class="form-control" id="fileUpload">
+                                                            </div>
+                                                            <div class="col-sm-2">
+                                                                <button type="button" onclick="editBrgyClearance()"
+                                                                    class="btn btn-success">Submit</button>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-sm-2">
-                                                            <button type="button" onclick="editBrgyClearance()"
-                                                                class="btn btn-success">Submit</button>
-                                                        </div>
-                                                    </div>
-                                                    <?php if ($remarks_brgyClearance == 1) { ?>
+                                                    <?php }
+                                                    if ($remarks_brgyClearance == 1) { ?>
                                                         <h3 class="text-primary">
                                                             APPROVED
                                                         </h3>
                                                     <?php } elseif (isset($remarks_brgyClearance) && $remarks_brgyClearance != 1) { ?>
                                                         <h3 class="text-primary">
-                                                        <?php echo $remarks_brgyClearance ?>  
+                                                            <?php echo $remarks_brgyClearance ?>
                                                         </h3>
                                                     <?php } ?>
                                                 </div>
@@ -251,24 +253,26 @@ foreach ($datas as $data) {
                                                             alt="Card image cap" />
                                                         <br>
                                                     <?php } ?>
-                                                    <div class="mb-3 row align-items-center">
-                                                        <label for="fileUpload" class="form-label">Upload File</label>
-                                                        <div class="col-sm-8">
-                                                            <input type="file" name="DTIPermit" class="form-control"
-                                                                id="fileUpload">
+                                                    <?php if ($remarks_dti != 1) { ?>
+                                                        <div class="mb-3 row align-items-center">
+                                                            <label for="fileUpload" class="form-label">Upload File</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="file" name="DTIPermit" class="form-control"
+                                                                    id="fileUpload">
+                                                            </div>
+                                                            <div class="col-sm-2">
+                                                                <button type="butoon" onclick="editDTIPermit()"
+                                                                    class="btn btn-success">Submit</button>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-sm-2">
-                                                            <button type="butoon" onclick="editDTIPermit()"
-                                                                class="btn btn-success">Submit</button>
-                                                        </div>
-                                                    </div>
-                                                    <?php if ($remarks_dti == 1) { ?>
+                                                    <?php }
+                                                    if ($remarks_dti == 1) { ?>
                                                         <h3 class="text-primary">
                                                             APPROVED
                                                         </h3>
                                                     <?php } elseif (isset($remarks_dti) && $remarks_dti != 1) { ?>
                                                         <h3 class="text-primary">
-                                                        <?php echo $remarks_dti ?>  
+                                                            <?php echo $remarks_dti ?>
                                                         </h3>
                                                     <?php } ?>
                                                 </div>
@@ -284,24 +288,26 @@ foreach ($datas as $data) {
                                                             alt="Card image cap" />
                                                         <br>
                                                     <?php } ?>
-                                                    <div class="mb-3 row align-items-center">
-                                                        <label for="fileUpload" class="form-label">Upload File</label>
-                                                        <div class="col-sm-8">
-                                                            <input type="file" name="sanitaryPermit"
-                                                                class="form-control" id="fileUpload">
+                                                    <?php if ($remarks_sanitary != 1) { ?>
+                                                        <div class="mb-3 row align-items-center">
+                                                            <label for="fileUpload" class="form-label">Upload File</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="file" name="sanitaryPermit"
+                                                                    class="form-control" id="fileUpload">
+                                                            </div>
+                                                            <div class="col-sm-2">
+                                                                <button type="button" onclick="editSanitaryPermit()"
+                                                                    class="btn btn-success">Submit</button>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-sm-2">
-                                                            <button type="button" onclick="editSanitaryPermit()"
-                                                                class="btn btn-success">Submit</button>
-                                                        </div>
-                                                    </div>
-                                                    <?php if ($remarks_sanitary == 1) { ?>
+                                                    <?php }
+                                                    if ($remarks_sanitary == 1) { ?>
                                                         <h3 class="text-primary">
                                                             APPROVED
                                                         </h3>
                                                     <?php } elseif (isset($remarks_sanitary) && $remarks_sanitary != 1) { ?>
                                                         <h3 class="text-primary">
-                                                        <?php echo $remarks_sanitary ?>  
+                                                            <?php echo $remarks_sanitary ?>
                                                         </h3>
                                                     <?php } ?>
                                                 </div>
@@ -317,24 +323,26 @@ foreach ($datas as $data) {
                                                             alt="Card image cap" />
                                                         <br>
                                                     <?php } ?>
-                                                    <div class="mb-3 row align-items-center">
-                                                        <label for="fileUpload" class="form-label">Upload File</label>
-                                                        <div class="col-sm-8">
-                                                            <input type="file" name="edtCedula" class="form-control"
-                                                                id="fileUpload">
+                                                    <?php if ($remarks_cedula != 1) { ?>
+                                                        <div class="mb-3 row align-items-center">
+                                                            <label for="fileUpload" class="form-label">Upload File</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="file" name="edtCedula" class="form-control"
+                                                                    id="fileUpload">
+                                                            </div>
+                                                            <div class="col-sm-2">
+                                                                <button type="button" onclick="editCedula()"
+                                                                    class="btn btn-success">Submit</button>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-sm-2">
-                                                            <button type="button" onclick="editCedula()"
-                                                                class="btn btn-success">Submit</button>
-                                                        </div>
-                                                    </div>
-                                                    <?php if ($remarks_cedula == 1) { ?>
+                                                    <?php }
+                                                    if ($remarks_cedula == 1) { ?>
                                                         <h3 class="text-primary">
                                                             APPROVED
                                                         </h3>
                                                     <?php } elseif (isset($remarks_cedula) && $remarks_cedula != 1) { ?>
                                                         <h3 class="text-primary">
-                                                        <?php echo $remarks_cedula ?>  
+                                                            <?php echo $remarks_cedula ?>
                                                         </h3>
                                                     <?php } ?>
                                                 </div>
@@ -350,24 +358,26 @@ foreach ($datas as $data) {
                                                             alt="Card image cap" />
                                                         <br>
                                                     <?php } ?>
-                                                    <div class="mb-3 row align-items-center">
-                                                        <label for="fileUpload" class="form-label">Upload File</label>
-                                                        <div class="col-sm-8">
-                                                            <input type="file" name="mayorPermit" class="form-control"
-                                                                id="fileUpload">
+                                                    <?php if ($remarks_mayorsPermit != 1) { ?>
+                                                        <div class="mb-3 row align-items-center">
+                                                            <label for="fileUpload" class="form-label">Upload File</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="file" name="mayorPermit" class="form-control"
+                                                                    id="fileUpload">
+                                                            </div>
+                                                            <div class="col-sm-2">
+                                                                <button type="button" onclick="editMayorPermit()"
+                                                                    class="btn btn-success">Submit</button>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-sm-2">
-                                                            <button type="button" onclick="editMayorPermit()"
-                                                                class="btn btn-success">Submit</button>
-                                                        </div>
-                                                    </div>
-                                                    <?php if ($remarks_mayorsPermit == 1) { ?>
+                                                    <?php }
+                                                    if ($remarks_mayorsPermit == 1) { ?>
                                                         <h3 class="text-primary">
                                                             APPROVED
                                                         </h3>
                                                     <?php } elseif (isset($remarks_mayorsPermit) && $remarks_mayorsPermit != 1) { ?>
                                                         <h3 class="text-primary">
-                                                        <?php echo $remarks_mayorsPermit ?>  
+                                                            <?php echo $remarks_mayorsPermit ?>
                                                         </h3>
                                                     <?php } ?>
                                                 </div>
