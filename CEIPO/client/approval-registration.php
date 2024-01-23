@@ -64,40 +64,45 @@ if (empty($_SESSION['ownerId'])) {
   }
 
   #loaderOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(255, 255, 255, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
 
-.loader {
-  border: 8px solid #f3f3f3;
-  border-top: 8px solid #3498db;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  animation: spin 1s linear infinite;
-  margin-bottom: 10%;
-}
-.loader-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding-top: 5%;
-}
+  .loader {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 10%;
+  }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+  .loader-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-top: 5%;
+  }
 
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 </style>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -944,7 +949,7 @@ if (empty($_SESSION['ownerId'])) {
         }
 
 
-     
+
         // //fetching of appoving and declining of every requirements (OPTIMIZED)
         function updateStep(status, passedId, failedId, statusId, remarksId) {
           if (status === "1") {
@@ -965,8 +970,8 @@ if (empty($_SESSION['ownerId'])) {
         updateStep(userid.remarks_sanitary, '#passedStep4', '#failedStep4', '#step4_Status', '#remarksStep4');
         updateStep(userid.remarks_cedula, '#passedStep5', '#failedStep5', '#step5_Status', '#remarksStep5');
         updateStep(userid.remarks_mayorsPermit, '#passedStep6', '#failedStep6', '#step6_Status', '#remarksStep6');
-        
-        
+
+
         // //fetching of appoving and declining of every requirements 
         // if (userid.remarks_brgyClearance === "1") {
         //   $('#passedStep2').hide();
@@ -1094,17 +1099,17 @@ if (empty($_SESSION['ownerId'])) {
     // }
 
 
-function showLoader() {
-  console.log('Show Loader called');
-  
-  // Create loader overlay
-  const loaderOverlay = $('<div id="loaderOverlay"></div>').appendTo('body');
-  
-  // Add loader spinner and "Please Wait" message
-  const loaderContainer = $('<div class="loader-container"></div>').appendTo(loaderOverlay);
-  $('<div class="loader"></div>').appendTo(loaderContainer);
-  $('<p  style="font-size: 18px;" ><b>Please wait </b>, it will take a while...</p>').appendTo(loaderContainer);
-}
+    function showLoader() {
+      console.log('Show Loader called');
+
+      // Create loader overlay
+      const loaderOverlay = $('<div id="loaderOverlay"></div>').appendTo('body');
+
+      // Add loader spinner and "Please Wait" message
+      const loaderContainer = $('<div class="loader-container"></div>').appendTo(loaderOverlay);
+      $('<div class="loader"></div>').appendTo(loaderContainer);
+      $('<p  style="font-size: 18px;" ><b>Please wait </b>, it will take a while...</p>').appendTo(loaderContainer);
+    }
 
 
     //with blockchain 
@@ -1124,7 +1129,7 @@ function showLoader() {
           mayorsPermit: $('#bc_permit').val(),
         };
 
-  
+
         const gasEstimate = await contract.methods.storeData(
           updateData.id,
           updateData.businessName,
@@ -1138,9 +1143,19 @@ function showLoader() {
         ).estimateGas({
           from: currentAccount
         });
-     
+
+
+
+        // Fetch the current gas price from MetaMask using ethereum provider
+        // const currentGasPrice = await ethereum.request({
+        //   method: 'eth_gasPrice'
+        // });
+
+        // // Set a lower gas price (adjust this value as needed)
+        // const lowerGasPrice = Math.floor(parseInt(currentGasPrice) * 1); // For example, set to 80% of the current gas price
+
         const gasLimit = gasEstimate + 200000;
-        
+
         const tx = await contract.methods.storeData(
           updateData.id,
           updateData.businessName,
@@ -1153,11 +1168,12 @@ function showLoader() {
           updateData.mayorsPermit
         ).send({
           from: currentAccount,
+          // gasPrice: lowerGasPrice, // Set the lower gas price
           gas: gasLimit
         });
 
         console.log('Transaction Result:', tx);
-       
+
         // If the transaction is successful, update the status to 'approved' on the server.
         if (tx.status === true) {
           const hiddendata1 = updateData.id;
@@ -1187,12 +1203,12 @@ function showLoader() {
 
 
 
-function hideLoader() {
-  // Implement your loader hiding logic here
-  // For example, remove the overlay or hide the spinner
-  // Example removing the overlay:
-  $('#loaderOverlay').remove();
-}
+    function hideLoader() {
+      // Implement your loader hiding logic here
+      // For example, remove the overlay or hide the spinner
+      // Example removing the overlay:
+      $('#loaderOverlay').remove();
+    }
   </script>
 
 
