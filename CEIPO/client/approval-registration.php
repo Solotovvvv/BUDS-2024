@@ -772,7 +772,7 @@ if (empty($_SESSION['ownerId'])) {
       });
 
     });
-
+//step
     var currentStep = 1;
     var failedSteps = []; // Array to store failed steps
     var remarksData = {}; // Object to store remarks for each step
