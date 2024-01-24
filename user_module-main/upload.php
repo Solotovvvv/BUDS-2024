@@ -19,26 +19,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $targetPath = $uploadDirectory . basename($file['name']);
 
-        // Check for file name conflicts
-        $fileCount = 1;
-        while (file_exists($targetPath)) {
-            $fileName = pathinfo($file['name'], PATHINFO_FILENAME);
-            $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
-            $targetPath = $uploadDirectory . $fileName . '_' . $fileCount . '.' . $extension;
-            $fileCount++;
-        }
-
         if (move_uploaded_file($file['tmp_name'], $targetPath)) {
             // Get the app_id from the session
             session_start();
             $ownerId = isset($_SESSION['ownerId']) ? $_SESSION['ownerId'] : null;
 
             if ($ownerId) {
-                // Save file information to the database using prepared statements
-                $sql = "INSERT INTO user_resume (app_id, file) VALUES (?, ?)";
-                $stmt = $pdo->prepare($sql);
-                $stmt->execute([$ownerId, $targetPath]);
-                // Assuming 'file' column in the database is VARCHAR, you might need to adjust accordingly
+                // Check if the app_id already exists in the user_resume table
+                $checkSql = "SELECT COUNT(*) FROM user_resume WHERE app_id = ?";
+                $checkStmt = $pdo->prepare($checkSql);
+                $checkStmt->execute([$ownerId]);
+                $rowCount = $checkStmt->fetchColumn();
+
+                if ($rowCount > 0) {
+                    // App_id exists, update the existing record
+                    $updateSql = "UPDATE user_resume SET file = ? WHERE app_id = ?";
+                    $updateStmt = $pdo->prepare($updateSql);
+                    $updateStmt->execute([$targetPath, $ownerId]);
+                } else {
+                    // App_id does not exist, insert a new record
+                    $insertSql = "INSERT INTO user_resume (app_id, file) VALUES (?, ?)";
+                    $insertStmt = $pdo->prepare($insertSql);
+                    $insertStmt->execute([$ownerId, $targetPath]);
+                }
 
                 // Provide a JSON response with file information
                 header('Content-Type: application/json');

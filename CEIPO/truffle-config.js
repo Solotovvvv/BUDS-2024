@@ -45,7 +45,9 @@
 // const { MNEMONIC, PROJECT_ID } = process.env;
 
 // const HDWalletProvider = require('@truffle/hdwallet-provider');
-
+const HDWalletProvider = require('@truffle/hdwallet-provider');
+const METAMASK_MNEMONIC = 'weapon sponsor goose butter favorite taste lounge tongue filter gym team neglect';
+const INFURA_PROJECT_ID = '7b64c60dbf2c4634bf1baeff68f744fc'; // Your Infura project ID
 module.exports = {
   /**
    * Networks define how you connect to your ethereum client and let you set the
@@ -64,12 +66,20 @@ module.exports = {
     // tab if you use this network and you must also set the `host`, `port` and `network_id`
     // options below to some value.
     //
-    development: {
-     host: "127.0.0.1",     // Localhost (default: none)
-     port: 7545,            // Standard Ethereum port (default: none)
-     network_id: "*",       // Any network (default: none)
-    },
+    // development: {
+    //  host: "127.0.0.1",     // Localhost (default: none)
+    //  port: 7545,            // Standard Ethereum port (default: none)
+    //  network_id: "*",       // Any network (default: none)
+    // },
     
+    //sepolia testnetwork
+    sepolia: {
+      provider: () => new HDWalletProvider(METAMASK_MNEMONIC, `https://sepolia.infura.io/v3/${INFURA_PROJECT_ID}`),
+      network_id: "*", // Use a wildcard as you don't have a specific network ID for Sepolia
+      confirmations: 12,
+      timeoutBlocks: 500,
+      skipDryRun: false,
+    }, 
     // An additional network, but with some advanced options…
     // advanced: {
     //   port: 8777,             // Custom port
@@ -96,6 +106,12 @@ module.exports = {
     //   network_id: 2111,   // This network is yours, in the cloud.
     //   production: true    // Treats this network as if it was a public net. (default: false)
     // }
+
+    
+    
+    
+    // Add other networks as needed
+ 
   },
 
   // Set default mocha options here, use special reporters, etc.

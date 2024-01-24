@@ -7099,10 +7099,16 @@
       "links": {},
       "address": "0xCfAFBec9a41041C01b35d6ef14A09126a3879683",
       "transactionHash": "0x66df083e847b1befad81652fab13b96c7a218c228f1b68b4223ac56c2801a3f5"
+    },
+    "11155111": {
+      "events": {},
+      "links": {},
+      "address": "0xfd6d0CcBd98143fB0B784176A023833d842ff23f",
+      "transactionHash": "0xc7e389edfdfcd008db7d8ca6541f256769dabba4a3f42947c517b7502098b5a7"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2023-12-26T06:39:22.559Z",
+  "updatedAt": "2024-01-17T17:35:03.450Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

@@ -62,6 +62,47 @@ if (empty($_SESSION['ownerId'])) {
   .swal2-container {
     z-index: 100001;
   }
+
+  #loaderOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+
+  .loader {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 10%;
+  }
+
+  .loader-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-top: 5%;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 </style>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -317,17 +358,23 @@ if (empty($_SESSION['ownerId'])) {
 
                 <!-- Step 2 -->
                 <div class="stepper-content" id="step2">
+
                   <h3>Brgy Clearance</h3>
                   <img id="busBrgyClearanceImage" src="" alt="Barangay Clearance" style="max-width: 100%; max-height: 100%; width: auto; height: auto;">
                   <p class="no-image-text" style="display: none;">No requirements found</p>
                   <!-- Other content for Step 2 here -->
 
                   <br>
+
                   <div class="mt-4">
                     <button type="button" class="btn btn-success" id="passedStep2">Approve</button>
                     <button type="button" class="btn btn-danger" id="failedStep2">Decline</button>
+                    <span id="step2_Status" style="font-size: 100px; display: none;">APPROVED</span>
                     <input type="text" class="form-control" id="remarksStep2" placeholder="Enter remarks" style="display: none;">
+
                   </div>
+
+
 
                 </div>
 
@@ -342,6 +389,7 @@ if (empty($_SESSION['ownerId'])) {
                   <div class="mt-4">
                     <button type="button" class="btn btn-success" id="passedStep3">Approve</button>
                     <button type="button" class="btn btn-danger" id="failedStep3">Decline</button>
+                    <span id="step3_Status" style="font-size: 100px; display: none;">APPROVED</span>
                     <input type="text" class="form-control" id="remarksStep3" placeholder="Enter remarks" style="display: none;">
                   </div>
                 </div>
@@ -357,6 +405,7 @@ if (empty($_SESSION['ownerId'])) {
                   <div class="mt-4">
                     <button type="button" class="btn btn-success" id="passedStep4">Approve</button>
                     <button type="button" class="btn btn-danger" id="failedStep4">Decline</button>
+                    <span id="step4_Status" style="font-size: 100px; display: none;">APPROVED</span>
                     <input type="text" class="form-control" id="remarksStep4" placeholder="Enter remarks" style="display: none;">
                   </div>
                 </div>
@@ -372,6 +421,7 @@ if (empty($_SESSION['ownerId'])) {
                   <div class="mt-4">
                     <button type="button" class="btn btn-success" id="passedStep5">Approve</button>
                     <button type="button" class="btn btn-danger" id="failedStep5">Decline</button>
+                    <span id="step5_Status" style="font-size: 100px; display: none;">APPROVED</span>
                     <input type="text" class="form-control" id="remarksStep5" placeholder="Enter remarks" style="display: none;">
                   </div>
                 </div>
@@ -388,6 +438,7 @@ if (empty($_SESSION['ownerId'])) {
                     <button type="button" class="btn btn-success" id="passedStep6">Approve</button>
                     <button type="button" class="btn btn-danger " id="failedStep6">Decline</button>
                     <br>
+                    <span id="step6_Status" style="font-size: 100px; display: none;">APPROVED</span>
                     <input type="text" class="form-control" id="remarksStep6" placeholder="Enter remarks" style="display: none; ">
                   </div>
                 </div>
@@ -401,7 +452,7 @@ if (empty($_SESSION['ownerId'])) {
 
               </div>
               <div class="modal-footer">
-                <input type="text" id="hiddendata">
+                <input type="hidden" id="hiddendata">
                 <button type="button" class="btn btn-primary" id="prevStep">Previous</button>
                 <button type="button" class="btn btn-primary" id="nextStep">Next</button>
 
@@ -515,172 +566,172 @@ if (empty($_SESSION['ownerId'])) {
     let contract;
     let currentAccount;
 
-    // document.addEventListener('DOMContentLoaded', async () => {
-    //   const web3 = new Web3(Web3.givenProvider || 'http://127.0.0.1:7545');
+    document.addEventListener('DOMContentLoaded', async () => {
+      const web3 = new Web3(Web3.givenProvider || 'http://127.0.0.1:7545');
 
-    //   if (typeof window.ethereum !== 'undefined') {
+      if (typeof window.ethereum !== 'undefined') {
 
-    //     const web3 = new Web3(window.ethereum);
+        const web3 = new Web3(window.ethereum);
 
-    //     try {
-    //       const accounts = await ethereum.request({
-    //         method: 'eth_requestAccounts'
-    //       });
-    //       currentAccount = accounts[0]; // Assign to the higher-scoped variable
+        try {
+          const accounts = await ethereum.request({
+            method: 'eth_requestAccounts'
+          });
+          currentAccount = accounts[0]; // Assign to the higher-scoped variable
 
-    //       console.log('Current Ethereum address:', currentAccount);
+          console.log('Current Ethereum address:', currentAccount);
 
-    //       const contractAddress = '0xCfAFBec9a41041C01b35d6ef14A09126a3879683';
+          const contractAddress = '0xfd6d0CcBd98143fB0B784176A023833d842ff23f';
 
-    //       const contractAbi = [{
-    //           "inputs": [{
-    //               "internalType": "string",
-    //               "name": "_id",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "_businessName",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "_businessBranch",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "_ownerName",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "_cedula",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "_businessPermit",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "_brgyClearance",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "_sanitaryPermit",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "_mayorsPermit",
-    //               "type": "string"
-    //             }
-    //           ],
-    //           "name": "storeData",
-    //           "outputs": [],
-    //           "stateMutability": "nonpayable",
-    //           "type": "function"
-    //         },
-    //         {
-    //           "inputs": [{
-    //             "internalType": "address",
-    //             "name": "user",
-    //             "type": "address"
-    //           }],
-    //           "name": "getData",
-    //           "outputs": [{
-    //               "internalType": "string",
-    //               "name": "",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "string",
-    //               "name": "",
-    //               "type": "string"
-    //             },
-    //             {
-    //               "internalType": "uint256",
-    //               "name": "",
-    //               "type": "uint256"
-    //             }
-    //           ],
-    //           "stateMutability": "view",
-    //           "type": "function",
-    //           "constant": true
-    //         }
-    //       ];;
+          const contractAbi = [{
+              "inputs": [{
+                  "internalType": "string",
+                  "name": "_id",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "_businessName",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "_businessBranch",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "_ownerName",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "_cedula",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "_businessPermit",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "_brgyClearance",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "_sanitaryPermit",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "_mayorsPermit",
+                  "type": "string"
+                }
+              ],
+              "name": "storeData",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [{
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+              }],
+              "name": "getData",
+              "outputs": [{
+                  "internalType": "string",
+                  "name": "",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "",
+                  "type": "string"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function",
+              "constant": true
+            }
+          ];;
 
-    //       contract = new web3.eth.Contract(contractAbi, contractAddress);
+          contract = new web3.eth.Contract(contractAbi, contractAddress);
 
-    //       ethereum.on('accountsChanged', newAccounts => {
-    //         console.log('Accounts changed:', newAccounts);
-    //         currentAccount = newAccounts[0]; // Update the higher-scoped variable
-    //         console.log('Updated Ethereum address:', currentAccount);
-    //       });
+          ethereum.on('accountsChanged', newAccounts => {
+            console.log('Accounts changed:', newAccounts);
+            currentAccount = newAccounts[0]; // Update the higher-scoped variable
+            console.log('Updated Ethereum address:', currentAccount);
+          });
 
-    //       ethereum.on('chainChanged', chainId => {
-    //         console.log('Network changed:', chainId);
-    //       });
+          ethereum.on('chainChanged', chainId => {
+            console.log('Network changed:', chainId);
+          });
 
-    $('#approval_tbl').DataTable({
-      'serverside': true,
-      'processing': true,
-      'paging': true,
-      "columnDefs": [{
-        "className": "dt-center",
-        "targets": "_all"
-      }, ],
-      'ajax': {
-        'url': 'Registration_approval_tbl.php',
-        'type': 'post',
+          $('#approval_tbl').DataTable({
+            'serverside': true,
+            'processing': true,
+            'paging': true,
+            "columnDefs": [{
+              "className": "dt-center",
+              "targets": "_all"
+            }, ],
+            'ajax': {
+              'url': 'Registration_approval_tbl.php',
+              'type': 'post',
 
-      },
+            },
+          });
+        } catch (error) {
+          console.error('Error fetching accounts:', error);
+        }
+      } else {
+        console.log('MetaMask or an Ethereum-compatible wallet is not installed.');
+      }
     });
-    //     } catch (error) {
-    //       console.error('Error fetching accounts:', error);
-    //     }
-    //   } else {
-    //     console.log('MetaMask or an Ethereum-compatible wallet is not installed.');
-    //   }
-    // });
 
     $(document).ready(function() {
 
@@ -762,7 +813,7 @@ if (empty($_SESSION['ownerId'])) {
       });
 
     });
-
+    //step
     var currentStep = 1;
     var failedSteps = []; // Array to store failed steps
     var remarksData = {}; // Object to store remarks for each step
@@ -804,25 +855,6 @@ if (empty($_SESSION['ownerId'])) {
       }
     }
 
-    // // Save changes button click event
-    // $("#saveChangesButton").click(function() {
-
-
-
-    //   // Log the remarks data before sending it to the server
-    //   console.log(remarksDataStep2);
-    //   console.log(remarksDataStep3);
-    //   console.log(remarksDataStep4);
-    //   console.log(remarksDataStep5);
-    //   console.log(remarksDataStep6);
-
-    //   update(remarksDataStep2, remarksDataStep3, remarksDataStep4, remarksDataStep5, remarksDataStep6, hiddendata);
-
-    //   $('#view').modal("hide");
-    //   for (var i = 2; i <= 6; i++) {
-    //     $("#remarksStep" + i).val("");
-    //   }
-    // });
 
     function update() {
 
@@ -835,18 +867,14 @@ if (empty($_SESSION['ownerId'])) {
 
       hiddendata = $('#hiddendata').val();
 
-      //   console.log(remarksDataStep2);
-      //   console.log(remarksDataStep3);
-      //   console.log(remarksDataStep4);
-      //   console.log(remarksDataStep5);
-      //   console.log(remarksDataStep6);
 
-      console.log(remarksDataStep2)
-      console.log(remarksDataStep3)
-      console.log(remarksDataStep4)
-      console.log(remarksDataStep5)
-      console.log(remarksDataStep6)
-      console.log(hiddendata)
+
+      // console.log(remarksDataStep2)
+      // console.log(remarksDataStep3)
+      // console.log(remarksDataStep4)
+      // console.log(remarksDataStep5)
+      // console.log(remarksDataStep6)
+      // console.log(hiddendata)
 
       $('#view').modal("hide");
       for (var i = 2; i <= 6; i++) {
@@ -920,18 +948,86 @@ if (empty($_SESSION['ownerId'])) {
 
         }
 
-        // Add an event listener to the #status element
-        $('#status').on('change', function() {
-          // Check if the selected value is 3 and hide or show the #remarks field accordingly
-          if ($(this).val() === '3') {
-            $('#remarksRow').show();
 
+
+        // //fetching of appoving and declining of every requirements (OPTIMIZED)
+        function updateStep(status, passedId, failedId, statusId, remarksId) {
+          if (status === "1") {
+            $(passedId).hide();
+            $(failedId).hide();
+            $(statusId).show();
+            $(remarksId).val("1");
           } else {
-            $('#remarksRow').hide();
-            $('#remarks').val("");
-
+            $(passedId).show();
+            $(failedId).show();
+            $(statusId).hide();
+            $(remarksId).val(""); // Adjust as needed
           }
-        });
+        }
+
+        updateStep(userid.remarks_brgyClearance, '#passedStep2', '#failedStep2', '#step2_Status', '#remarksStep2');
+        updateStep(userid.remarks_dti, '#passedStep3', '#failedStep3', '#step3_Status', '#remarksStep3');
+        updateStep(userid.remarks_sanitary, '#passedStep4', '#failedStep4', '#step4_Status', '#remarksStep4');
+        updateStep(userid.remarks_cedula, '#passedStep5', '#failedStep5', '#step5_Status', '#remarksStep5');
+        updateStep(userid.remarks_mayorsPermit, '#passedStep6', '#failedStep6', '#step6_Status', '#remarksStep6');
+
+
+        // //fetching of appoving and declining of every requirements 
+        // if (userid.remarks_brgyClearance === "1") {
+        //   $('#passedStep2').hide();
+        //   $('#failedStep2').hide();
+        //   $("#step2_Status").show();
+        //   $('#remarksStep2').val("1");
+        // } else {
+        //   // If condition is false (revert changes)
+        //   $('#passedStep2').show();
+        //   $('#failedStep2').show();
+        //   $("#step2_Status").hide();
+        //   $('#remarksStep2').val(""); // Assuming you want to clear the value, change this line accordingly if needed
+        // }
+
+        // if (userid.remarks_dti === "1") {
+        //   $('#passedStep3').hide();
+        //   $('#failedStep3').hide();
+        //   $("#step3_Status").show();
+        //   $('#remarksStep3').val("1");
+        // }
+
+        // if (userid.remarks_sanitary === "1") {
+        //   $('#passedStep4').hide();
+        //   $('#failedStep4').hide();
+        //   $("#step4_Status").show();
+        //   $('#remarksStep4').val("1");
+        // }
+
+        // if (userid.remarks_cedula === "1") {
+        //   $('#passedStep5').hide();
+        //   $('#failedStep5').hide();
+        //   $("#step5_Status").show();
+        //   $('#remarksStep5').val("1");
+        // }
+
+        // if (userid.remarks_mayorsPermit === "1") {
+        //   $('#passedStep6').hide();
+        //   $('#failedStep6').hide();
+        //   $("#step6_Status").show();
+        //   $('#remarksStep6').val("1");
+        // }
+
+        // // Add an event listener to the #status element
+        // $('#status').on('change', function() {
+        //   // Check if the selected value is 3 and hide or show the #remarks field accordingly
+        //   if ($(this).val() === '3') {
+        //     $('#remarksRow').show();
+
+        //   } else {
+        //     $('#remarksRow').hide();
+        //     $('#remarks').val("");
+
+        //   }
+        // });
+
+
         // Function to handle displaying images or "No requirements found" text
         function displayImageOrText(imageId, imageName) {
           var $imageElement = $('#' + imageId);
@@ -985,7 +1081,7 @@ if (empty($_SESSION['ownerId'])) {
       $('#blockchain').modal("show");
     }
 
-    //function save without blockchain
+    // function save without blockchain
 
     // function Save() {
     //   var hiddendata1 = $('#hiddendata1').val();
@@ -1003,10 +1099,24 @@ if (empty($_SESSION['ownerId'])) {
     // }
 
 
+    function showLoader() {
+      console.log('Show Loader called');
+
+      // Create loader overlay
+      const loaderOverlay = $('<div id="loaderOverlay"></div>').appendTo('body');
+
+      // Add loader spinner and "Please Wait" message
+      const loaderContainer = $('<div class="loader-container"></div>').appendTo(loaderOverlay);
+      $('<div class="loader"></div>').appendTo(loaderContainer);
+      $('<p  style="font-size: 18px;" ><b>Please wait </b>, it will take a while...</p>').appendTo(loaderContainer);
+    }
+
+
     //with blockchain 
 
     async function Save() {
       try {
+        showLoader();
         const updateData = {
           id: $('#hiddendata1').val(),
           businessName: $('#bc_businessname').val(),
@@ -1018,6 +1128,7 @@ if (empty($_SESSION['ownerId'])) {
           sanitaryPermit: $('#bc_sanitary').val(),
           mayorsPermit: $('#bc_permit').val(),
         };
+
 
         const gasEstimate = await contract.methods.storeData(
           updateData.id,
@@ -1033,7 +1144,17 @@ if (empty($_SESSION['ownerId'])) {
           from: currentAccount
         });
 
-        const gasLimit = gasEstimate + 100000;
+
+
+        // Fetch the current gas price from MetaMask using ethereum provider
+        // const currentGasPrice = await ethereum.request({
+        //   method: 'eth_gasPrice'
+        // });
+
+        // // Set a lower gas price (adjust this value as needed)
+        // const lowerGasPrice = Math.floor(parseInt(currentGasPrice) * 1); // For example, set to 80% of the current gas price
+
+        const gasLimit = gasEstimate + 200000;
 
         const tx = await contract.methods.storeData(
           updateData.id,
@@ -1047,6 +1168,7 @@ if (empty($_SESSION['ownerId'])) {
           updateData.mayorsPermit
         ).send({
           from: currentAccount,
+          // gasPrice: lowerGasPrice, // Set the lower gas price
           gas: gasLimit
         });
 
@@ -1062,7 +1184,7 @@ if (empty($_SESSION['ownerId'])) {
             },
             body: `hiddendata1=${encodeURIComponent(hiddendata1)}`,
           });
-
+          hideLoader();
           if (response.ok) {
             // Reload DataTable (assuming you have DataTables initialized)
             $('#approval_tbl').DataTable().ajax.reload();
@@ -1074,8 +1196,18 @@ if (empty($_SESSION['ownerId'])) {
 
         $('#blockchain').modal('hide');
       } catch (error) {
+        hideLoader();
         console.error('Error:', error);
       }
+    }
+
+
+
+    function hideLoader() {
+      // Implement your loader hiding logic here
+      // For example, remove the overlay or hide the spinner
+      // Example removing the overlay:
+      $('#loaderOverlay').remove();
     }
   </script>
 
