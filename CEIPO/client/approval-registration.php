@@ -1147,12 +1147,12 @@ if (empty($_SESSION['ownerId'])) {
 
 
         // Fetch the current gas price from MetaMask using ethereum provider
-        // const currentGasPrice = await ethereum.request({
-        //   method: 'eth_gasPrice'
-        // });
+        const currentGasPrice = await ethereum.request({
+          method: 'eth_gasPrice'
+        });
 
-        // // Set a lower gas price (adjust this value as needed)
-        // const lowerGasPrice = Math.floor(parseInt(currentGasPrice) * 1); // For example, set to 80% of the current gas price
+        // Set a lower gas price (adjust this value as needed)
+        const lowerGasPrice = Math.floor(parseInt(currentGasPrice) * 1); // For example, set to 80% of the current gas price
 
         const gasLimit = gasEstimate + 200000;
 
@@ -1168,7 +1168,7 @@ if (empty($_SESSION['ownerId'])) {
           updateData.mayorsPermit
         ).send({
           from: currentAccount,
-          // gasPrice: lowerGasPrice, // Set the lower gas price
+          gasPrice: lowerGasPrice, // Set the lower gas price
           gas: gasLimit
         });
 
