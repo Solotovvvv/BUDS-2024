@@ -83,6 +83,8 @@ if (!$stmt1->execute()) {
         cursor: pointer;
         padding: 0;
         font: inherit;
+        display: block; /* Make the button a block element */
+        margin: auto;   /* Center the button horizontally */
     }
 
     /* Optionally, you can remove the default button styling */
@@ -455,7 +457,7 @@ if (!$stmt1->execute()) {
                       <?php echo substr($data1['BusinessDescrip'], 0, 50); ?>
                     </span>
                   </li>
-                  <button  class="link-button" onclick="toggleDescription(this, '<?php echo $uniqueId; ?>')">See More</button>
+                  <button class="link-button center text-secondary" onclick="toggleDescription(this, '<?php echo $uniqueId; ?>')">See More</button>
                 </ul>
                 <div class="pi-agent">
                   <div class="pa-item">
