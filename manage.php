@@ -34,9 +34,7 @@ INNER JOIN brgyzone_list AS brgyl ON bl.BusinessBrgy = brgyl.ID
 INNER JOIN business_location AS bloc ON bl.bus_id = bloc.bus_id
 INNER JOIN business_links AS bll ON bl.bus_id = bll.bus_id
 WHERE 
-bl.ownerId = $ownerId AND
-(bl.BusinessStatus = 4 OR 
-bl.BusinessStatus = 1 )";
+bl.ownerId = $ownerId";
 $x = -1;
 if ($rs = $conn->query($sql)) {
     if ($rs->num_rows > 0) {

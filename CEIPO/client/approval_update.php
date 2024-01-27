@@ -66,11 +66,11 @@ if (isset($_POST['views'])) {
         ':hiddendata' => $hiddendata,
     ])) {
         // Update remarks fields in the business_requirement table
-        $updateBusinessRequirementSql = "UPDATE business_requirement 
-                                             SET remarks_brgyClearance = :remarks_brgyClearance, 
-                                                 remarks_dti = :remarks_dti, 
-                                                 remarks_sanitary = :remarks_sanitary, 
-                                                 remarks_cedula = :remarks_cedula, 
+        $updateBusinessRequirementSql = "UPDATE business_requirement
+                                             SET remarks_brgyClearance = :remarks_brgyClearance,
+                                                 remarks_dti = :remarks_dti,
+                                                 remarks_sanitary = :remarks_sanitary,
+                                                 remarks_cedula = :remarks_cedula,
                                                  remarks_mayorsPermit = :remarks_mayorsPermit
                                              WHERE bus_id = :hiddendata";
 

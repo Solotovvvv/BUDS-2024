@@ -566,8 +566,8 @@ function addBusiness($request = null)
             }
             return ''; // Return an empty string if the file is not set
         };
-        
-        $newImageName1 = $handleFileUpload($_FILES['brgyClearance'] ?? [],  '../img/requirements/');
+
+        $newImageName1 = $handleFileUpload($_FILES['brgyClearance'] ?? [], '../img/requirements/');
         $newImageName2 = $handleFileUpload($_FILES['DTIPermit'] ?? [], '../img/requirements/');
         $newImageName3 = $handleFileUpload($_FILES['sanitaryPermit'] ?? [], '../img/requirements/');
         $newImageName4 = $handleFileUpload($_FILES['cedula'] ?? [], '../img/requirements/');
@@ -774,7 +774,8 @@ function edtBusinessDetails($request = null)
             echo json_encode($msg);
         }
     }
-};
+}
+;
 
 function edtBusinessBrgyClear($request = null)
 {
@@ -827,13 +828,12 @@ function edtBusinessBrgyClear($request = null)
                 $msg['icon'] = "error";
                 echo json_encode($msg);
             } else {
-                $sql2 = "UPDATE business_list set BusinessStatus = 2, BusinessRemarks = null";
+                $sql2 = "UPDATE business_list set BusinessStatus = 2 WHERE bus_id = :id";
                 $stmt1 = $pdo->prepare($sql2);
-                $stmt1->execute();
-                if ($stmt->errorCode() !== '00000') {
-                    $errorInfo = $stmt->errorInfo();
-                    $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
-                    // Handle the error as needed (e.g., logging, displaying an error message)
+                $stmt1->bindParam(':id', $id, PDO::PARAM_INT);
+                if (!$stmt1->execute()) {
+                    $errorInfo = $stmt1->errorInfo();
+                    $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql2;
                     $msg['title'] = "Error";
                     $msg['message'] = $errorMsg;
                     $msg['icon'] = "error";
@@ -861,7 +861,8 @@ function edtBusinessBrgyClear($request = null)
         $msg['status'] = "error";
         echo json_encode($msg);
     }
-};
+}
+;
 
 function edtDTIPermit($request = null)
 {
@@ -905,6 +906,15 @@ function edtDTIPermit($request = null)
                     ':id' => $id
                 )
             );
+            // $sql = "UPDATE business_requirement SET bus_dtipermit = :clearance WHERE bus_id = :id";
+            // $pdo = Database::connection();
+            // $stmt = $pdo->prepare($sql);
+            // $stmt->execute(
+            //     array(
+            //         ':clearance' => $newImageName,
+            //         ':id' => $id
+            //     )
+            // );
             if ($stmt->errorCode() !== '00000') {
                 $errorInfo = $stmt->errorInfo();
                 $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
@@ -913,14 +923,14 @@ function edtDTIPermit($request = null)
                 $msg['message'] = $errorMsg;
                 $msg['icon'] = "error";
                 echo json_encode($msg);
+                return;  // Add this to prevent further execution
             } else {
-                $sql2 = "UPDATE business_list set BusinessStatus = 2, BusinessRemarks = null";
+                $sql2 = "UPDATE business_list SET BusinessStatus = 2 WHERE bus_id = :id";
                 $stmt1 = $pdo->prepare($sql2);
-                $stmt1->execute();
-                if ($stmt->errorCode() !== '00000') {
-                    $errorInfo = $stmt->errorInfo();
-                    $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
-                    // Handle the error as needed (e.g., logging, displaying an error message)
+                $stmt1->bindParam(':id', $id, PDO::PARAM_INT);
+                if (!$stmt1->execute()) {
+                    $errorInfo = $stmt1->errorInfo();
+                    $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql2;
                     $msg['title'] = "Error";
                     $msg['message'] = $errorMsg;
                     $msg['icon'] = "error";
@@ -948,7 +958,8 @@ function edtDTIPermit($request = null)
         $msg['status'] = "error";
         echo json_encode($msg);
     }
-};
+}
+;
 
 function edtSanitaryPermit($request = null)
 {
@@ -1001,13 +1012,12 @@ function edtSanitaryPermit($request = null)
                 $msg['icon'] = "error";
                 echo json_encode($msg);
             } else {
-                $sql2 = "UPDATE business_list set BusinessStatus = 2, BusinessRemarks = null";
+                $sql2 = "UPDATE business_list set BusinessStatus = 2 WHERE bus_id = :id";
                 $stmt1 = $pdo->prepare($sql2);
-                $stmt1->execute();
-                if ($stmt->errorCode() !== '00000') {
-                    $errorInfo = $stmt->errorInfo();
-                    $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
-                    // Handle the error as needed (e.g., logging, displaying an error message)
+                $stmt1->bindParam(':id', $id, PDO::PARAM_INT);
+                if (!$stmt1->execute()) {
+                    $errorInfo = $stmt1->errorInfo();
+                    $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql2;
                     $msg['title'] = "Error";
                     $msg['message'] = $errorMsg;
                     $msg['icon'] = "error";
@@ -1035,7 +1045,8 @@ function edtSanitaryPermit($request = null)
         $msg['status'] = "error";
         echo json_encode($msg);
     }
-};
+}
+;
 
 function edtCedulaPermit($request = null)
 {
@@ -1088,13 +1099,12 @@ function edtCedulaPermit($request = null)
                 $msg['icon'] = "error";
                 echo json_encode($msg);
             } else {
-                $sql2 = "UPDATE business_list set BusinessStatus = 2, BusinessRemarks = null";
+                $sql2 = "UPDATE business_list set BusinessStatus = 2 WHERE bus_id = :id";
                 $stmt1 = $pdo->prepare($sql2);
-                $stmt1->execute();
-                if ($stmt->errorCode() !== '00000') {
-                    $errorInfo = $stmt->errorInfo();
-                    $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
-                    // Handle the error as needed (e.g., logging, displaying an error message)
+                $stmt1->bindParam(':id', $id, PDO::PARAM_INT);
+                if (!$stmt1->execute()) {
+                    $errorInfo = $stmt1->errorInfo();
+                    $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql2;
                     $msg['title'] = "Error";
                     $msg['message'] = $errorMsg;
                     $msg['icon'] = "error";
@@ -1122,7 +1132,8 @@ function edtCedulaPermit($request = null)
         $msg['status'] = "error";
         echo json_encode($msg);
     }
-};
+}
+;
 
 function edtMayorPermit($request = null)
 {
@@ -1175,13 +1186,12 @@ function edtMayorPermit($request = null)
                 $msg['icon'] = "error";
                 echo json_encode($msg);
             } else {
-                $sql2 = "UPDATE business_list set BusinessStatus = 2, BusinessRemarks = null";
+                $sql2 = "UPDATE business_list set BusinessStatus = 2 WHERE bus_id = :id";
                 $stmt1 = $pdo->prepare($sql2);
-                $stmt1->execute();
-                if ($stmt->errorCode() !== '00000') {
-                    $errorInfo = $stmt->errorInfo();
-                    $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
-                    // Handle the error as needed (e.g., logging, displaying an error message)
+                $stmt1->bindParam(':id', $id, PDO::PARAM_INT);
+                if (!$stmt1->execute()) {
+                    $errorInfo = $stmt1->errorInfo();
+                    $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql2;
                     $msg['title'] = "Error";
                     $msg['message'] = $errorMsg;
                     $msg['icon'] = "error";
@@ -1209,7 +1219,8 @@ function edtMayorPermit($request = null)
         $msg['status'] = "error";
         echo json_encode($msg);
     }
-};
+}
+;
 
 function addJobSpec1($request = null)
 {
@@ -1227,7 +1238,8 @@ function addJobSpec1($request = null)
     <button type='button' class='btn btn-icon btn-success' onclick='addJobSpec1()'><i class='bx bx-plus'></i></button>
     </div>";
     echo json_encode($response);
-};
+}
+;
 
 function addJobSpec2($request = null)
 {
@@ -1246,7 +1258,8 @@ function addJobSpec2($request = null)
     <button type='button' class='btn btn-icon btn-success' onclick='addJobSpec2()'><i class='bx bx-plus'></i></button>
     </div>";
     echo json_encode($response);
-};
+}
+;
 
 function addJob($request = null)
 {
@@ -1306,7 +1319,8 @@ function addJob($request = null)
         $msg['status'] = "success";
         echo json_encode($msg);
     }
-};
+}
+;
 
 function edtJob($request = null)
 {
@@ -1369,7 +1383,8 @@ function edtJob($request = null)
         $msg['icon'] = "success";
         echo json_encode($msg);
     }
-};
+}
+;
 
 function edtJobStatus($request = null)
 {
@@ -1403,7 +1418,8 @@ function edtJobStatus($request = null)
         $msg['icon'] = "success";
         echo json_encode($msg);
     }
-};
+}
+;
 
 function addPics($request = null)
 {
@@ -1582,7 +1598,8 @@ function addPics($request = null)
             }
         }
     }
-};
+}
+;
 
 function edtPic1($request = null)
 {
@@ -1656,7 +1673,8 @@ function edtPic1($request = null)
         $msg['status'] = "error";
         echo json_encode($msg);
     }
-};
+}
+;
 
 function edtPic2($request = null)
 {
@@ -1730,7 +1748,8 @@ function edtPic2($request = null)
         $msg['status'] = "error";
         echo json_encode($msg);
     }
-};
+}
+;
 
 function edtPic3($request = null)
 {
@@ -1804,7 +1823,8 @@ function edtPic3($request = null)
         $msg['status'] = "error";
         echo json_encode($msg);
     }
-};
+}
+;
 
 function edtPic4($request = null)
 {
@@ -1878,7 +1898,8 @@ function edtPic4($request = null)
         $msg['status'] = "error";
         echo json_encode($msg);
     }
-};
+}
+;
 
 function uploadPost($request = null)
 {
@@ -1958,7 +1979,8 @@ function uploadPost($request = null)
         $msg['status'] = "error";
         echo json_encode($msg);
     }
-};
+}
+;
 
 function editPost($request = null)
 {
@@ -2065,7 +2087,8 @@ function editPost($request = null)
             echo json_encode($msg);
         }
     }
-};
+}
+;
 
 function edtPostStatus($request = null)
 {
@@ -2099,7 +2122,8 @@ function edtPostStatus($request = null)
         $msg['icon'] = "success";
         echo json_encode($msg);
     }
-};
+}
+;
 
 function commentAndRating($request = null)
 {
@@ -2134,7 +2158,8 @@ function commentAndRating($request = null)
         $msg['icon'] = "success";
         echo json_encode($msg);
     }
-};
+}
+;
 
 function reply($request = null)
 {
@@ -2157,7 +2182,8 @@ function reply($request = null)
         $msg['icon'] = "success";
         echo json_encode($msg);
     }
-};
+}
+;
 
 function searchBusinessFilter($request = null)
 {
@@ -2239,7 +2265,7 @@ function searchBusinessFilter($request = null)
                 <div class="py-3 px-2 pb-1 border-bottom">
                 <div class="row">
                     <div class="col-lg-4">
-                    <img src="img/logo/'.$row['Businesslogo'].'" style="border-radius: 20px;" alt="no pic">
+                    <img src="img/logo/' . $row['Businesslogo'] . '" style="border-radius: 20px;" alt="no pic">
                     </div>
                     <div class="col-lg-8">
                     <div class="d-md-flex align-items-md-center">
@@ -2259,7 +2285,7 @@ function searchBusinessFilter($request = null)
                                 $counter1++;
                             }
                         }
-                        $totalAve = (int)($totalRating1 / $counter1);
+                        $totalAve = (int) ($totalRating1 / $counter1);
                         for ($j = 0; $j < $totalAve; $j++) {
                             $disp .= '<i class="fa fa-star"></i>';
                         }
@@ -2281,4 +2307,5 @@ function searchBusinessFilter($request = null)
     }
 
     echo $disp;
-};
+}
+;

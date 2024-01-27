@@ -6,6 +6,7 @@ if (empty($_SESSION['ownerId']) || empty($_GET['a'])) {
   header('Location: manage.php');
 }
 $bus_id = $_GET['a'];
+$_SESSION['bus_id'] = $_GET['a'];
 $sql5 = "SELECT * 
 FROM business_reviews AS br 
 INNER JOIN business_list AS bl ON br.bus_id = bl.bus_id
