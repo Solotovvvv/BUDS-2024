@@ -1188,7 +1188,13 @@ if (empty($_SESSION['ownerId'])) {
           if (response.ok) {
             // Reload DataTable (assuming you have DataTables initialized)
             $('#approval_tbl').DataTable().ajax.reload();
-            alert("Store in blockchain");
+          
+            Swal.fire({
+              title: "Store in blockchain",
+              icon: "info",
+              confirmButtonText: "OK"
+            });
+            
           } else {
             throw new Error(`Failed to update status on the server. Status: ${response.status}`);
           }
