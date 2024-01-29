@@ -1841,7 +1841,8 @@ CREATE TABLE `user_resume` (
   `exp_year` varchar(255) NOT NULL,
   `skills` varchar(500) NOT NULL,
   `cert_desc` varchar(500) NOT NULL,
-  `cert_year` varchar(255) NOT NULL
+  `cert_year` varchar(255) NOT NULL,
+  `file` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
