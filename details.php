@@ -853,9 +853,9 @@ if (isset($_SESSION['ownerId'])) {
                                                 <div class="top-agent">
                                                     <div class="ta-item">
                                                         <div class="ta-pic set-bg" data-setbg=<?php echo 'img/logo/' . $data7['Businesslogo'] ?>></div>
-                                                        <div class="ta-text">
+                                                        <div class="ta-text" style="height: fit-content;">
                                                             <h6><a href=<?php echo './details.php?ID=' . $data7['bus_id'] ?>><?php echo $data7['BusinessName'] ?></a></h6>
-                                                            <span>
+                                                            <span style="font-size: small;">
                                                                 <?php echo $data7['BusinessAddress'] ?>
                                                             </span>
                                                             <div class="ta-num">
