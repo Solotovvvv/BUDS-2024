@@ -1184,11 +1184,11 @@ if (empty($_SESSION['ownerId'])) {
             },
             body: `hiddendata1=${encodeURIComponent(hiddendata1)}`,
           });
-          hideLoader();
+        
           if (response.ok) {
             // Reload DataTable (assuming you have DataTables initialized)
             $('#approval_tbl').DataTable().ajax.reload();
-          
+            hideLoader();
             Swal.fire({
               title: "Store in blockchain",
               icon: "info",
