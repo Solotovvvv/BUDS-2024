@@ -56,7 +56,7 @@ if (empty($_SESSION['ownerId'])) {
   .progress-bar {
     width: 0%;
     height: 20px;
-    background-color: #007bff;
+    background-color: #067335;
   }
 
   .swal2-container {
