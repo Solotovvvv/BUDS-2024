@@ -198,7 +198,7 @@ $_SESSION['bus_id'] = $_GET['a'];
                                                 <!-- Container for "X" and "edit" icons -->
                                                 <div class="icon-container position-absolute top-0 end-0 p-2">
                                                     <!-- Boxicon for "X" sign in the upper right corner -->
-                                                    <i class='bx bx-x cursor-pointer' style="font-size: 1.5rem;"></i>
+                                                    <i class='bx bx-x cursor-pointer remove-icon' style="font-size: 1.5rem;"></i>
                                                     <!-- Boxicon for edit in the upper right corner -->
                                                     <i class='bx bx-edit cursor-pointer' style="font-size: 1.5rem;"></i>
                                                 </div>
@@ -258,7 +258,23 @@ $_SESSION['bus_id'] = $_GET['a'];
                 var cardCounter = 1;
                 var questions = []; // Array to store questions
 
-                
+                // Click event handler for the "Remove" icon
+                $(document).on("click", ".remove-icon", function() {
+                    // Find the parent card and remove it
+                    $(this).closest(".card").remove();
+
+
+                    // Decrement the counter
+                    cardCounter--;
+
+                    // Update the labels of remaining questions
+                    // $(".card-body #lbl").each(function(index) {
+                    //     $(this).text("Question " + (index + 1));
+                    // });
+                });
+
+
+
                 $("#addbtn").click(function() {
                     var newCard = $("#hiddenCard").clone().removeAttr("style id").addClass("mb-5");;
                     newCard.find("#lbl").text("Question " + cardCounter);
@@ -314,7 +330,7 @@ $_SESSION['bus_id'] = $_GET['a'];
 
                             if (status === 'success') {
                                 alert("Saved");
-                             
+
                             } else {
                                 alert("Failed to save. Please try again.");
                             }
@@ -332,9 +348,8 @@ $_SESSION['bus_id'] = $_GET['a'];
                 });
             });
 
-           
+
             // Function to display fetched FAQs
-      
         </script>
 
 
