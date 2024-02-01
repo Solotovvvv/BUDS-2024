@@ -61,7 +61,7 @@ if ($stmt->execute()) {
                 <button type="button" class="btn btn-warning btn-sm" onclick="view(' .$row['app_id'] . ')">
                     <i class="bx bxs-file-doc"></i>
                 </button>
-                <button type="button" class="btn btn-primary btn-sm" onclick="status(' .$row['app_id'] . ')">
+                <button type="button" class="btn btn-primary btn-sm" onclick="status(' .$row['ID'] . ')">
                     <i class="bx bx-show-alt"></i>
                 </button>
             </td>',

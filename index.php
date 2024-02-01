@@ -53,8 +53,7 @@ if (!$stmt1->execute()) {
   <title>BuDS</title>
 
   <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800,900&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800,900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Lato:400,700,900&display=swap" rel="stylesheet">
 
   <!-- Css Styles -->
@@ -76,20 +75,23 @@ if (!$stmt1->execute()) {
     }
 
     .link-button {
-        background: none;
-        border: none;
-        color: #007bff; /* Set the color to the desired link color */
-        text-decoration: underline;
-        cursor: pointer;
-        padding: 0;
-        font: inherit;
-        display: block; /* Make the button a block element */
-        margin: auto;   /* Center the button horizontally */
+      background: none;
+      border: none;
+      color: #007bff;
+      /* Set the color to the desired link color */
+      text-decoration: underline;
+      cursor: pointer;
+      padding: 0;
+      font: inherit;
+      display: block;
+      /* Make the button a block element */
+      margin: auto;
+      /* Center the button horizontally */
     }
 
     /* Optionally, you can remove the default button styling */
     .link-button:focus {
-        outline: none;
+      outline: none;
     }
   </style>
 
@@ -205,8 +207,7 @@ if (!$stmt1->execute()) {
       <div class="modal-content w-100">
         <div class="modal-header">
           <h3 class="text-center mb-6 font-weight-bold">LOG IN</h3>
-          <span onclick="document.getElementById('id01').style.display='none'" class="close"
-            title="Close Modal">&times;</span>
+          <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
         </div>
         <div class="container mt-4">
           <div class="card px-2 py-3" id="form1">
@@ -249,8 +250,7 @@ if (!$stmt1->execute()) {
       <div class="modal-content w-100">
         <div class="modal-header">
           <h3 class="text-center mb-6 font-weight-bold">USER ACCOUNT REGISTRATION</h3>
-          <span onclick="document.getElementById('id02').style.display='none'" class="close"
-            title="Close Modal">&times;</span>
+          <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
         </div>
         <div class="container mt-4">
           <div class="card px-2 py-3" id="form2">
@@ -294,8 +294,7 @@ if (!$stmt1->execute()) {
       <div class="modal-content w-100">
         <div class="modal-header">
           <h3 class="text-center mb-6 font-weight-bold">BUSINESS ACCOUNT REGISTRATION</h3>
-          <span onclick="document.getElementById('id03').style.display='none'" class="close"
-            title="Close Modal">&times;</span>
+          <span onclick="document.getElementById('id03').style.display='none'" class="close" title="Close Modal">&times;</span>
         </div>
         <div class="container mt-4">
           <div class="card px-2 py-3" id="form2">
@@ -309,28 +308,23 @@ if (!$stmt1->execute()) {
                 </div>
                 <div class="row">
                   <div class="col">
-                    <div class="forms-inputs mb-4"> <span>First Name</span> <input type="text" name="firstname"
-                        id="ownerFname"></div>
+                    <div class="forms-inputs mb-4"> <span>First Name</span> <input type="text" name="firstname" id="ownerFname"></div>
                   </div>
                   <div class="col">
-                    <div class="forms-inputs mb-4"> <span>Middle Name</span> <input type="text" name="middlename"
-                        id="ownerMname"></div>
+                    <div class="forms-inputs mb-4"> <span>Middle Name</span> <input type="text" name="middlename" id="ownerMname"></div>
                   </div>
 
                   <div class="col">
-                    <div class="forms-inputs mb-4"> <span>Last Name</span> <input type="text" name="surname"
-                        id="ownerLname">
+                    <div class="forms-inputs mb-4"> <span>Last Name</span> <input type="text" name="surname" id="ownerLname">
                     </div>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col">
-                    <div class="forms-inputs mb-4"> <span>Birthday</span> <input type="date" name="birthday" required
-                        id="ownerBirthday"></div>
+                    <div class="forms-inputs mb-4"> <span>Birthday</span> <input type="date" name="birthday" required id="ownerBirthday"></div>
                   </div>
                   <div class="col">
-                    <div class="forms-inputs mb-4"> <span>Age</span> <input type="text" name="age" required
-                        id="ownerAge"></div>
+                    <div class="forms-inputs mb-4"> <span>Age</span> <input type="text" name="age" required id="ownerAge"></div>
                   </div>
                 </div>
                 <div class="row">
@@ -343,23 +337,17 @@ if (!$stmt1->execute()) {
                     </div>
                   </div>
                   <div class="col">
-                    <div class="forms-inputs mb-4"> <span>Contact Number</span> <input type="tell" name="contactnumber"
-                        id="ownerNumber"></div>
+                    <div class="forms-inputs mb-4"> <span>Contact Number</span> <input type="tell" name="contactnumber" id="ownerNumber"></div>
                   </div>
                 </div>
-                <div class="forms-inputs mb-4"> <span>Address</span> <input type="text" name="address"
-                    id="ownerAddress"></div>
-                <div class="forms-inputs mb-4"> <span>Password</span> <input type="password" name="password"
-                    id="ownerPass"></div>
-                <div class="forms-inputs mb-4"> <span>Confirm Password</span> <input type="password"
-                    name="passwordconfirm" id="ownerConPass"></div>
+                <div class="forms-inputs mb-4"> <span>Address</span> <input type="text" name="address" id="ownerAddress"></div>
+                <div class="forms-inputs mb-4"> <span>Password</span> <input type="password" name="password" id="ownerPass"></div>
+                <div class="forms-inputs mb-4"> <span>Confirm Password</span> <input type="password" name="passwordconfirm" id="ownerConPass"></div>
                 <div class="form-group form-check">
                   <input type="checkbox" class="form-check-input" id="checkTerms">
-                  <p class="form-check-label" for="exampleCheck1">By clicking this, you are agreeing to the <a
-                      href="#">Terms & Conditions </a> and the <a href="#">Privacy Policy</a>.</p>
+                  <p class="form-check-label" for="exampleCheck1">By clicking this, you are agreeing to the <a href="#">Terms & Conditions </a> and the <a href="#">Privacy Policy</a>.</p>
                 </div>
-                <div class="mb-3"> <button disabled class="btn w-100" id="signUp" onclick="createBusinessOwner()"
-                    name="btnbusiness" type="button">SIGN UP</button></div>
+                <div class="mb-3"> <button disabled class="btn w-100" id="signUp" onclick="createBusinessOwner()" name="btnbusiness" type="button">SIGN UP</button></div>
             </div>
             </form>
           </div>
@@ -383,8 +371,7 @@ if (!$stmt1->execute()) {
             <div class="row">
               <div class="col-lg-9 align-self-center">
                 <fieldset>
-                  <input type="name" name="name" id="searchVal" class="searchText" placeholder=" Enter a Business Name"
-                    autocomplete="on" required>
+                  <input type="name" name="name" id="searchVal" class="searchText" placeholder=" Enter a Business Name" autocomplete="on" required>
                 </fieldset>
               </div>
               <div class="col-lg-3">
@@ -424,7 +411,7 @@ if (!$stmt1->execute()) {
               <li data-filter="all">All</li>
               <?php foreach ($datas as $data) {
                 $sanitizedCategory = "cat" . str_replace([' ', '&'], ['_', ''], $data['ID']);
-                ?>
+              ?>
                 <li data-filter=".<?php echo $sanitizedCategory; ?>">
                   <?php echo $data['category']; ?>
                 </li>
@@ -438,7 +425,7 @@ if (!$stmt1->execute()) {
         foreach ($datas1 as $data1) {
           $class = "cat" . str_replace([' ', '&'], ['_', ''], $data1['BusinessCategory']);
           $uniqueId = 'businessDescription_' . $data1['bus_id'];
-          ?>
+        ?>
           <div class="col-lg-4 col-md-6 mix all <?php echo $class; ?>">
             <div class="property-item">
               <div class="pi-pic set-bg" data-setbg=<?php echo 'img/logo/' . $data1['Businesslogo'] ?>>
@@ -456,14 +443,13 @@ if (!$stmt1->execute()) {
                     <span id="<?php echo $uniqueId; ?>">
                       <?php echo substr($data1['BusinessDescrip'], 0, 50); ?>
                     </span>
+                    <button class="link-button center text-info" onclick="toggleDescription(this, '<?php echo $uniqueId; ?>', '<?php echo htmlspecialchars(json_encode($data1['BusinessDescrip'])); ?>')">See More</button>
                   </li>
-                  <button class="link-button center text-secondary" onclick="toggleDescription(this, '<?php echo $uniqueId; ?>')">See More</button>
                 </ul>
                 <div class="pi-agent">
                   <div class="pa-item">
                     <div class="pa-text">
-                      <a class="btn btn-success" href="details.php?ID=<?php echo $data1['bus_id']; ?>" role="button"><i
-                          class="fa fa-search"></i> View More</a>
+                      <a class="btn btn-success" href="details.php?ID=<?php echo $data1['bus_id']; ?>" role="button"><i class="fa fa-search"></i> View More</a>
                     </div>
                   </div>
                 </div>
@@ -681,7 +667,7 @@ if (!$stmt1->execute()) {
   <script src="js/login.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
       var mixer = mixitup('.property-filter', {
         selectors: {
           target: '.mix',
@@ -693,7 +679,7 @@ if (!$stmt1->execute()) {
       var signUpButton = $("#signUp");
 
       // Add a change event handler
-      checkbox.change(function () {
+      checkbox.change(function() {
         // Check if the checkbox is checked
         if (checkbox.is(":checked")) {
           // Checkbox is checked
@@ -709,18 +695,18 @@ if (!$stmt1->execute()) {
       });
     });
 
-    $('#id02, #id03').on('show.bs.modal', function (e) {
+    $('#id02, #id03').on('show.bs.modal', function(e) {
       $('#id01').modal('hide'); // Close the first modal when the second modal is shown
     });
 
-    $('#id02, #id03').on('hidden.bs.modal', function (e) {
+    $('#id02, #id03').on('hidden.bs.modal', function(e) {
       $('#id01').modal('show'); // Reopen the first modal when the second or third modal is closed
     });
 
 
     function searchpage() {
       var searchVal = encodeURIComponent($('#searchVal').val()); // Encode the searchVal
-      setTimeout(function () {
+      setTimeout(function() {
         window.location.href = "listing.php?a=" + searchVal;
       }, 1);
     };
@@ -770,7 +756,7 @@ if (!$stmt1->execute()) {
             payload: JSON.stringify(payload),
             setFunction: 'createUser'
           },
-          success: function (response) {
+          success: function(response) {
             data = JSON.parse(response);
             Swal.fire({
               title: data.title,
@@ -784,7 +770,7 @@ if (!$stmt1->execute()) {
             //for normal UI AHAHAHHAHAHA
             // swal.fire(data.title, data.message, data.icon);
             if (data.status == "success") {
-              setTimeout(function () {
+              setTimeout(function() {
                 window.location.reload();
               }, 2000);
             }
@@ -863,7 +849,7 @@ if (!$stmt1->execute()) {
             payload: JSON.stringify(payload),
             setFunction: 'createOwner'
           },
-          success: function (response) {
+          success: function(response) {
             data = JSON.parse(response);
             Swal.fire({
               title: data.title,
@@ -877,7 +863,7 @@ if (!$stmt1->execute()) {
             //for normal UI AHAHAHHAHAHA
             // swal.fire(data.title, data.message, data.icon);
             if (data.status == "success") {
-              setTimeout(function () {
+              setTimeout(function() {
                 window.location.reload();
               }, 2000);
             }
@@ -913,7 +899,7 @@ if (!$stmt1->execute()) {
           payload: JSON.stringify(payload),
           setFunction: 'loginUser'
         },
-        success: function (response) {
+        success: function(response) {
           data = JSON.parse(response);
           Swal.fire({
             title: data.title,
@@ -925,17 +911,17 @@ if (!$stmt1->execute()) {
             showCancelButton: false,
           });
           if (data.role == 1) {
-            setTimeout(function () {
+            setTimeout(function() {
               window.location.href = "CEIPO/client/index.php";
             }, 2000);
 
           } else if (data.role == 4) {
-            setTimeout(function () {
+            setTimeout(function() {
               window.location.href = "super_dashboard/index.php";
             }, 2000);
           } else {
             if (data.status == "success") {
-              setTimeout(function () {
+              setTimeout(function() {
                 window.location.reload();
               }, 2000);
             }
@@ -946,18 +932,18 @@ if (!$stmt1->execute()) {
       });
     };
 
-    function toggleDescription(button, uniqueId) {
-      var descriptionElement = document.getElementById(uniqueId);
+    function toggleDescription(button, uniqueId, fullDescription) {
+        var descriptionElement = document.getElementById(uniqueId);
 
-      if (descriptionElement) {
-        if (descriptionElement.innerText.length < <?php echo strlen($data1['BusinessDescrip']); ?>) {
-          descriptionElement.innerText = <?php echo json_encode($data1['BusinessDescrip']); ?>;
-          button.innerText = 'See Less';
-        } else {
-          descriptionElement.innerText = <?php echo json_encode(substr($data1['BusinessDescrip'], 0, 50)); ?>;
-          button.innerText = 'See More';
+        if (descriptionElement) {
+            if (descriptionElement.innerText.length < fullDescription.length) {
+                descriptionElement.innerText = fullDescription;
+                button.innerText = 'See Less';
+            } else {
+                descriptionElement.innerText = fullDescription.substring(0, 50);
+                button.innerText = 'See More';
+            }
         }
-      }
     }
   </script>
 </body>
