@@ -21,7 +21,7 @@ $stmt5->execute();
 $numRows3 = $stmt5->rowCount();
 $datas = $stmt5->fetchAll();
 
-foreach($datas as $data){
+foreach ($datas as $data) {
   $logo = $data['Businesslogo'];
 }
 
@@ -40,19 +40,19 @@ $stmt6->execute();
 $numRows4 = $stmt6->rowCount();
 $datas1 = $stmt6->fetchAll();
 $totalRating = 0; // Initialize the variable
-$counter =0;
+$counter = 0;
 
-foreach($datas1 as $data){
-  if(isset($data['rating']) && $data['rating'] != null){
-   $totalRating += $data['rating'];
-   $counter ++;
+foreach ($datas1 as $data) {
+  if (isset($data['rating']) && $data['rating'] != null) {
+    $totalRating += $data['rating'];
+    $counter++;
   }
 }
 // echo $numRows3;
 // echo $counter;
 // echo $totalRating;
-if(isset($data['rating']) && $data['rating'] != null){
-$totalAve = $totalRating/$counter;
+if (isset($data['rating']) && $data['rating'] != null) {
+  $totalAve = $totalRating / $counter;
 }
 
 ?>
@@ -132,6 +132,13 @@ $totalAve = $totalRating/$counter;
               <div data-i18n="Analytics">Comments & Rating</div>
             </a>
           </li>
+          <li class="menu-item">
+            <a href="<?php echo "FAQ.php?a=" . $bus_id ?>" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-message-rounded"></i>
+              <div data-i18n="Analytics">FAQ</div>
+            </a>
+          </li>
+          
           <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Business Document</span>
           </li>
@@ -219,11 +226,11 @@ $totalAve = $totalRating/$counter;
                   <div class="col-sm-7">
                     <div class="card-body">
                       <h5 class="card-title text-primary">Congratulations Owner! 🎉</h5>
-                      <?php if(isset($data['rating']) && $data['rating'] != null){ ?>
-                      <p class="mb-4">
-                        You received <span class="fw-bold"><?php echo $totalAve ?>/5 ratings</span> and <?php echo $numRows3 ?> comments to your business as of
-                        today.
-                      </p>
+                      <?php if (isset($data['rating']) && $data['rating'] != null) { ?>
+                        <p class="mb-4">
+                          You received <span class="fw-bold"><?php echo $totalAve ?>/5 ratings</span> and <?php echo $numRows3 ?> comments to your business as of
+                          today.
+                        </p>
                       <?php } ?>
                     </div>
                   </div>
@@ -246,8 +253,8 @@ $totalAve = $totalRating/$counter;
                         </div>
                       </div>
                       <span class="fw-semibold d-block mb-1">Rating</span>
-                      <?php if(isset($data['rating']) && $data['rating'] != null){ ?> 
-                      <h3 class="card-title mb-2"><?php echo $totalAve. ' ' ?>/ 5</h3>
+                      <?php if (isset($data['rating']) && $data['rating'] != null) { ?>
+                        <h3 class="card-title mb-2"><?php echo $totalAve . ' ' ?>/ 5</h3>
                       <?php } ?>
                     </div>
                   </div>
@@ -282,44 +289,44 @@ $totalAve = $totalRating/$counter;
                 </div>
 
                 <div class="comment-widgets m-b-20">
-                  
-                <?php foreach ($datas1 as $data1){ 
-                  $dateString = $data1['curr_time']; // Assuming you have the date as a string in this format
-                  $timestamp = strtotime($dateString);
-                  $formattedDate = date('F j, Y', $timestamp);?>
-                      <div class="d-flex flex-row comment-row">
+
+                  <?php foreach ($datas1 as $data1) {
+                    $dateString = $data1['curr_time']; // Assuming you have the date as a string in this format
+                    $timestamp = strtotime($dateString);
+                    $formattedDate = date('F j, Y', $timestamp); ?>
+                    <div class="d-flex flex-row comment-row">
                       <?php if ($_SESSION['photo'] != "") { ?>
                         <div class="p-2"><span class="round"><img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt="user" width="50"></span></div>
-                        <?php } else { ?>
-                          <div class="p-2"><span class="round"><img src="img/testimonial-author/unknown.jpg" alt="user" width="50"></span></div>
-                        <?php } ?>
-                        <div class="comment-text w-100">
-                          <h5 class="mb-0"><?php echo $data1['Firstname'] . ' ' . $data1['MiddleName'] . ' ' . $data1['Surname'] ?></h5>
-                          <div class="pr-rating">
+                      <?php } else { ?>
+                        <div class="p-2"><span class="round"><img src="img/testimonial-author/unknown.jpg" alt="user" width="50"></span></div>
+                      <?php } ?>
+                      <div class="comment-text w-100">
+                        <h5 class="mb-0"><?php echo $data1['Firstname'] . ' ' . $data1['MiddleName'] . ' ' . $data1['Surname'] ?></h5>
+                        <div class="pr-rating">
                           <?php for ($j = 0; $j < $data1['rating']; $j++) { ?>
                             <i class='bx bxs-star'></i>
                           <?php } ?>
-                          </div>
-                          <div class="comment-footer">
-                            <span class="date"><?php echo ' ' . $formattedDate ?></span>
-                            <a data-bs-toggle="collapse" href="<?php echo "#collapseExample1".$data1['bus_rev_id'] ?>" role="button" aria-expanded="false" aria-controls="collapseExample">
-                              <i class='bx bxs-chat'></i>Reply</a>
-                            </span>
-                          </div>
-                          <p class="m-b-5 m-t-5"><?php echo $data1['comment'] ?></p>
+                        </div>
+                        <div class="comment-footer">
+                          <span class="date"><?php echo ' ' . $formattedDate ?></span>
+                          <a data-bs-toggle="collapse" href="<?php echo "#collapseExample1" . $data1['bus_rev_id'] ?>" role="button" aria-expanded="false" aria-controls="collapseExample">
+                            <i class='bx bxs-chat'></i>Reply</a>
+                          </span>
+                        </div>
+                        <p class="m-b-5 m-t-5"><?php echo $data1['comment'] ?></p>
 
-                          <div class="collapse" id="<?php echo "collapseExample1".$data1['bus_rev_id'] ?>">
-                            <div class="d-grid d-sm-flex p-3 border">
+                        <div class="collapse" id="<?php echo "collapseExample1" . $data1['bus_rev_id'] ?>">
+                          <div class="d-grid d-sm-flex p-3 border">
 
-                              <div class="col mb-0">
-                                <textarea class="form-control" id="<?php echo 'replyVal'.$data1['bus_rev_id'] ?>"></textarea>
-                                <br>
-                                <button type="button" class="btn btn-success" onclick="reply('<?php echo $data1['bus_rev_id'] ?>')">Reply</button>
-                              </div>
+                            <div class="col mb-0">
+                              <textarea class="form-control" id="<?php echo 'replyVal' . $data1['bus_rev_id'] ?>"></textarea>
+                              <br>
+                              <button type="button" class="btn btn-success" onclick="reply('<?php echo $data1['bus_rev_id'] ?>')">Reply</button>
                             </div>
                           </div>
                         </div>
                       </div>
+                    </div>
                   <?php } ?>
 
 
@@ -342,34 +349,34 @@ $totalAve = $totalRating/$counter;
       <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.8.2/js/lightbox.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
       <script>
-        function reply(repId){
-          var reply = $('#replyVal'+repId).val();
+        function reply(repId) {
+          var reply = $('#replyVal' + repId).val();
           var replyId = repId;
           var payload = {
-            reply:reply,
-            replyId:replyId
+            reply: reply,
+            replyId: replyId
           };
           $.ajax({
-                    type: "POST",
-                    url: 'controllers/business.php',
-                    data: {
-                        payload: JSON.stringify(payload),
-                        setFunction: 'reply'
-                    },
-                    success: function(response) {
-                        data = JSON.parse(response);
-                        Swal.fire({
-                            title: data.title,
-                            text: data.message,
-                            icon: data.icon,
-                            customClass: {
-                                confirmButton: 'swal-confirm-button',
-                            },
-                            showCancelButton: false,
-                        });
-                        window.location.reload();
-                    }
-                });
+            type: "POST",
+            url: 'controllers/business.php',
+            data: {
+              payload: JSON.stringify(payload),
+              setFunction: 'reply'
+            },
+            success: function(response) {
+              data = JSON.parse(response);
+              Swal.fire({
+                title: data.title,
+                text: data.message,
+                icon: data.icon,
+                customClass: {
+                  confirmButton: 'swal-confirm-button',
+                },
+                showCancelButton: false,
+              });
+              window.location.reload();
+            }
+          });
         };
       </script>
 

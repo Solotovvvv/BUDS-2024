@@ -77,6 +77,7 @@ body {
   -webkit-tap-highlight-color: rgba(67, 89, 113, 0);
 }
 
+
 hr {
   margin: 1rem 0;
   color: #d9dee3;
@@ -6375,7 +6376,7 @@ label.btn {
 .show > .btn-outline-secondary.dropdown-toggle .badge {
   background: #fff;
   border-color: #fff;
-  color: #8592a3;
+  color: #355E3B;
 }
 
 .btn-success {
@@ -6423,15 +6424,15 @@ label.btn {
 }
 .btn-check:focus + .btn-outline-success, .btn-outline-success:focus {
   color: #fff;
-  background-color: #66c732;
-  border-color: #66c732;
+  background-color: #355E3B;
+  border-color: #355E3B;
   box-shadow: none;
   transform: translateY(0);
 }
 .btn-check:checked + .btn-outline-success, .btn-check:active + .btn-outline-success, .btn-outline-success:active, .btn-outline-success.active, .btn-outline-success.dropdown-toggle.show {
   color: #fff;
-  background-color: #60bc2f;
-  border-color: #60bc2f;
+  background-color: #355E3B;
+  border-color: #355E3B;
 }
 .btn-check:checked + .btn-outline-success:focus, .btn-check:active + .btn-outline-success:focus, .btn-outline-success:active:focus, .btn-outline-success.active:focus, .btn-outline-success.dropdown-toggle.show:focus {
   box-shadow: none;
@@ -6441,8 +6442,8 @@ label.btn {
 }
 
 .btn-outline-success .badge {
-  background: #71dd37;
-  border-color: #71dd37;
+  background: #355E3B;
+  border-color: #355E3B;
   color: #fff;
 }
 
@@ -6453,7 +6454,7 @@ label.btn {
 .show > .btn-outline-success.dropdown-toggle .badge {
   background: #fff;
   border-color: #fff;
-  color: #71dd37;
+  color: #355E3B;
 }
 
 .btn-info {
