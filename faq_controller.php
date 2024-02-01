@@ -14,7 +14,7 @@ try {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // Use a prepared statement to insert into the database
-    $stmt = $pdo->prepare("INSERT INTO business_faq (bus_id, questions, answer) VALUES (:bus_id, :question, :answer)");
+    $stmt = $pdo->prepare("INSERT INTO business_faq (bus_id, Questions, Answer) VALUES (:bus_id, :question, :answer)");
 
     // Bind parameters
     $stmt->bindParam(':bus_id', $bus_id);
