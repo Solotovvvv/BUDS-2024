@@ -7,6 +7,26 @@ if (empty($_SESSION['ownerId']) || empty($_GET['a'])) {
 }
 $bus_id = $_GET['a'];
 $_SESSION['bus_id'] = $_GET['a'];
+
+
+
+
+require_once "includes/config.php";
+
+$pdo = Database::connection();
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+// Prepare and execute the query
+$query = "SELECT * FROM business_faq WHERE bus_id = :bus_id";
+$statement = $pdo->prepare($query);
+$statement->bindParam(':bus_id', $bus_id, PDO::PARAM_INT);
+$statement->execute();
+
+// Fetch all rows as an associative array
+$faqData = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="plugins/assets/" data-template="vertical-menu-template-free">
@@ -192,9 +212,37 @@ $_SESSION['bus_id'] = $_GET['a'];
                                 <div class="card mb-4">
                                     <h3 class="card-header"><strong>FAQ'S</strong></h3>
                                     <div class="card-body">
+
                                         <div class="container" id="cardContainer">
-                                            <!-- Hidden card template -->
-                                            <div class="card position-relative" style="display: none;" id="hiddenCard">
+                                            <?php foreach ($faqData as $faqItem) { ?>
+                                                <div class="card position-relative mb-5">
+                                                    <!-- Container for "X" and "edit" icons -->
+                                                    <div class="icon-container position-absolute top-0 end-0 p-2">
+                                                        <!-- Boxicon for "X" sign in the upper right corner -->
+                                                        <i class='bx bx-x cursor-pointer remove-icon' style="font-size: 1.5rem;" data-faq-id="<?php echo $faqItem['id']; ?>"></i>
+                                                        <!-- Boxicon for edit in the upper right corner -->
+                                                        <i class='bx bx-edit cursor-pointer edit-icon' style="font-size: 1.5rem;" data-faq-update="<?php echo $faqItem['id']; ?>"></i>
+
+                                                    </div>
+
+                                                    <div class="card-body">
+                                                        <!-- Input Field 1 -->
+                                                        <div class="mb-3">
+                                                            <label for="Question" class="form-label">Question</label>
+                                                            <input type="text" class="form-control question-input" value="<?php echo htmlspecialchars($faqItem['Questions']); ?>" disabled>
+                                                        </div>
+
+                                                        <!-- Input Field 2 -->
+                                                        <div class="mb-3">
+                                                            <label for="Answer" class="form-label">Answer</label>
+                                                            <input type="text" class="form-control answer-input" value="<?php echo htmlspecialchars($faqItem['Answer']); ?>" disabled>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <?php } ?>
+
+                                            <!-- Blank card template initially hidden -->
+                                            <div class="card position-relative mb-5" style="display: none;" id="hiddenCard">
                                                 <!-- Container for "X" and "edit" icons -->
                                                 <div class="icon-container position-absolute top-0 end-0 p-2">
                                                     <!-- Boxicon for "X" sign in the upper right corner -->
@@ -204,8 +252,6 @@ $_SESSION['bus_id'] = $_GET['a'];
                                                 </div>
 
                                                 <div class="card-body">
-
-
                                                     <!-- Input Field 1 -->
                                                     <div class="mb-3">
                                                         <label for="Question" id="lbl" class="form-label">Question</label>
@@ -220,17 +266,16 @@ $_SESSION['bus_id'] = $_GET['a'];
                                                 </div>
                                             </div>
 
-                                            <!-- Button to add new question -->
-                                            <div class="d-grid mt-4">
-                                                <button type="button" id="addbtn" class="btn btn-outline-success btn-dashed mx-auto d-block mb-3 w-100">Add new question</button>
-                                            </div>
-
 
                                         </div>
-
+                                        <!-- Button to add new question -->
                                         <div class="d-grid mt-4">
-                                            <button type="button" id="save" class="btn btn-info  mx-auto d-block mb-3 w-10">Saved</button>
+                                            <button type="button" id="addbtn" class="btn btn-outline-success btn-dashed mx-auto d-block mb-3 w-100">Add new question</button>
                                         </div>
+                                        <div class="d-grid mt-4">
+                                            <button type="button" id="save" class="btn btn-info mx-auto d-block mb-3 w-10">Saved</button>
+                                        </div>
+
                                         <hr class="my-0">
                                         <div class="card-body">
                                         </div>
@@ -255,44 +300,107 @@ $_SESSION['bus_id'] = $_GET['a'];
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             $(document).ready(function() {
-                var cardCounter = 1;
+
                 var questions = []; // Array to store questions
 
+                var cardCounter = <?php echo count($faqData); ?>;
+
                 // Click event handler for the "Remove" icon
-                $(document).on("click", ".remove-icon", function() {
-                    // Find the parent card and remove it
-                    $(this).closest(".card").remove();
+                // $(document).on("click", ".remove-icon", function() {
+                //     $(this).closest(".card").remove();
+                //     cardCounter--;
 
+                //     // Update the labels of remaining questions
+                //     $(".card-body #lbl").each(function(index) {
+                //         $(this).text("Question " + (index + 1));
+                //     });
+                // });
 
-                    // Decrement the counter
-                    cardCounter--;
+                // Add click event listener to elements with class 'edit-icon'
+                $('.edit-icon').on('click', function() {
+                    // Find the closest parent with the class 'card'
+                    var card = $(this).closest('.card');
 
-                    // Update the labels of remaining questions
-                    // $(".card-body #lbl").each(function(index) {
-                    //     $(this).text("Question " + (index + 1));
-                    // });
+                    // Find and enable the input fields within the card
+                    var questionInput = card.find('.question-input');
+                    var answerInput = card.find('.answer-input');
+
+                    // Enable the input fields
+                    questionInput.prop('disabled', false);
+                    answerInput.prop('disabled', false);
                 });
 
+                $(document).on("click", ".remove-icon", function() {
+                    var card = $(this).closest(".card");
+                    var questionInput = card.find(".question-input");
+                    var answerInput = card.find(".answer-input");
+                    var faqId = $(this).data("faq-id");
 
+                    if (questionInput.prop("disabled") && answerInput.prop("disabled")) {
+
+
+                        // Add your AJAX request to delete the record from the database
+                        $.ajax({
+                            type: "POST",
+                            url: "delete_faqs.php", // Replace with the actual URL for deleting records
+                            data: {
+                                id: faqId,
+
+                            },
+                            success: function(response) {
+                                var jsons = JSON.parse(response);
+                                var status = jsons.status;
+
+                                if (status === 'success') {
+                                    alert("Record deleted");
+                                    card.remove(); // Remove the entire card from the DOM
+                                    updateLabels();
+                                } else {
+                                    alert("Failed to delete. Please try again.");
+                                }
+                            },
+                            error: function(error) {
+                                // Handle error response from the server
+                                console.error(error);
+                            }
+                        });
+                    } else {
+                        // If either question or answer input is not disabled, simply remove the card
+                        card.remove();
+                        cardCounter--;
+
+                        // Update the labels of remaining questions
+                        updateLabels();
+                    }
+                });
+
+                function updateLabels() {
+                    // Update the labels of remaining questions
+                    $(".card-body #lbl").each(function(index) {
+                        $(this).text("Question " + (index + 1));
+                    });
+                }
 
                 $("#addbtn").click(function() {
-                    var newCard = $("#hiddenCard").clone().removeAttr("style id").addClass("mb-5");;
-                    newCard.find("#lbl").text("Question " + cardCounter);
-                    newCard.find(".form-control").attr("id", "Question" + cardCounter);
+                    var newCard = $("#hiddenCard").clone().removeAttr("style id").addClass("mb-5");
+                    newCard.find("#lbl").text("Question");
+                    newCard.find(".form-control").each(function() {
+                        var newId = $(this).attr("id") + cardCounter;
+                        $(this).attr("id", newId);
+                        $(this).val(""); // Clear previous values
+                    });
 
                     // Append the new card to the container
                     $("#cardContainer").append(newCard);
                     cardCounter++;
                 });
-                // Click event handler for the "Save" button
 
 
                 $("#save").click(function() {
                     var savedQuestions = [];
                     var savedAnswers = [];
 
-                    // Iterate through each question and save its value by ID
-                    $(".question-input").each(function() {
+                    $(".question-input:not(:disabled)").each(function() {
                         var questionId = $(this).attr("id");
                         var questionValue = $(this).val();
 
@@ -304,7 +412,7 @@ $_SESSION['bus_id'] = $_GET['a'];
                         }
                     });
 
-                    $(".answer-input").each(function() {
+                    $(".answer-input:not(:disabled)").each(function() {
                         var answerId = $(this).attr("id");
                         var answerValue = $(this).val();
 
@@ -316,36 +424,45 @@ $_SESSION['bus_id'] = $_GET['a'];
                         }
                     });
 
-                    $.ajax({
-                        type: "POST",
-                        url: "faq_controller.php",
-                        data: {
-                            id: <?php echo $bus_id ?>,
-                            questions: JSON.stringify(savedQuestions),
-                            answers: JSON.stringify(savedAnswers)
-                        },
-                        success: function(response) {
-                            var jsons = JSON.parse(response);
-                            var status = jsons.status;
+                    if (savedQuestions.length > 0 || savedAnswers.length > 0) {
+                        // Only send the data to the server if there are valid entries
+                        $.ajax({
+                            type: "POST",
+                            url: "faq_controller.php",
+                            data: {
+                                id: <?php echo $bus_id ?>,
+                                questions: JSON.stringify(savedQuestions),
+                                answers: JSON.stringify(savedAnswers)
+                            },
+                            success: function(response) {
+                                var jsons = JSON.parse(response);
+                                var status = jsons.status;
 
-                            if (status === 'success') {
-                                alert("Saved");
-
-                            } else {
-                                alert("Failed to save. Please try again.");
+                                if (status === 'success') {
+                                    alert("Saved");
+                                    $(".question-input, .answer-input").each(function() {
+                                        if ($(this).val().trim() !== "") {
+                                            $(this).prop("disabled", true);
+                                        } else {
+                                            $(this).closest('.card').remove(); // Remove the entire card
+                                        }
+                                    });
+                                    location.reload();
+                                } else {
+                                    alert("Failed to save. Please try again.");
+                                }
+                            },
+                            error: function(error) {
+                                // Handle error response from the server
+                                console.error(error);
                             }
-                        },
-                        error: function(error) {
-                            // Handle error response from the server
-                            console.error(error);
-                        }
-                    });
-
-
-                    // Log or process the saved questions
-                    console.log("Saved Questions:", savedQuestions);
-                    console.log("Saved Answer:", savedAnswers);
+                        });
+                    } else {
+                        alert("No valid entries to save.");
+                    }
                 });
+
+
             });
 
 
