@@ -210,7 +210,7 @@ $faqData = $statement->fetchAll(PDO::FETCH_ASSOC);
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="card mb-4">
-                                    <h3 class="card-header"><strong>FAQ'S</strong></h3>
+                                    <h3 class="card-header"><strong> Frequently Asked Question Template</strong></h3>
                                     <div class="card-body">
 
                                         <div class="container" id="cardContainer">
@@ -221,8 +221,10 @@ $faqData = $statement->fetchAll(PDO::FETCH_ASSOC);
                                                         <!-- Boxicon for "X" sign in the upper right corner -->
                                                         <i class='bx bx-x cursor-pointer remove-icon' style="font-size: 1.5rem;" data-faq-id="<?php echo $faqItem['id']; ?>"></i>
                                                         <!-- Boxicon for edit in the upper right corner -->
-                                                        <i class='bx bx-edit cursor-pointer edit-icon' style="font-size: 1.5rem;" data-faq-update="<?php echo $faqItem['id']; ?>"></i>
-
+                                                        <i class='bx bx-edit cursor-pointer edit-icon' style="font-size: 1.5rem;" data-faq-ids="<?php echo isset($faqItem['id']) ? $faqItem['id'] : ''; ?>"></i>
+                                                      
+                                                        <i class='bx bx-save cursor-pointer save-icon' style="font-size: 1.5rem; display: none;" ></i>
+                                                       
                                                     </div>
 
                                                     <div class="card-body">
@@ -305,18 +307,8 @@ $faqData = $statement->fetchAll(PDO::FETCH_ASSOC);
 
                 var cardCounter = <?php echo count($faqData); ?>;
 
-                // Click event handler for the "Remove" icon
-                // $(document).on("click", ".remove-icon", function() {
-                //     $(this).closest(".card").remove();
-                //     cardCounter--;
+            
 
-                //     // Update the labels of remaining questions
-                //     $(".card-body #lbl").each(function(index) {
-                //         $(this).text("Question " + (index + 1));
-                //     });
-                // });
-
-                // Add click event listener to elements with class 'edit-icon'
                 $('.edit-icon').on('click', function() {
                     // Find the closest parent with the class 'card'
                     var card = $(this).closest('.card');
@@ -328,7 +320,56 @@ $faqData = $statement->fetchAll(PDO::FETCH_ASSOC);
                     // Enable the input fields
                     questionInput.prop('disabled', false);
                     answerInput.prop('disabled', false);
+
+                    // Show the Save button
+                    card.find('.save-icon').show();
                 });
+
+                // Add click event listener to elements with class 'save-icon'
+                $('.save-icon').on('click', function() {
+                    // Find the closest parent with the class 'card'
+                    var card = $(this).closest('.card');
+
+                    // Find the FAQ ID from the data attribute
+                    var faqId = card.find('.edit-icon').data("faq-ids");
+
+                    // Find the input fields within the card
+                    var questionInput = card.find('.question-input');
+                    var answerInput = card.find('.answer-input');
+
+                    // Get the updated values
+                    var updatedQuestion = questionInput.val();
+                    var updatedAnswer = answerInput.val();
+
+                    // Perform an AJAX request to update the data in the database
+                    // You'll need to implement the server-side code to handle this update
+                    $.ajax({
+                        type: 'POST',
+                        url: 'update_faq.php', // Replace with the actual endpoint
+                        data: {
+                            id: faqId, // You may need to set a data attribute on your card to store the FAQ ID
+                            question: updatedQuestion,
+                            answer: updatedAnswer
+                        },
+                        success: function(response) {
+                            // Handle the success response, if needed
+                            console.log(response);
+                        },
+                        error: function(error) {
+                            // Handle the error, if needed
+                            console.error(error);
+                        }
+                    });
+
+                    // Disable the input fields
+                    questionInput.prop('disabled', true);
+                    answerInput.prop('disabled', true);
+
+                    // Hide the Save button
+                    card.find('.save-icon').hide();
+                });
+
+
 
                 $(document).on("click", ".remove-icon", function() {
                     var card = $(this).closest(".card");
@@ -466,7 +507,6 @@ $faqData = $statement->fetchAll(PDO::FETCH_ASSOC);
             });
 
 
-            // Function to display fetched FAQs
         </script>
 
 
