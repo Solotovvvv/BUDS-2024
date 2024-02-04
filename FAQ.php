@@ -223,8 +223,7 @@ $faqData = $statement->fetchAll(PDO::FETCH_ASSOC);
                                                         <!-- Boxicon for edit in the upper right corner -->
                                                         <i class='bx bx-edit cursor-pointer edit-icon' style="font-size: 1.5rem;" data-faq-ids="<?php echo isset($faqItem['id']) ? $faqItem['id'] : ''; ?>"></i>
                                                       
-                                                        <i class='bx bx-save cursor-pointer save-icon' style="font-size: 1.5rem; display: none;" ></i>
-                                                       
+                                                     
                                                     </div>
 
                                                     <div class="card-body">
@@ -240,6 +239,9 @@ $faqData = $statement->fetchAll(PDO::FETCH_ASSOC);
                                                             <input type="text" class="form-control answer-input" value="<?php echo htmlspecialchars($faqItem['Answer']); ?>" disabled>
                                                         </div>
                                                     </div>
+
+                                                    <i class='bx bx-save cursor-pointer save-icon position-absolute bottom-0 end-0 m-2' style="font-size: 1.5rem; display: none;" ></i>
+                                                       
                                                 </div>
                                             <?php } ?>
 
