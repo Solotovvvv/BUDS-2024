@@ -8,7 +8,7 @@ if (isset($_POST['id'])) {
     $id = $_POST['id'];
     $sql = "SELECT Status
            FROM application_list
-           WHERE app_id = :id";
+           WHERE ID = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
@@ -38,7 +38,7 @@ if (isset($_POST['hiddendata1'])) {
     $hiddendata1 = $_POST['hiddendata1'];
     $status = $_POST['status']; // Make sure 'status' is passed in the POST request
 
-    $sql = "UPDATE application_list SET Status = :status WHERE app_id = :hiddendata";
+    $sql = "UPDATE application_list SET Status = :status WHERE ID = :hiddendata";
     $stmt = $pdo->prepare($sql);
 
     if ($stmt->execute([
