@@ -189,13 +189,16 @@ if ($rs = $conn->query($sql)) {
                 <h4>Business Name</h4>
                 <input name="BusinessName" id="busName" type="text" placeholder="Enter Business Name">
               </div>
-              <div class="pf-title">
-                <h4>Business Logo</h4>
+              
+              <h4>Business Email</h4>
+              <div class="custom-file">
                 <!-- add this to form data -->
-                <input name="BusinessLogo" id="BusinessLogo" type="file">
+                <input class="custom-file-input" name="BusinessLogo" id="BusinessLogo" type="file">
+                <label class="custom-file-label" for="BusinessLogo">Choose file...</label>
               </div>
+
               <div class="pf-title">
-                <h4>Business Email</h4>
+              <br><h4>Business Email</h4>
                 <input name="BusinessEmail" id="BusinessEmail" type="email" placeholder="Enter Business Email">
               </div>
               <div class="pf-title">
@@ -643,6 +646,17 @@ if ($rs = $conn->query($sql)) {
 
     };
   </script>
+
+  <script>
+      $(document).ready(function() {
+          $('.custom-file-input').on('change', function() {
+              // Get the file name and display it in the label
+              var fileName = $(this).val().split('\\').pop();
+              $(this).next('.custom-file-label').addClass("selected").html(fileName);
+          });
+      });
+  </script>
+
 </body>
 
 </html>

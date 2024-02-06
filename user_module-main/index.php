@@ -48,7 +48,6 @@ if (isset($_SESSION['ownerId'])) {
             width: 8rem;
         }
         #fileViewer{
-            padding-top:10px;
             padding-left:25px;
         }
     </style>
@@ -90,21 +89,56 @@ if (isset($_SESSION['ownerId'])) {
             </div>
         </aside>
 
-        <div class="container mt-3">
+        <!-- <div class="container mt-3 mr-3">
             <form id="fileUploadForm" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="fileInput">Upload Resume (PDF or DOCX only):</label>
-                    <input type="file" class="form-control-file" id="fileInput" name="resumeFile" accept=".pdf" required>
+                    <h2><strong>UPLOAD RESUME<strong></h2>
+                    <label for="fileInput">PDF or DOCX only:</label><br>
+                    <div class="custom-file col-6">
+                    <input type="file" class="custom-file-input" id="fileInput" name="resumeFile" accept=".pdf" required>
+                    <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+                    </div>
+                    
                 </div>
-                <button type="button" class="btn btn-primary" id="uploadBtn">Upload</button>
+                <button type="button" class="btn btn-success mb-3" id="uploadBtn">Upload</button>
                 <div id="uploadMessage"></div>
             </form>
            
         </div>
 
-        <div id="fileViewer"></div> <!-- Move the viewer outside the modal -->
+        <div id="fileViewer"></div> Move the viewer outside the modal -->
 
+        <div class="container">
+            <div class="row">
+                <div class="col-1">
+                </div>
+                <div class="col-4 border">
+                <form id="fileUploadForm" enctype="multipart/form-data">
+                <div class="form-group">
+                    <h2 class="fw-bold text-center mt-5">UPLOAD RESUME</h2>
+                    <label for="fileInput">PDF or DOCX only:</label><br>
+                    <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="fileInput" name="resumeFile" accept=".pdf" required>
+                    <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+                    </div>
+                    
+                </div>
+                <button type="button" class="btn btn-success mb-3" id="uploadBtn">Upload</button>
+                <div id="uploadMessage"></div>
 
+                <p class="text-justify">1. Format your resume in a clear and professional manner, utilizing standard fonts and consistent styling throughout.</p>
+                <p class="text-justify">2. Tailor your resume to the specific job you're applying for, highlighting relevant skills, experiences, and accomplishments.</p>
+                <p class="text-justify">3. Double-check for spelling and grammar errors to present yourself as detail-oriented and competent.</p>
+                <p class="text-justify">4. Keep your resume concise and focused, ideally limiting it to one or two pages.</p>
+                <p class="text-justify">5. Ensure your contact information is accurate and up-to-date, making it easy for employers to reach you.</p>
+            </form>
+                </div>
+
+                <div class="col-7">
+                    <div id="fileViewer"></div> <!-- Move the viewer outside the modal -->
+                </div>
+            </div>
+        </div>
 
 
 
@@ -114,6 +148,8 @@ if (isset($_SESSION['ownerId'])) {
 
         <script>
             $(document).ready(function() {
+
+                $('body').addClass('sidebar-collapse');
 
                 <?php if (isset($filePath) && !empty($filePath)) { ?>
                     var filePath = '<?php echo $filePath; ?>';
@@ -175,14 +211,17 @@ if (isset($_SESSION['ownerId'])) {
         <script src="plugins/datatables/bootstrap 4/dataTables.bootstrap4.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.min.js"></script>
     </div>
-
-    <footer class="main-footer">
-        <strong>
-            &copy; 2023-2024 <a href="#" target="_blank" class="text-muted">Business Directory Systems</a>.
-        </strong>
-        All rights reserved.
-    </footer>
     <aside class="control-sidebar control-sidebar-dark"></aside>
+
+    <script>
+    $(document).ready(function() {
+        $('.custom-file-input').on('change', function() {
+            // Get the file name and display it in the label
+            var fileName = $(this).val().split('\\').pop();
+            $(this).next('.custom-file-label').addClass("selected").html(fileName);
+        });
+    });
+</script>
 
 </body>
 
