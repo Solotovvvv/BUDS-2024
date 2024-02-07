@@ -15,6 +15,7 @@ $_SESSION['bus_id'] = $_GET['a'];
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
   <title>BuDS | Admin Panel</title>
   <meta name="description" content="">
   <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
@@ -24,7 +25,6 @@ $_SESSION['bus_id'] = $_GET['a'];
   <link rel="stylesheet" href="plugins/assets/vendor/css/theme-default.css" class="template-customizer-theme-css">
   <link rel="stylesheet" href="plugins/assets/css/demo.css">
   <link rel="stylesheet" href="plugins/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css">
-  <link rel="icon" type="image/x-icon" href="plugins/assets/img/favicon/buds-logo.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">

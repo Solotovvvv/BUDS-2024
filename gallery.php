@@ -160,7 +160,7 @@ $uploadedImages = $stmtFetchImages->fetchAll(PDO::FETCH_ASSOC);
     <title>Business Dashboard</title>
     <meta name="description" content="">
 
-    <link rel="icon" type="image/x-icon" href="plugins/assets/img/favicon/favicon.ico">
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
