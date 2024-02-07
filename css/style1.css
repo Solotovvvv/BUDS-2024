@@ -2461,7 +2461,7 @@ button {
   color: #252525;
   font-weight: 700;
   text-transform: uppercase;
-  margin-bottom: 35px;
+  margin-bottom: 20px;
 }
 .property-submit-form form input {
   height: 46px;
@@ -2477,7 +2477,7 @@ button {
   color: #666666;
 }
 .property-submit-form form .pf-title {
-  margin-bottom: 75px;
+  margin-bottom: 45px;
 }
 .property-submit-form form .pf-title input {
   padding-left: 30px;

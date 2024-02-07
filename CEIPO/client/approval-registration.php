@@ -56,7 +56,7 @@ if (empty($_SESSION['ownerId'])) {
   .progress-bar {
     width: 0%;
     height: 20px;
-    background-color: #007bff;
+    background-color: #067335;
   }
 
   .swal2-container {
@@ -187,23 +187,10 @@ if (empty($_SESSION['ownerId'])) {
               Searching Business
             </a>
           </li>
-
-          <li class="menu-item">
-            <a href="business-profile.php" class="menu-link">
-              <i class="menu-icon tf-icons bx bxs-user"></i>
-              <div data-i18n="Analytics">Profile of Business</div>
-            </a>
-          </li>
           <li class="menu-item">
             <a href="printing-reports.php" class="menu-link">
               <i class="menu-icon tf-icons bx bxs-report"></i>
               <div data-i18n="Analytics">Reports</div>
-            </a>
-          </li>
-          <li class="menu-item">
-            <a href="posting-activities.php" class="menu-link">
-              <i class="menu-icon tf-icons bx bxs-edit"></i>
-              <div data-i18n="Analytics">Posting Activities/Events</div>
             </a>
           </li>
         </ul>
@@ -351,7 +338,7 @@ if (empty($_SESSION['ownerId'])) {
 
                     <div class="col mb-3">
                       <label for="nameWithTitle" class="form-label">Zone</label>
-                      <input type="text" id="zone" class="form-control" placeholder="Enter Name" readonly />
+                      <input type="text" id="zone" class="form-control  mt-2" placeholder="Enter Name" readonly />
                     </div>
                   </div>
                 </div>
@@ -370,7 +357,7 @@ if (empty($_SESSION['ownerId'])) {
                     <button type="button" class="btn btn-success" id="passedStep2">Approve</button>
                     <button type="button" class="btn btn-danger" id="failedStep2">Decline</button>
                     <span id="step2_Status" style="font-size: 100px; display: none;">APPROVED</span>
-                    <input type="text" class="form-control" id="remarksStep2" placeholder="Enter remarks" style="display: none;">
+                    <input type="text" class="form-control mt-2" id="remarksStep2" placeholder="Enter remarks" style="display: none;">
 
                   </div>
 
@@ -390,7 +377,7 @@ if (empty($_SESSION['ownerId'])) {
                     <button type="button" class="btn btn-success" id="passedStep3">Approve</button>
                     <button type="button" class="btn btn-danger" id="failedStep3">Decline</button>
                     <span id="step3_Status" style="font-size: 100px; display: none;">APPROVED</span>
-                    <input type="text" class="form-control" id="remarksStep3" placeholder="Enter remarks" style="display: none;">
+                    <input type="text" class="form-control mt-2" id="remarksStep3" placeholder="Enter remarks" style="display: none;">
                   </div>
                 </div>
 
@@ -406,7 +393,7 @@ if (empty($_SESSION['ownerId'])) {
                     <button type="button" class="btn btn-success" id="passedStep4">Approve</button>
                     <button type="button" class="btn btn-danger" id="failedStep4">Decline</button>
                     <span id="step4_Status" style="font-size: 100px; display: none;">APPROVED</span>
-                    <input type="text" class="form-control" id="remarksStep4" placeholder="Enter remarks" style="display: none;">
+                    <input type="text" class="form-control mt-2" id="remarksStep4" placeholder="Enter remarks" style="display: none;">
                   </div>
                 </div>
 
@@ -422,7 +409,7 @@ if (empty($_SESSION['ownerId'])) {
                     <button type="button" class="btn btn-success" id="passedStep5">Approve</button>
                     <button type="button" class="btn btn-danger" id="failedStep5">Decline</button>
                     <span id="step5_Status" style="font-size: 100px; display: none;">APPROVED</span>
-                    <input type="text" class="form-control" id="remarksStep5" placeholder="Enter remarks" style="display: none;">
+                    <input type="text" class="form-control mt-2" id="remarksStep5" placeholder="Enter remarks" style="display: none;">
                   </div>
                 </div>
 
@@ -439,7 +426,7 @@ if (empty($_SESSION['ownerId'])) {
                     <button type="button" class="btn btn-danger " id="failedStep6">Decline</button>
                     <br>
                     <span id="step6_Status" style="font-size: 100px; display: none;">APPROVED</span>
-                    <input type="text" class="form-control" id="remarksStep6" placeholder="Enter remarks" style="display: none; ">
+                    <input type="text" class="form-control mt-2" id="remarksStep6" placeholder="Enter remarks" style="display: none; ">
                   </div>
                 </div>
 
@@ -453,10 +440,10 @@ if (empty($_SESSION['ownerId'])) {
               </div>
               <div class="modal-footer">
                 <input type="hidden" id="hiddendata">
-                <button type="button" class="btn btn-primary" id="prevStep">Previous</button>
-                <button type="button" class="btn btn-primary" id="nextStep">Next</button>
+                <button type="button" class="btn btn-success mt-3" id="prevStep">Previous</button>
+                <button type="button" class="btn btn-success mt-3" id="nextStep">Next</button>
 
-                <button type="button" class="btn btn-success" data-dismiss="modal" id="saveChangesButton" style="display: none;" onclick="update()">Save changes</button>
+                <button type="button" class="btn btn-success mt-3" data-dismiss="modal" id="saveChangesButton" style="display: none;" onclick="update()">Save changes</button>
               </div>
             </div>
           </div>

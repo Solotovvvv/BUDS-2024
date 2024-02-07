@@ -118,23 +118,10 @@ if (empty($_SESSION['ownerId'])) {
               Searching Business
             </a>
           </li>
-
-          <li class="menu-item">
-            <a href="business-profile.php" class="menu-link">
-              <i class="menu-icon tf-icons bx bxs-user"></i>
-              <div data-i18n="Analytics">Profile of Business</div>
-            </a>
-          </li>
           <li class="menu-item">
             <a href="printing-reports.php" class="menu-link">
               <i class="menu-icon tf-icons bx bxs-report"></i>
               <div data-i18n="Analytics">Reports</div>
-            </a>
-          </li>
-          <li class="menu-item">
-            <a href="posting-activities.php" class="menu-link">
-              <i class="menu-icon tf-icons bx bxs-edit"></i>
-              <div data-i18n="Analytics">Posting Activities/Events</div>
             </a>
           </li>
         </ul>

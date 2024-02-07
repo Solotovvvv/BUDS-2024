@@ -78,6 +78,8 @@ if ($rs = $conn->query($sql)) {
     }
   </style>
 
+
+
 </head>
 
 <body>
@@ -189,13 +191,16 @@ if ($rs = $conn->query($sql)) {
                 <h4>Business Name</h4>
                 <input name="BusinessName" id="busName" type="text" placeholder="Enter Business Name">
               </div>
-              <div class="pf-title">
-                <h4>Business Logo</h4>
+              
+              <h4>Business Email</h4>
+              <div class="custom-file">
                 <!-- add this to form data -->
-                <input name="BusinessLogo" id="BusinessLogo" type="file">
+                <input class="custom-file-input" name="BusinessLogo" id="BusinessLogo" type="file">
+                <label class="custom-file-label" for="BusinessLogo">Choose file...</label>
               </div>
+
               <div class="pf-title">
-                <h4>Business Email</h4>
+              <br><h4>Business Email</h4>
                 <input name="BusinessEmail" id="BusinessEmail" type="email" placeholder="Enter Business Email">
               </div>
               <div class="pf-title">
@@ -311,36 +316,78 @@ if ($rs = $conn->query($sql)) {
                 </div>
               </div>
 
-              <div class="pf-property-details">
-
-                <div class="property-details-inputs">
-                  <div class="property-details-inputs">
-                    <h4>Upload Scan Picture of Barangay Clearance</h4>
-                    <!-- <div type="file" class="feature-image-content" name="uploadBrgyClearance"></div> -->
-                    <input type="file" class="feature-image-content" name="uploadBrgyClearance">
-                  </div><br>
-                  <div class="property-details-inputs">
-                    <h4>Upload Scan Picture of DTI Permit</h4>
-                    <!-- <div type="file" class="feature-image-content" name="uploadDTIPermit"></div> -->
-                    <input type="file" class="feature-image-content" name="uploadDTIPermit">
-                  </div><br>
-                  <div class="property-details-inputs">
-                    <h4>Upload Scan Picture of Sanitary Document</h4>
-                    <!-- <div type="file"class="feature-image-content" name="uploadSanitaryPermit"></div> -->
-                    <input type="file" class="feature-image-content" name="uploadSanitaryPermit">
-                  </div><br>
-                  <div class="property-details-inputs">
-                    <h4>Upload Scan Picture of Cedula</h4>
-                    <!-- <div type="file"class="feature-image-content" name="uploadSanitaryPermit"></div> -->
-                    <input type="file" class="feature-image-content" name="uploadCedula">
-                  </div><br>
-                  <div class="property-details-inputs">
-                    <h4>Upload Scan Picture of Business Permit</h4>
-                    <!-- <div type="file" class="feature-image-content" name="uploadBusinessPermit"></div> -->
-                    <input type="file" class="feature-image-content" name="uploadBusinessPermit">
+                <div class="property-details-inputs">     
+                  <h4>Upload Scan Picture of Barangay Clearance</h4>
+                  <div class="custom-file">
+                    <!-- add this to form data -->
+                    <input class="custom-file-input" name="uploadBrgyClearance" id="uploadBrgyClearance" type="file">
+                    <label class="custom-file-label" for="uploadBrgyClearance">Choose file...</label>
                   </div>
                 </div>
-                <button name="SubmitProperty" type="button" onclick="addBusiness()" class="site-btn">Submit Property</button>
+                <div class="property-details-inputs">
+                  <br><h4>Upload Scan Picture of DTI Permit</h4>
+                  <div class="custom-file">
+                    <!-- add this to form data -->
+                    <input class="custom-file-input" name="uploadDTIPermit" id="uploadDTIPermit" type="file">
+                    <label class="custom-file-label" for="uploadDTIPermit">Choose file...</label>
+                  </div>
+                </div>
+
+                <div class="property-details-inputs">
+                  <br><h4>Upload Scan Picture of Sanitary Document</h4>
+                  <div class="custom-file">
+                    <!-- add this to form data -->
+                    <input class="custom-file-input" name="uploadSanitaryPermit" id="uploadSanitaryPermit" type="file">
+                    <label class="custom-file-label" for="uploadSanitaryPermit">Choose file...</label>
+                  </div>
+                </div>
+                
+                <div class="property-details-inputs">
+                  <br><h4>Upload Scan Picture of Sanitary Document</h4>
+                  <div class="custom-file">
+                    <!-- add this to form data -->
+                    <input class="custom-file-input" name="uploadCedula" id="uploadCedula" type="file">
+                    <label class="custom-file-label" for="uploadCedula">Choose file...</label>
+                  </div>
+                </div>
+
+                <div class="property-details-inputs">
+                  <br><h4>Upload Scan Picture of Business Permit</h4>
+                  <div class="custom-file">
+                    <!-- add this to form data -->
+                    <input class="custom-file-input" name="uploadBusinessPermit" id="uploadBusinessPermit" type="file">
+                    <label class="custom-file-label" for="uploadBusinessPermit">Choose file...</label>
+                  </div>
+                </div>
+
+                <!-- <div class="property-details-inputs"> -->
+                  <!-- <div class="property-details-inputs">
+                  <br><h4>Upload Scan Picture of Barangay Clearance</h4>
+                    <div type="file" class="feature-image-content" name="uploadBrgyClearance"></div>
+                    <input type="file" class="feature-image-content" name="uploadBrgyClearance">
+                  </div><br> -->
+                  <!-- <div class="property-details-inputs">
+                    <h4>Upload Scan Picture of DTI Permit</h4>
+                    <div type="file" class="feature-image-content" name="uploadDTIPermit"></div>
+                    <input type="file" class="feature-image-content" name="uploadDTIPermit">
+                  </div><br> -->
+                  <!-- <div class="property-details-inputs">
+                    <h4>Upload Scan Picture of Sanitary Document</h4>
+                    <div type="file"class="feature-image-content" name="uploadSanitaryPermit"></div>
+                    <input type="file" class="feature-image-content" name="uploadSanitaryPermit">
+                  </div><br> -->
+                  <!-- <div class="property-details-inputs">
+                    <h4>Upload Scan Picture of Cedula</h4>
+                    <div type="file"class="feature-image-content" name="uploadSanitaryPermit"></div>
+                    <input type="file" class="feature-image-content" name="uploadCedula">
+                  </div><br> -->
+                  <!-- <div class="property-details-inputs">
+                    <h4>Upload Scan Picture of Business Permit</h4>
+                    <div type="file" class="feature-image-content" name="uploadBusinessPermit"></div>
+                    <input type="file" class="feature-image-content" name="uploadBusinessPermit">
+                  </div> -->
+                <!-- </div> -->
+                <br><button name="SubmitProperty" type="button" onclick="addBusiness()" class="site-btn">Submit Property</button>
               </div>
             </form>
           </div>
@@ -382,6 +429,19 @@ if ($rs = $conn->query($sql)) {
   <script src="js/image-uploader.min.js"></script>
   <script src="js/main.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script>
+    $(document).ready(function() {
+        $('#filter').on('click', function() {
+            $(this).attr('size', 5); // Set the size of the dropdown to 5 options
+        });
+
+        $('#filter').on('focusout', function() {
+            $(this).removeAttr('size'); // Remove the size attribute when focus is lost
+        });
+    });
+</script>
+
   <script type="text/javascript">
     function get_subcategory() {
       var category = $('#category').val();
@@ -643,6 +703,17 @@ if ($rs = $conn->query($sql)) {
 
     };
   </script>
+
+  <script>
+      $(document).ready(function() {
+          $('.custom-file-input').on('change', function() {
+              // Get the file name and display it in the label
+              var fileName = $(this).val().split('\\').pop();
+              $(this).next('.custom-file-label').addClass("selected").html(fileName);
+          });
+      });
+  </script>
+
 </body>
 
 </html>
