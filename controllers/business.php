@@ -683,6 +683,7 @@ function edtBusinessDetails($request = null)
             $msg['icon'] = "warning";
             $msg['status'] = "error";
             echo json_encode($msg);
+            return;
         }
 
         $newImageName = uniqid() . '.' . $imageExtension;
