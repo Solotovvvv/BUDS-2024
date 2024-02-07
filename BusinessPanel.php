@@ -209,17 +209,17 @@ foreach ($datas as $data) {
                       <div class="button-wrapper">
                         <form id="formAccountSettings" method="POST" enctype="multipart/form-data">
                           <?php //if ($status == 4 || $status == 1) { ?>
-                            <label for="upload" class="btn btn-success me-2 mb-4" tabindex="0">
-                              <span class="d-none d-sm-block">Upload new photo</span>
-                              <i class="bx bx-upload d-block d-sm-none"></i>
-                              <input type="file" id="upload" name="bus_logo" class="account-file-input" hidden accept="image/png, image/jpeg" disabled />
-                            </label>
-                          <?php //} else { ?>
                             <!-- <label for="upload" class="btn btn-success me-2 mb-4" tabindex="0">
                               <span class="d-none d-sm-block">Upload new photo</span>
                               <i class="bx bx-upload d-block d-sm-none"></i>
-                              <input type="file" id="upload" name="bus_logo" class="account-file-input" hidden accept="image/png, image/jpeg" />
+                              <input type="file" id="upload" name="bus_logo" class="account-file-input" hidden accept="image/png, image/jpeg" disabled />
                             </label> -->
+                          <?php //} else { ?>
+                            <label for="upload" class="btn btn-success me-2 mb-4" tabindex="0">
+                              <span class="d-none d-sm-block">Upload new photo</span>
+                              <i class="bx bx-upload d-block d-sm-none"></i>
+                              <input type="file" id="upload" name="bus_logo" class="account-file-input" hidden accept="image/png, image/jpeg" />
+                            </label>
                           <?php //} ?>
                           <!-- <button type="button" class="btn btn-outline-secondary account-image-reset mb-4">
                           <i class="bx bx-reset d-block d-sm-none"></i>
