@@ -22,7 +22,6 @@ $sql = "SELECT * FROM business_list AS bl
 INNER JOIN business_links AS bll ON bl.bus_id = bll.bus_id
 INNER JOIN brgyzone_list AS bzl ON bl.BusinessBrgy = bzl.ID
 INNER JOIN business_location AS bloc ON bl.bus_id = bloc.bus_id
--- INNER JOIN business_faq AS faq ON bl.bus_id = faq.bus_id
 WHERE 
 bl.bus_id = $id";
 $disp = "";
@@ -114,10 +113,10 @@ if ($rs = $conn->query($sql)) {
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
                     $FAQs .= '<div class="dropdown">';
-                    $FAQs .= '<div class="question" onclick="toggleAnswer(\'answer' . $row['id'] . '\')">' . 'Question: '.$row['questions'] . '</div>';
+                    $FAQs .= '<div class="question" onclick="toggleAnswer(\'answer' . $row['id'] . '\')">' . 'Question: ' . $row['questions'] . '</div>';
 
                     // Display the answer
-                    $FAQs .= '<div id="answer' . $row['id'] . '" class="answer">'.'Answer: '. $row['answer'] . '</div>';
+                    $FAQs .= '<div id="answer' . $row['id'] . '" class="answer">' . 'Answer: ' . $row['answer'] . '</div>';
 
                     $FAQs .= '</div>';
                 }
@@ -125,7 +124,6 @@ if ($rs = $conn->query($sql)) {
                 $FAQs .= 'No FAQs available.';
             }
             $FAQs .= '</div>';
-
             $socialMedia .= '<div class="section-title sidebar-title">
                         <h5>FOLLOW US</h5>
                     </div>
@@ -789,91 +787,6 @@ if (isset($_SESSION['ownerId'])) {
                                         <?php echo $socialMedia; ?>
                                     </div>
                                 </div>
-<<<<<<< HEAD
-=======
-                                <!-- Modal -->
-                                <div id="<?php echo $modalId ?>" style="z-index: 1000; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);" class="modal">
-                                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                                        <div class="modal-content w-100">
-                                            <div class="modal-header">
-                                                <img src="img/company/jollibee.jpg" alt="Company Logo" class="circle-image" style="margin-right: 5px; border: 2px solid #355E3B;">
-                                                <h3 class="text-center mb-6 font-weight-bold" style="margin-top: 7px;">We're Hiring!</h3>
-                                                <span onclick="closeModal('<?php echo $modalId ?>')" class="close" title="Close Modal">&times;</span>
-                                            </div>
-                                            <div class="container mt-4">
-                                                <div class="card px-2" id="jobBoardForm">
-                                                    <div class="job-board">
-                                                        <!-- Job Listings -->
-                                                        <div class="job-listing">
-                                                            <h4 class="jobTitle"><strong>Manager</strong></h4>
-                                                            <p id="des">The Restaurant Manager is responsible for
-                                                                the development and achievement of the store business
-                                                                objectives such as Sales and Profitability targets,
-                                                                customer satisfaction & Food, Safety and Cleanliness
-                                                                standards; People Management and Development; and
-                                                                Stores adherence to operating systems and standards
-                                                                and
-                                                                compliance to all government requirements.</p>
-                                                            <h6><strong>Job Specification</strong></h6>
-                                                            <ul class="bullet-list">
-                                                                <!-- Additional job specification details -->
-                                                            </ul>
-                                                        </div>
-                                                        <br>
-                                                    </div>
-                                                    <div class="col-lg-12">
-                                                        <h6><strong>Additional Information</strong></h6>
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <p class="degree"><strong>Degree:</strong>
-                                                                    Bachelor's Degree</p>
-                                                            </div>
-                                                            <div class="col">
-                                                                <p class="experience"><strong>Years of
-                                                                        Experience:</strong> 3 years</p>
-                                                            </div>
-                                                            <div class="col">
-                                                                <p class="salary"><strong>Years of
-                                                                        Experience:</strong> 3 years</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="upload-button">
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <br>
-                                                                <h4 style="margin-top: 7px;"><strong>Submit
-                                                                        Application</strong></h4>
-                                                            </div>
-                                                            <div class="col text-right">
-                                                                <input type="hidden" id="app_id">
-                                                                <br><button class="btn btn-success" onclick="applyUser('<?php echo $modalId ?>', '<?php echo $user_id ?>')" style="margin-bottom: 20px;">Submit
-                                                                    Resume</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php }
-                            } else {
-                            ?>
-                            <h3 class="mt-0 mb-5 text-success">This Feature is not available to you</h3>
-                            <?php  } ?>
-                            <!-- Related Business Section -->
-                            <div class="single-sidebar">
-                                <?php
-                                $selectRelatedBusiness = "SELECT * FROM business_list WHERE BusinessCategory = :bus_category AND bus_id != :id LIMIT 2";
-                                $stmt7 = $pdo->prepare($selectRelatedBusiness);
-                                $stmt7->bindParam(':id', $id, PDO::PARAM_STR);
-                                $stmt7->bindParam(':bus_category', $bus_category, PDO::PARAM_STR);
-                                $stmt7->execute();
-                                $datas7 = $stmt7->fetchAll();
-                                $numRows7 = $stmt7->rowCount();
-                                ?>
->>>>>>> 65fc424bc9bb3e3cd413ab22a88ceb77b1651e40
                                 <div class="section-title sidebar-title">
                                     <h5>We're Hiring!</h5>
                                 </div>
@@ -978,8 +891,9 @@ if (isset($_SESSION['ownerId'])) {
                                 <!-- Related Business Section -->
                                 <div class="single-sidebar">
                                     <?php
-                                    $selectRelatedBusiness = "SELECT * FROM business_list WHERE BusinessCategory = :bus_category LIMIT 2";
+                                    $selectRelatedBusiness = "SELECT * FROM business_list WHERE BusinessCategory = :bus_category AND bus_id != :id LIMIT 2";
                                     $stmt7 = $pdo->prepare($selectRelatedBusiness);
+                                    $stmt7->bindParam(':id', $id, PDO::PARAM_STR);
                                     $stmt7->bindParam(':bus_category', $bus_category, PDO::PARAM_STR);
                                     $stmt7->execute();
                                     $datas7 = $stmt7->fetchAll();
@@ -1124,11 +1038,6 @@ if (isset($_SESSION['ownerId'])) {
                     // You can add your code to handle the unchecked state here
                 }
             });
-
-
-            // $('.question').click(function() {
-            //     $(this).next('.answer').slideToggle();
-            // });
         });
 
         // for comment and ratings
