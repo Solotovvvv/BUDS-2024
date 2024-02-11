@@ -22,6 +22,7 @@ $sql = "SELECT * FROM business_list AS bl
 INNER JOIN business_links AS bll ON bl.bus_id = bll.bus_id
 INNER JOIN brgyzone_list AS bzl ON bl.BusinessBrgy = bzl.ID
 INNER JOIN business_location AS bloc ON bl.bus_id = bloc.bus_id
+-- INNER JOIN business_faq AS faq ON bl.bus_id = faq.bus_id
 WHERE 
 bl.bus_id = $id";
 $disp = "";
@@ -68,9 +69,63 @@ if ($rs = $conn->query($sql)) {
             $overview .= '<div class="tab-desc">
                         <p>' . $row['BusinessDescrip'] . '</p>
                   </div>';
-            $FAQs .= '<div class="tab-desc">
-                <p>FAQs AREA</p>
-              </div>';
+            $FAQs .= '<style>
+                  .tab-desc {
+                      /* Your styles for the container of the FAQ section */
+                  }
+      
+                  .dropdown {
+                      /* Styles for the dropdown container */
+                      margin-bottom: 10px; /* Add margin between dropdowns */
+                  }
+      
+                  .question {
+                    cursor: pointer;
+                    padding: 10px;
+                    border-bottom: 1px solid #ccc;
+                    border-radius: 5px;
+                    font-weight: bold;
+                  }
+      
+                  .answer {
+                      display: none;
+                      padding: 10px;
+                     
+                      margin-top: 5px;
+                  }
+                </style>';
+
+            $FAQs .= '<script>
+                  function toggleAnswer(id) {
+                      var answer = document.getElementById(id);
+                      if (answer.style.display === "none") {
+                          answer.style.display = "block";
+                      } else {
+                          answer.style.display = "none";
+                      }
+                  }
+                </script>';
+
+            $FAQs .= '<div class="tab-desc">';
+            // Fetch questions from the database
+            $sql = "SELECT * FROM business_faq WHERE bus_id = $id";
+            $result = $conn->query($sql);
+
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    $FAQs .= '<div class="dropdown">';
+                    $FAQs .= '<div class="question" onclick="toggleAnswer(\'answer' . $row['id'] . '\')">' . 'Question: '.$row['questions'] . '</div>';
+
+                    // Display the answer
+                    $FAQs .= '<div id="answer' . $row['id'] . '" class="answer">'.'Answer: '. $row['answer'] . '</div>';
+
+                    $FAQs .= '</div>';
+                }
+            } else {
+                $FAQs .= 'No FAQs available.';
+            }
+            $FAQs .= '</div>';
+
             $socialMedia .= '<div class="section-title sidebar-title">
                         <h5>FOLLOW US</h5>
                     </div>
@@ -514,252 +569,228 @@ if (isset($_SESSION['ownerId'])) {
     <!-- Header End -->
 
     <!-- Property Details Section Begin -->
-    
+
 
 
     <section class="property-section latest-property-section spad">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-5">
-                <div class="section-title">
-                    <h4>BUSINESS INFORMATION</h4>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-5">
+                    <div class="section-title">
+                        <h4>BUSINESS INFORMATION</h4>
+                    </div>
                 </div>
-            </div>
-            <!-- Displaying business information -->
-            <div class="container">
-                <div class="profile-agent-content">
-                    <?php echo $disp; ?>
+                <!-- Displaying business information -->
+                <div class="container">
+                    <div class="profile-agent-content">
+                        <?php echo $disp; ?>
+                    </div>
                 </div>
-            </div>
 
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8">
-                        <div class="pd-text">
-                            <div class="pd-board">
-                                <br>
-                                <div class="tab-board">
-                                    <!-- Tabs for Overview and FAQs -->
-                                    <ul class="nav nav-tabs" role="tablist">
-                                        <li class="nav-item">
-                                            <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">Overview</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">FAQs</a>
-                                        </li>
-                                    </ul>
-                                    <!-- Tab panes -->
-                                    <div class="tab-content">
-                                        <div class="tab-pane active" id="tabs-1" role="tabpanel">
-                                            <?php echo $overview; ?>
-                                        </div>
-                                        <div class="tab-pane" id="tabs-2" role="tabpanel">
-                                            <?php echo $FAQs; ?>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Gallery Section -->
-                            <div class="pd-widget">
-                                <h4>GALLERY</h4>
-                                <?php if ($numRows1 > 0) { ?>
-                                    <div class="fp-slider owl-carousel">
-                                        <?php foreach ($datas3 as $image) : ?>
-                                            <div class="fp-item set-bg mb-4" data-setbg=<?php echo $image['images']; ?>>
-                                                <div class="fp-text">
-                                                    <h5 class="title">
-                                                        <?php echo $bus_name; ?>
-                                                    </h5>
-                                                    <p><span class="icon_pin_alt"></span>
-                                                        <?php echo $bus_add; ?>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        <?php endforeach; ?>
-                                    </div>
-                                <?php } else { ?>
-                                    <p class="h4 text-muted mb-2 mt-0 pt-0">No available post</p>
-                                <?php } ?>
-                            </div>
-                            <!-- Map Location Section -->
-                            <div class="pd-widget">
-                                <h4>Map Location</h4>
-                                <div class="map">
-                                    <div id="map"></div>
-                                    <!-- Your map content or iframe -->
-                                </div>
-                            </div>
-                            <!-- Feature Post Section -->
-                            <div class="blog-item-list"><br><br>
-                                <div class="pd-widget">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="pd-text">
+                                <div class="pd-board">
                                     <br>
-                                    <h4>FEATURE POST</h4>
-                                </div>
-                                <?php if ($numRows2 > 0) {
-                                    foreach ($datas4 as $data2) { ?>
-                                        <div class="blog-item">
-                                            <div class="bi-pic">
-                                                <img src="<?php echo "img/post/" . $data2['photo'] ?>" style="" height="200" width="300" alt="">
+                                    <div class="tab-board">
+                                        <!-- Tabs for Overview and FAQs -->
+                                        <ul class="nav nav-tabs" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">Overview</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">FAQs</a>
+                                            </li>
+                                        </ul>
+                                        <!-- Tab panes -->
+                                        <div class="tab-content">
+                                            <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                                                <?php echo $overview; ?>
                                             </div>
-                                            <div class="bi-text">
-                                                <h5>
-                                                    <?php echo $data2['post_title'] ?>
-                                                </h5>
-                                                <ul>
-                                                    <li>
-                                                        <?php echo $data2['post_desc'] ?>
-                                                    </li>
-                                                </ul>
-                                                <p>
-                                                    <?php echo $data2['post_date'] ?>
-                                                </p>
+                                            <div class="tab-pane" id="tabs-2" role="tabpanel">
+                                                <?php echo $FAQs; ?>
                                             </div>
                                         </div>
-                                    <?php }
-                                } else { ?>
-                                    <p class="h4 text-muted mb-5 mt-0 pt-0">No available post</p>
-                                <?php } ?>
-                            </div>
-                            <!-- Reviews Section -->
-                            <div class="blog-details-content">
-                                <div class="bc-widget">
-                                    <h4>
-                                        <?php echo $numRows3 . " REVIEWS" ?>
-                                    </h4>
-                                    <div class="comment-option">
-                                        <?php
-                                        for ($i = 0; $i < 5 && $i < count($datas5); $i++) {
-                                            $data5 = $datas5[$i];
-                                            $dateString = $data5['curr_time'];
-                                            $timestamp = strtotime($dateString);
-                                            $formattedDate = date('F j, Y', $timestamp);
-                                        ?>
-                                            <div class="co-item">
-                                                <div class="ci-pic">
-                                                    <?php if ($data5['photo'] != null && $data5['photo'] != " ") { ?>
-                                                        <img src="<?php echo "img/profile-picture/" . $data5['photo'] ?>" alt="">
-                                                    <?php } else { ?>
-                                                        <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
-                                                    <?php } ?>
-                                                </div>
-                                                <div class="ci-text">
-                                                    <h5>
-                                                        <?php echo $data5['Firstname'] . ' ' . $data5['MiddleName'] . ' ' . $data5['Surname'] ?>
-                                                    </h5>
-                                                    <div class="pr-rating">
-                                                        <?php for ($j = 0; $j < $data5['rating']; $j++) { ?>
-                                                            <i class="fa fa-star"></i>
-                                                        <?php } ?>
-                                                    </div>
-                                                    <p>
-                                                        <?php echo $data5['comment'] ?>
-                                                    </p>
-                                                    <ul>
-                                                        <li><i class="fa fa-clock-o">
-                                                                <?php echo ' ' . $formattedDate ?>
-                                                            </i></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <?php if ($data5['bus_reply'] != null && $data5['bus_reply'] != " ") { ?>
-                                                <div class="co-item reply-item">
-                                                    <div class="ci-pic">
-                                                        <img src="<?php echo "img/logo/" . $data5['Businesslogo'] ?>" alt="">
-                                                    </div>
-                                                    <div class="ci-text">
-                                                        <h5>
-                                                            <?php echo $data5['BusinessName'] ?>
+                                    </div>
+                                </div>
+                                <!-- Gallery Section -->
+                                <div class="pd-widget">
+                                    <h4>GALLERY</h4>
+                                    <?php if ($numRows1 > 0) { ?>
+                                        <div class="fp-slider owl-carousel">
+                                            <?php foreach ($datas3 as $image) : ?>
+                                                <div class="fp-item set-bg mb-4" data-setbg=<?php echo $image['images']; ?>>
+                                                    <div class="fp-text">
+                                                        <h5 class="title">
+                                                            <?php echo $bus_name; ?>
                                                         </h5>
-                                                        <p>
-                                                            <?php echo $data5['bus_reply'] ?>
+                                                        <p><span class="icon_pin_alt"></span>
+                                                            <?php echo $bus_add; ?>
                                                         </p>
                                                     </div>
                                                 </div>
-                                            <?php }
-                                        }
-                                        ?>
-                                        <div id="UIcommentAndRating"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Leave a Comment Section -->
-                            <div class="pd-widget">
-                                <div class="col-sm-12">
-                                    <div class="row">
-                                        <h4>LEAVE A COMMENT</h4><br>
-                                    </div>
-                                    <?php if ($numRows6 === 0 || !isset($_SESSION['ownerId'])) { ?>
-                                        <div class="row">
-                                            <fieldset id="ratingUi" class="rating">
-                                                <!-- Rating UI -->
-                                                <input type="radio" id="star5" name="rating" value="5" />
-                                                <label for="star5">5 stars</label>
-                                                <input type="radio" id="star4" name="rating" value="4" />
-                                                <label for="star4">4 stars</label>
-                                                <input type="radio" id="star3" name="rating" value="3" />
-                                                <label for="star3">3 stars</label>
-                                                <input type="radio" id="star2" name="rating" value="2" />
-                                                <label for="star2">2 stars</label>
-                                                <input type="radio" id="star1" name="rating" value="1" />
-                                                <label for="star1">1 star</label>
-                                            </fieldset>
+                                            <?php endforeach; ?>
                                         </div>
+                                    <?php } else { ?>
+                                        <p class="h4 text-muted mb-2 mt-0 pt-0">No available post</p>
                                     <?php } ?>
                                 </div>
-                                <form class="review-form">
-                                    <textarea placeholder="Leave a Comment" id="commentVal"></textarea>
-                                    <?php // if (isset($_SESSION['ownerId'])) { ?>
-                                    <input type="hidden" value="<?php echo $_SESSION['ownerId'] ?>" id="commentAndRatingId">
-                                    <?php // } ?>
-                                    <input type="hidden" value="<?php echo $nameCommentRate ?>" id="nameUserComment">
-                                    <?php // if (isset($_SESSION['photo'])) { ?>
-                                    <input type="hidden" value="<?php echo $_SESSION['photo'] ?>" id="photoCommentVal">
-                                    <?php // } ?>
-                                    <input type="hidden" value="<?php echo $id ?>" id="commentRatingBusId">
-                                    <button type="button" onclick="commentAndRating('<?php echo $numRows6 ?>')" class="site-btn">Send</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Sidebar Section -->
-                    <div class="col-lg-4">
-                        <div class="property-sidebar">
-                            <div class="blog-sidebar">
-                                <div class="follow-us">
-                                    <br><br>
-                                    <?php echo $socialMedia; ?>
+                                <!-- Map Location Section -->
+                                <div class="pd-widget">
+                                    <h4>Map Location</h4>
+                                    <div class="map">
+                                        <div id="map"></div>
+                                        <!-- Your map content or iframe -->
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="section-title sidebar-title">
-                                <h5>We're Hiring!</h5>
-                            </div>
-                            <?php
-                            if ($role == 3 || $role == '') {
-                            foreach ($datas as $index => $data) {
-                                $businessLogo = $data['Businesslogo'];
-                                $pos = $data['pos_vacant'];
-                                $jobDes = $data['job_desc'];
-                                $modalId = 'modal_' . $index;
-                                $jobSpec = $data['job_spec'];
-                                $degree = $data['degree'];
-                                $salary = $data['salary'];
-                                $yearExp = $data['year_exp'];
-                                $bus_applicant_id = $data['bus_applicant'];
-                                $user_id = $_SESSION['ownerId'];
-                            ?>
-                                <!-- Hiring Modal -->
-                                <div class="single-sidebar m-0 p-0">
-                                    <div class="top-agent">
-                                        <div class="ta-item">
-                                            <div class="ta-pic set-bg" data-setbg="img/job/381351858_340934731618300_4699644083071352903_n.png"></div>
-                                            <div class="ta-text">
-                                                <h6><a><?php echo $data['pos_vacant'] ?></a></h6>
-                                                <!-- Pass the JavaScript variables as separate parameters to openModal -->
-                                                <button onclick="openModal('<?php echo $businessLogo ?>', '<?php echo $pos ?>', '<?php echo $jobDes ?>', '<?php echo $modalId ?>', '<?php echo $jobSpec ?>', '<?php echo $degree ?>', '<?php echo $yearExp ?>', '<?php echo $salary ?>', `<?php echo $bus_applicant_id ?>`)" class="btn btn-success">Apply</button>
+                                <!-- Feature Post Section -->
+                                <div class="blog-item-list"><br><br>
+                                    <div class="pd-widget">
+                                        <br>
+                                        <h4>FEATURE POST</h4>
+                                    </div>
+                                    <?php if ($numRows2 > 0) {
+                                        foreach ($datas4 as $data2) { ?>
+                                            <div class="blog-item">
+                                                <div class="bi-pic">
+                                                    <img src="<?php echo "img/post/" . $data2['photo'] ?>" style="" height="200" width="300" alt="">
+                                                </div>
+                                                <div class="bi-text">
+                                                    <h5>
+                                                        <?php echo $data2['post_title'] ?>
+                                                    </h5>
+                                                    <ul>
+                                                        <li>
+                                                            <?php echo $data2['post_desc'] ?>
+                                                        </li>
+                                                    </ul>
+                                                    <p>
+                                                        <?php echo $data2['post_date'] ?>
+                                                    </p>
+                                                </div>
                                             </div>
+                                        <?php }
+                                    } else { ?>
+                                        <p class="h4 text-muted mb-5 mt-0 pt-0">No available post</p>
+                                    <?php } ?>
+                                </div>
+                                <!-- Reviews Section -->
+                                <div class="blog-details-content">
+                                    <div class="bc-widget">
+                                        <h4>
+                                            <?php echo $numRows3 . " REVIEWS" ?>
+                                        </h4>
+                                        <div class="comment-option">
+                                            <?php
+                                            for ($i = 0; $i < 5 && $i < count($datas5); $i++) {
+                                                $data5 = $datas5[$i];
+                                                $dateString = $data5['curr_time'];
+                                                $timestamp = strtotime($dateString);
+                                                $formattedDate = date('F j, Y', $timestamp);
+                                            ?>
+                                                <div class="co-item">
+                                                    <div class="ci-pic">
+                                                        <?php if ($data5['photo'] != null && $data5['photo'] != " ") { ?>
+                                                            <img src="<?php echo "img/profile-picture/" . $data5['photo'] ?>" alt="">
+                                                        <?php } else { ?>
+                                                            <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
+                                                        <?php } ?>
+                                                    </div>
+                                                    <div class="ci-text">
+                                                        <h5>
+                                                            <?php echo $data5['Firstname'] . ' ' . $data5['MiddleName'] . ' ' . $data5['Surname'] ?>
+                                                        </h5>
+                                                        <div class="pr-rating">
+                                                            <?php for ($j = 0; $j < $data5['rating']; $j++) { ?>
+                                                                <i class="fa fa-star"></i>
+                                                            <?php } ?>
+                                                        </div>
+                                                        <p>
+                                                            <?php echo $data5['comment'] ?>
+                                                        </p>
+                                                        <ul>
+                                                            <li><i class="fa fa-clock-o">
+                                                                    <?php echo ' ' . $formattedDate ?>
+                                                                </i></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <?php if ($data5['bus_reply'] != null && $data5['bus_reply'] != " ") { ?>
+                                                    <div class="co-item reply-item">
+                                                        <div class="ci-pic">
+                                                            <img src="<?php echo "img/logo/" . $data5['Businesslogo'] ?>" alt="">
+                                                        </div>
+                                                        <div class="ci-text">
+                                                            <h5>
+                                                                <?php echo $data5['BusinessName'] ?>
+                                                            </h5>
+                                                            <p>
+                                                                <?php echo $data5['bus_reply'] ?>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                            <?php }
+                                            }
+                                            ?>
+                                            <div id="UIcommentAndRating"></div>
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Leave a Comment Section -->
+                                <div class="pd-widget">
+                                    <div class="col-sm-12">
+                                        <div class="row">
+                                            <h4>LEAVE A COMMENT</h4><br>
+                                        </div>
+                                        <?php if ($numRows6 === 0 || !isset($_SESSION['ownerId'])) { ?>
+                                            <div class="row">
+                                                <fieldset id="ratingUi" class="rating">
+                                                    <!-- Rating UI -->
+                                                    <input type="radio" id="star5" name="rating" value="5" />
+                                                    <label for="star5">5 stars</label>
+                                                    <input type="radio" id="star4" name="rating" value="4" />
+                                                    <label for="star4">4 stars</label>
+                                                    <input type="radio" id="star3" name="rating" value="3" />
+                                                    <label for="star3">3 stars</label>
+                                                    <input type="radio" id="star2" name="rating" value="2" />
+                                                    <label for="star2">2 stars</label>
+                                                    <input type="radio" id="star1" name="rating" value="1" />
+                                                    <label for="star1">1 star</label>
+                                                </fieldset>
+                                            </div>
+                                        <?php } ?>
+                                    </div>
+                                    <form class="review-form">
+                                        <textarea placeholder="Leave a Comment" id="commentVal"></textarea>
+                                        <?php // if (isset($_SESSION['ownerId'])) { 
+                                        ?>
+                                        <input type="hidden" value="<?php echo $_SESSION['ownerId'] ?>" id="commentAndRatingId">
+                                        <?php // } 
+                                        ?>
+                                        <input type="hidden" value="<?php echo $nameCommentRate ?>" id="nameUserComment">
+                                        <?php // if (isset($_SESSION['photo'])) { 
+                                        ?>
+                                        <input type="hidden" value="<?php echo $_SESSION['photo'] ?>" id="photoCommentVal">
+                                        <?php // } 
+                                        ?>
+                                        <input type="hidden" value="<?php echo $id ?>" id="commentRatingBusId">
+                                        <button type="button" onclick="commentAndRating('<?php echo $numRows6 ?>')" class="site-btn">Send</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Sidebar Section -->
+                        <div class="col-lg-4">
+                            <div class="property-sidebar">
+                                <div class="blog-sidebar">
+                                    <div class="follow-us">
+                                        <br><br>
+                                        <?php echo $socialMedia; ?>
+                                    </div>
+                                </div>
+<<<<<<< HEAD
+=======
                                 <!-- Modal -->
                                 <div id="<?php echo $modalId ?>" style="z-index: 1000; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);" class="modal">
                                     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -842,39 +873,151 @@ if (isset($_SESSION['ownerId'])) {
                                 $datas7 = $stmt7->fetchAll();
                                 $numRows7 = $stmt7->rowCount();
                                 ?>
+>>>>>>> 65fc424bc9bb3e3cd413ab22a88ceb77b1651e40
                                 <div class="section-title sidebar-title">
-                                    <h5>Related Business</h5>
+                                    <h5>We're Hiring!</h5>
                                 </div>
                                 <?php
-                                if ($numRows7 > 0) {
-                                    foreach ($datas7 as $data7) { ?>
-                                        <div class="top-agent">
-                                            <div class="ta-item">
-                                                <div class="ta-pic set-bg" data-setbg=<?php echo 'img/logo/' . $data7['Businesslogo'] ?>></div>
-                                                <div class="ta-text" style="height: fit-content;">
-                                                    <h6><a href=<?php echo './details.php?ID=' . $data7['bus_id'] ?>><?php echo $data7['BusinessName'] ?></a></h6>
-                                                    <span style="font-size: small;">
-                                                        <?php echo $data7['BusinessAddress'] ?>
-                                                    </span>
-                                                    <div class="ta-num">
-                                                        <?php echo $data7['BusinessNumber'] ?>
+                                if ($role == 3 || $role == '') {
+                                    foreach ($datas as $index => $data) {
+                                        $businessLogo = $data['Businesslogo'];
+                                        $pos = $data['pos_vacant'];
+                                        $jobDes = $data['job_desc'];
+                                        $modalId = 'modal_' . $index;
+                                        $jobSpec = $data['job_spec'];
+                                        $degree = $data['degree'];
+                                        $salary = $data['salary'];
+                                        $yearExp = $data['year_exp'];
+                                        $bus_applicant_id = $data['bus_applicant'];
+                                        $user_id = $_SESSION['ownerId'];
+                                ?>
+                                        <!-- Hiring Modal -->
+                                        <div class="single-sidebar m-0 p-0">
+                                            <div class="top-agent">
+                                                <div class="ta-item">
+                                                    <div class="ta-pic set-bg" data-setbg="img/job/381351858_340934731618300_4699644083071352903_n.png"></div>
+                                                    <div class="ta-text">
+                                                        <h6><a><?php echo $data['pos_vacant'] ?></a></h6>
+                                                        <!-- Pass the JavaScript variables as separate parameters to openModal -->
+                                                        <button onclick="openModal('<?php echo $businessLogo ?>', '<?php echo $pos ?>', '<?php echo $jobDes ?>', '<?php echo $modalId ?>', '<?php echo $jobSpec ?>', '<?php echo $degree ?>', '<?php echo $yearExp ?>', '<?php echo $salary ?>', `<?php echo $bus_applicant_id ?>`)" class="btn btn-success">Apply</button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                <?php }
-                                } ?>
+                                        <!-- Modal -->
+                                        <div id="<?php echo $modalId ?>" style="z-index: 1000; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);" class="modal">
+                                            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                                <div class="modal-content w-100">
+                                                    <div class="modal-header">
+                                                        <img src="img/company/jollibee.jpg" alt="Company Logo" class="circle-image" style="margin-right: 5px; border: 2px solid #355E3B;">
+                                                        <h3 class="text-center mb-6 font-weight-bold" style="margin-top: 7px;">We're Hiring!</h3>
+                                                        <span onclick="closeModal('<?php echo $modalId ?>')" class="close" title="Close Modal">&times;</span>
+                                                    </div>
+                                                    <div class="container mt-4">
+                                                        <div class="card px-2" id="jobBoardForm">
+                                                            <div class="job-board">
+                                                                <!-- Job Listings -->
+                                                                <div class="job-listing">
+                                                                    <h4 class="jobTitle"><strong>Manager</strong></h4>
+                                                                    <p id="des">The Restaurant Manager is responsible for
+                                                                        the development and achievement of the store business
+                                                                        objectives such as Sales and Profitability targets,
+                                                                        customer satisfaction & Food, Safety and Cleanliness
+                                                                        standards; People Management and Development; and
+                                                                        Stores adherence to operating systems and standards
+                                                                        and
+                                                                        compliance to all government requirements.</p>
+                                                                    <h6><strong>Job Specification</strong></h6>
+                                                                    <ul class="bullet-list">
+                                                                        <!-- Additional job specification details -->
+                                                                    </ul>
+                                                                </div>
+                                                                <br>
+                                                            </div>
+                                                            <div class="col-lg-12">
+                                                                <h6><strong>Additional Information</strong></h6>
+                                                                <div class="row">
+                                                                    <div class="col">
+                                                                        <p class="degree"><strong>Degree:</strong>
+                                                                            Bachelor's Degree</p>
+                                                                    </div>
+                                                                    <div class="col">
+                                                                        <p class="experience"><strong>Years of
+                                                                                Experience:</strong> 3 years</p>
+                                                                    </div>
+                                                                    <div class="col">
+                                                                        <p class="salary"><strong>Years of
+                                                                                Experience:</strong> 3 years</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="upload-button">
+                                                                <div class="row">
+                                                                    <div class="col">
+                                                                        <br>
+                                                                        <h4 style="margin-top: 7px;"><strong>Submit
+                                                                                Application</strong></h4>
+                                                                    </div>
+                                                                    <div class="col text-right">
+                                                                        <input type="hidden" id="app_id">
+                                                                        <br><button class="btn btn-success" onclick="applyUser('<?php echo $modalId ?>', '<?php echo $user_id ?>')" style="margin-bottom: 20px;">Submit
+                                                                            Resume</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php }
+                                } else {
+                                    ?>
+                                    <h3 class="mt-0 mb-5 text-success">This Feature is not available to you</h3>
+                                <?php  } ?>
+                                <!-- Related Business Section -->
+                                <div class="single-sidebar">
+                                    <?php
+                                    $selectRelatedBusiness = "SELECT * FROM business_list WHERE BusinessCategory = :bus_category LIMIT 2";
+                                    $stmt7 = $pdo->prepare($selectRelatedBusiness);
+                                    $stmt7->bindParam(':bus_category', $bus_category, PDO::PARAM_STR);
+                                    $stmt7->execute();
+                                    $datas7 = $stmt7->fetchAll();
+                                    $numRows7 = $stmt7->rowCount();
+                                    ?>
+                                    <div class="section-title sidebar-title">
+                                        <h5>Related Business</h5>
+                                    </div>
+                                    <?php
+                                    if ($numRows7 > 0) {
+                                        foreach ($datas7 as $data7) { ?>
+                                            <div class="top-agent">
+                                                <div class="ta-item">
+                                                    <div class="ta-pic set-bg" data-setbg=<?php echo 'img/logo/' . $data7['Businesslogo'] ?>></div>
+                                                    <div class="ta-text" style="height: fit-content;">
+                                                        <h6><a href=<?php echo './details.php?ID=' . $data7['bus_id'] ?>><?php echo $data7['BusinessName'] ?></a></h6>
+                                                        <span style="font-size: small;">
+                                                            <?php echo $data7['BusinessAddress'] ?>
+                                                        </span>
+                                                        <div class="ta-num">
+                                                            <?php echo $data7['BusinessNumber'] ?>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    <?php }
+                                    } ?>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
 
-   
+
 
 
     <footer class="footer-section">
@@ -981,6 +1124,11 @@ if (isset($_SESSION['ownerId'])) {
                     // You can add your code to handle the unchecked state here
                 }
             });
+
+
+            // $('.question').click(function() {
+            //     $(this).next('.answer').slideToggle();
+            // });
         });
 
         // for comment and ratings
