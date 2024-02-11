@@ -834,8 +834,9 @@ if (isset($_SESSION['ownerId'])) {
                             <!-- Related Business Section -->
                             <div class="single-sidebar">
                                 <?php
-                                $selectRelatedBusiness = "SELECT * FROM business_list WHERE BusinessCategory = :bus_category LIMIT 2";
+                                $selectRelatedBusiness = "SELECT * FROM business_list WHERE BusinessCategory = :bus_category AND bus_id != :id LIMIT 2";
                                 $stmt7 = $pdo->prepare($selectRelatedBusiness);
+                                $stmt7->bindParam(':id', $id, PDO::PARAM_STR);
                                 $stmt7->bindParam(':bus_category', $bus_category, PDO::PARAM_STR);
                                 $stmt7->execute();
                                 $datas7 = $stmt7->fetchAll();

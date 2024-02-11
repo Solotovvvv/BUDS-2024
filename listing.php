@@ -510,7 +510,7 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
                     ?>
                       <div class="row">
                         <div class="col-lg-4">
-                          <img src="<?php echo "../img/logo/". $data['Businesslogo'] ?>" style="border-radius: 20px;" alt="no pic">
+                          <img src="<?php echo "img/logo/".$data['Businesslogo'] ?>" style="border-radius: 20px;" alt="no pic">
                         </div>
                         <div class="col-lg-8">
                           <div class="d-md-flex align-items-md-center">
