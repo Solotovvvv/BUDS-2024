@@ -74,7 +74,7 @@ if ($rs = $conn->query($sql)) {
                     Question #1
                     </button>
                         <div class="collapse" id="collapseContent">
-                            <div class="card card-body">
+                            <div class="card card-body" style="border: 1px solid rgba(0,0,0,.125)">
                                 Hello Bitches!
                             </div>
                         </div>
@@ -249,11 +249,11 @@ if (isset($_SESSION['ownerId'])) {
         }
 
         .dropdown-toggle {
-        width: 100%; 
+        width: 100%; /* Set the width to 100% */
         white-space: normal;
-        background-color: #ffffff; 
-        color: #000000; 
-        text-align: left; 
+        background-color: #ffffff; /* Set background color to white */
+        color: #000000; /* Set text color to black */
+        text-align: left; /* Align the text to the left */
         }
         .dropdown-toggle::after {
         display: inline-block;
@@ -267,9 +267,9 @@ if (isset($_SESSION['ownerId'])) {
         border-bottom: 0;
         border-left: .3em solid transparent;
         position: absolute;
-        right: 15px; 
-        top: 50%; 
-        transform: translateY(-50%); 
+        right: 15px; /* Position the arrow to the right */
+        top: 50%; /* Align the arrow vertically */
+        transform: translateY(-50%); /* Center the arrow vertically */
         }
     </style>
 
