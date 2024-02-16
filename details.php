@@ -68,18 +68,29 @@ if ($rs = $conn->query($sql)) {
             $overview .= '<div class="tab-desc">
                         <p>' . $row['BusinessDescrip'] . '</p>
                 </div>';
-            $FAQs .= '<div class="tab-desc">
-                <div class="dropdown">
-                    <button class="btn btn-success dropdown-toggle" type="button" id="collapseDropdownButton" data-toggle="collapse" data-target="#collapseContent" aria-expanded="false" aria-controls="collapseContent">
-                    Question #1
-                    </button>
-                        <div class="collapse" id="collapseContent">
-                            <div class="card card-body">
-                                Hello Bitches!
-                            </div>
-                        </div>
-                </div>
-            </div>';
+                $sqlfaq = "SELECT * FROM business_faq WHERE bus_id = $id";
+                if ($rsfaq = $conn->query($sqlfaq)) {
+                    if ($rsfaq->num_rows > 0) {
+                        $FAQs .= '<div class="tab-desc">';
+                        $counter = 1;
+                        while ($faqRow = $rsfaq->fetch_assoc()) {
+                            $FAQs .= '<div class="dropdown mb-2">
+                                <button class="btn btn-success dropdown-toggle" type="button" id="collapseDropdownButton' . $counter . '" data-toggle="collapse" data-target="#collapseContent' . $counter . '" aria-expanded="false" aria-controls="collapseContent' . $counter . '">
+                                Question #' . $counter. '. ' . $faqRow['questions'] . '
+                                </button>
+                                    <div class="collapse" id="collapseContent' . $counter . '">
+                                        <div class="card card-body">
+                                            ' . $faqRow['answer'] . '
+                                        </div>
+                                    </div>
+                            </div>';
+                            $counter++;
+                        }
+                        $FAQs .= '</div>';
+                    } else {
+                        $FAQs = '<div class="tab-desc">No FAQs available</div>';
+                    }
+                }
             $socialMedia .= '<div class="section-title sidebar-title">
                         <h5>FOLLOW US</h5>
                     </div>
