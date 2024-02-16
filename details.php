@@ -68,29 +68,18 @@ if ($rs = $conn->query($sql)) {
             $overview .= '<div class="tab-desc">
                         <p>' . $row['BusinessDescrip'] . '</p>
                 </div>';
-                $sqlfaq = "SELECT * FROM business_faq WHERE bus_id = $id";
-                if ($rsfaq = $conn->query($sqlfaq)) {
-                    if ($rsfaq->num_rows > 0) {
-                        $FAQs .= '<div class="tab-desc">';
-                        $counter = 1;
-                        while ($faqRow = $rsfaq->fetch_assoc()) {
-                            $FAQs .= '<div class="dropdown mb-2">
-                                <button class="btn btn-success dropdown-toggle" type="button" id="collapseDropdownButton' . $counter . '" data-toggle="collapse" data-target="#collapseContent' . $counter . '" aria-expanded="false" aria-controls="collapseContent' . $counter . '">
-                                Question #' . $counter. '. ' . $faqRow['questions'] . '
-                                </button>
-                                    <div class="collapse" id="collapseContent' . $counter . '">
-                                        <div class="card card-body">
-                                            ' . $faqRow['answer'] . '
-                                        </div>
-                                    </div>
-                            </div>';
-                            $counter++;
-                        }
-                        $FAQs .= '</div>';
-                    } else {
-                        $FAQs = '<div class="tab-desc">No FAQs available</div>';
-                    }
-                }
+            $FAQs .= '<div class="tab-desc">
+                <div class="dropdown">
+                    <button class="btn btn-success dropdown-toggle" type="button" id="collapseDropdownButton" data-toggle="collapse" data-target="#collapseContent" aria-expanded="false" aria-controls="collapseContent">
+                    Question #1
+                    </button>
+                        <div class="collapse" id="collapseContent">
+                            <div class="card card-body" style="border: 1px solid rgba(0,0,0,.125)">
+                                Hello Bitches!
+                            </div>
+                        </div>
+                </div>
+            </div>';
             $socialMedia .= '<div class="section-title sidebar-title">
                         <h5>FOLLOW US</h5>
                     </div>
@@ -260,11 +249,11 @@ if (isset($_SESSION['ownerId'])) {
         }
 
         .dropdown-toggle {
-        width: 100%; 
+        width: 100%; /* Set the width to 100% */
         white-space: normal;
-        background-color: #ffffff; 
-        color: #000000; 
-        text-align: left; 
+        background-color: #ffffff; /* Set background color to white */
+        color: #000000; /* Set text color to black */
+        text-align: left; /* Align the text to the left */
         }
         .dropdown-toggle::after {
         display: inline-block;
@@ -278,9 +267,9 @@ if (isset($_SESSION['ownerId'])) {
         border-bottom: 0;
         border-left: .3em solid transparent;
         position: absolute;
-        right: 15px; 
-        top: 50%; 
-        transform: translateY(-50%); 
+        right: 15px; /* Position the arrow to the right */
+        top: 50%; /* Align the arrow vertically */
+        transform: translateY(-50%); /* Center the arrow vertically */
         }
     </style>
 
