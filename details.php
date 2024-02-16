@@ -67,10 +67,19 @@ if ($rs = $conn->query($sql)) {
                     </div>';
             $overview .= '<div class="tab-desc">
                         <p>' . $row['BusinessDescrip'] . '</p>
-                  </div>';
+                </div>';
             $FAQs .= '<div class="tab-desc">
-                <p>FAQs AREA</p>
-              </div>';
+                <div class="dropdown">
+                    <button class="btn btn-success dropdown-toggle" type="button" id="collapseDropdownButton" data-toggle="collapse" data-target="#collapseContent" aria-expanded="false" aria-controls="collapseContent">
+                    Question #1
+                    </button>
+                        <div class="collapse" id="collapseContent">
+                            <div class="card card-body">
+                                Hello Bitches!
+                            </div>
+                        </div>
+                </div>
+            </div>';
             $socialMedia .= '<div class="section-title sidebar-title">
                         <h5>FOLLOW US</h5>
                     </div>
@@ -237,6 +246,30 @@ if (isset($_SESSION['ownerId'])) {
             margin: auto;
             width: 600px;
             height: 450px;
+        }
+
+        .dropdown-toggle {
+        width: 100%; 
+        white-space: normal;
+        background-color: #ffffff; 
+        color: #000000; 
+        text-align: left; 
+        }
+        .dropdown-toggle::after {
+        display: inline-block;
+        width: 0;
+        height: 0;
+        margin-left: .255em;
+        vertical-align: .255em;
+        content: "";
+        border-top: .3em solid;
+        border-right: .3em solid transparent;
+        border-bottom: 0;
+        border-left: .3em solid transparent;
+        position: absolute;
+        right: 15px; 
+        top: 50%; 
+        transform: translateY(-50%); 
         }
     </style>
 
