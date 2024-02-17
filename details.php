@@ -376,7 +376,7 @@ if (isset($_SESSION['ownerId'])) {
                 </div>
             </div>
         </div>
-        <div class="hs-nav">
+        <div class="hs-nav" style="border: 1px solid rgba(0,0,0,.125)">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-9">
