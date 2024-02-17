@@ -47,21 +47,6 @@ if ($result->num_rows > 0) {
  
   $decoded_output = json_decode($output, true);
 
-  // Check if decoding was successful
-  if ($decoded_output !== null) {
-      // Access the extracted data as an associative array
-      foreach ($decoded_output as $business) {
-        // Access individual elements of each business
-        echo "Business ID: " . $business['bus_id'] . "<br>";
-        echo "Business Name: " . $business['BusinessName'] . "<br>";
-        echo "Category: " . $business['category'] . "<br>";
-        echo "Rating : " . $business['average_rating'] . "<br>";
-        // Add more fields as needed
-        echo "<br>";
-      }
-  } else {
-      echo "Error decoding JSON data from Python script";
-  }
 
 
 } else {
@@ -534,6 +519,15 @@ if (!$stmt1->execute()) {
           </div>
         </div>
       </div>
+      <?php 
+      
+        // Check if decoding was successful
+  if ($decoded_output !== null) {
+    // Access the extracted data as an associative array
+    foreach ($decoded_output as $business) {
+      // Access individual elements of each business
+      ?>
+
       <div class="container-fluid">
         <div class="row justify-content-center mb-3">
           <div class="col-lg-12 col-xl-12">
@@ -542,7 +536,7 @@ if (!$stmt1->execute()) {
                 <div class="row">
                   <div class="col-lg-12 col-lg-5 col-xl-5 mb-lg-0">
                     <div class="bg-image hover-zoom ripple rounded ripple-surface">
-                      <img src="img/property/listing-09.jpg" class="w-100" />
+                      <img src="<?php echo 'img/logo/' . $business['Businesslogo'] ?>" class="w-100" />
                       <a href="#!">
                         <div class="hover-overlay">
                           <div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>
@@ -552,30 +546,30 @@ if (!$stmt1->execute()) {
                   </div>
                   <div class="col-md-6 col-lg-6 col-xl-6">
                     <br>
-                    <h5>Businesss Name</h5>
-                    <h6>Business Owner</h6>
+                    <h5><?php echo $business['BusinessName'] ?></h5>
+                    <h6><?php echo $business['Firstname'] . ' ' . $business['MiddleName'] . ' ' . $business['Surname'] ?></h6>
                     <div class="d-flex flex-row">
                       <div class="text-warning mb-1 me-2">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
+                        <?php   
+                         $totalRating2 =(int)$business['average_rating'];
+                        if($totalRating2 != null){
+                                for ($j = 0; $j < $totalRating2; $j++) { 
+                                ?> 
+                              <i class="fa fa-star"></i>
+                              <?php }
+                              }  ?>
                       </div>
-                      <span> (310) Reviews</span>
                     </div>
                     <div class="mt-1 mb-0 text-muted small">
                       <span>Category</span>
                       <span class="text-primary"> • </span>
-                      <span>Category</span>
-                      <span class="text-primary"> • </span>
-                      <span>Category<br /></span>
+                      <span><?php echo $business['category'] ?></span>
                     </div>
                     <p class="text-truncate mb-4 mb-md-0">
-                      Brief Description about the Business
+                      <?php echo $business['BusinessDescrip'] ?>
                     </p>
                     <br>
-                    <a class="btn btn-success" href="./details.html" role="button"><i class="fa fa-eye"></i> View
+                    <a class="btn btn-success" href="details.php?ID=<?php echo $business['bus_id']; ?>" role="button"><i class="fa fa-eye"></i> View
                       Info</a>
                   </div>
                 </div>
@@ -584,7 +578,14 @@ if (!$stmt1->execute()) {
           </div>
         </div>
       </div>
-      <div class="container-fluid">
+
+      <?php 
+        }
+      } else {
+          echo "Error decoding JSON data from Python script";
+      }
+      ?>
+      <!-- <div class="container-fluid">
         <div class="row justify-content-center mb-3">
           <div class="col-lg-12 col-xl-12">
             <div class="card shadow-0 border rounded-3">
@@ -633,60 +634,9 @@ if (!$stmt1->execute()) {
             </div>
           </div>
         </div>
-      </div>
-      <div class="container-fluid">
-        <div class="row justify-content-center mb-3">
-          <div class="col-lg-12 col-xl-12">
-            <div class="card shadow-0 border rounded-3">
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-lg-12 col-lg-5 col-xl-5 mb-lg-0">
-                    <div class="bg-image hover-zoom ripple rounded ripple-surface">
-                      <img src="img/property/listing-07.jpg" class="w-100" />
-                      <a href="#!">
-                        <div class="hover-overlay">
-                          <div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>
-                        </div>
-                      </a>
-                    </div>
-                  </div>
-                  <div class="col-md-6 col-lg-6 col-xl-6">
-                    <br>
-                    <h5>Businesss Name</h5>
-                    <h6>Business Owner</h6>
-                    <div class="d-flex flex-row">
-                      <div class="text-warning mb-1 me-2">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                      </div>
-                      <span> (310) Reviews</span>
-                    </div>
-                    <div class="mt-1 mb-0 text-muted small">
-                      <span>Category</span>
-                      <span class="text-primary"> • </span>
-                      <span>Category</span>
-                      <span class="text-primary"> • </span>
-                      <span>Category<br /></span>
-                    </div>
-                    <p class="text-truncate mb-4 mb-md-0">
-                      Brief Description about the Business
-                    </p>
-                    <br>
-                    <a class="btn btn-success" href="./details.html" role="button"><i class="fa fa-eye"></i> View
-                      Info</a>
-                    <!-- <div class="btn btn-outline-success">
-                                    <a href="contact.html"><i class="fa fa-search"></i> View More</a>
-                                  </div> -->
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      </div> -->
+      
+     
   </section>
 
   <!-- Footer Section Begin -->
