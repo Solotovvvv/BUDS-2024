@@ -68,7 +68,7 @@ if ($rs = $conn->query($sql)) {
             $overview .= '<div class="tab-desc">
                         <p>' . $row['BusinessDescrip'] . '</p>
                 </div>';
-
+//business faqs updated
                 $sqlfaq = "SELECT * FROM business_faq WHERE bus_id = $id";
                 if ($rsfaq = $conn->query($sqlfaq)) {
                     if ($rsfaq->num_rows > 0) {
@@ -79,7 +79,7 @@ if ($rs = $conn->query($sql)) {
                                 <button class="btn btn-success dropdown-toggle" type="button" id="collapseDropdownButton' . $counter . '" data-toggle="collapse" data-target="#collapseContent' . $counter . '" aria-expanded="false" aria-controls="collapseContent' . $counter . '">
                                 Question #' . $counter. '. ' . $faqRow['questions'] . '
                                 </button>
-                                    <div class="collapse" id="collapseContent' . $counter . '">
+                                    <div class="c  ollapse" id="collapseContent' . $counter . '">
                                       <div class="card card-body" style="border: 1px solid rgba(0,0,0,.125)">
                                             ' . $faqRow['answer'] . '
                                         </div>
