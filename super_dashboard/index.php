@@ -10,17 +10,30 @@ if (empty($_SESSION['admin_user'])) {
 }
 
 $pdo = Database::connection();
+//TOTAL OF BUSINESS REGISTRATION
 $total = "";
 $sql = "SELECT COUNT(*) AS total FROM business_list";
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
 if ($row) {
     $total = $row['total'];
 } else {
     $total = 0; // Set to 0 if no records are found
+}
+
+// TOTAL OF USERS
+$user = "";
+$user_sql = "SELECT COUNT(*) AS user FROM login WHERE userType = '3'";
+$stmt1 = $pdo->prepare($user_sql);
+$stmt1->execute();
+
+$row1 = $stmt1->fetch(PDO::FETCH_ASSOC);
+if ($row1) {
+    $user = $row1['user']; // Corrected reference to $row1
+} else {
+    $user = 0; // Set to 0 if no records are found
 }
 
 ?>
@@ -214,7 +227,7 @@ if ($row) {
                 <div class="card-body">
                   <div class="card-title d-flex align-items-center">
                     <div class="ms-2 d-flex flex-column">
-                      <span class="fw-semibold d-block mb-1">Business Applicant Status</span>
+                      <span class="fw-semibold d-block mb-1">Business Registration</span>
                       <h1 class="card-title mb-2"><?php echo $total;?></h1>
                     </div>
                     <i class="bx bx-loader-alt ms-auto" style="font-size: 90px; color: #355E3B;"></i>
@@ -227,9 +240,9 @@ if ($row) {
                 <div class="card-body">
                   <div class="card-title d-flex align-items-center">
                     <div class="ms-2 d-flex flex-column">
-                      <span class="fw-semibold d-block mb-1">Reports</span>
-                      <h1 class="card-title mb-2">$12,628</h1>
-                      <small class="text-success fw-bolder">+72.80%</small>
+                      <span class="fw-semibold d-block mb-1">User</span>
+                      <h1 class="card-title mb-2"><?php echo $user;?></h1>
+
                     </div>
                     <i class="bx bx-bar-chart-alt-2 ms-auto" style="font-size: 90px; color: #355E3B;"></i>
                   </div>

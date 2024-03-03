@@ -1,8 +1,8 @@
-<?php
+<?php 
 session_start();
 if(empty( $_SESSION['admin_user'] )){
 header('Location: ../index.php'); // Redirect to the login page if ownerId is not set
-    exit;
+    exit; 
 }
 ?>
 <!DOCTYPE html>
@@ -34,36 +34,37 @@ header('Location: ../index.php'); // Redirect to the login page if ownerId is no
   <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
         <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-        <div class="app-brand demo">
-          <a href="index.php" class="app-brand-link">
-            <span class="app-brand-logo demo">
-              <img src="plugins/assets/img/avatars/buds-logo.png" alt="" class="brand-image" width="30" height="30">
-            </span>
-            <span class="text-uppercase text-white app-brand-text demo menu-text fw-bolder ms-2">BuDS | Admin</span>
-          </a>
-          <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
-            <i class="bx bx-chevron-left bx-sm align-middle"></i>
-          </a>
-        </div>
+            <div class="app-brand demo">
+              <a href="index.html" class="app-brand-link">
+                <span class="app-brand-logo demo">
+                  <img src="plugins/assets/img/avatars/buds-logo.png" alt="" class="brand-image" width="50" height="50">
+                </span>
+                <span class="text-uppercase text-white app-brand-text demo menu-text fw-bolder ms-2">CEIPO</span>
+              </a>
+                <a href="javascript:void(0);"
+                    class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+                    <i class="bx bx-chevron-left bx-sm align-middle"></i>
+                </a>
+            </div>
             <div class="menu-inner-shadow"></div>
             <ul class="menu-inner py-1">
               <li class="menu-header text-uppercase">
               </li>
-
+    
               <li class="menu-item">
                 <a href="index.php" class="menu-link">
                   <i class="menu-icon tf-icons bx bxs-dashboard"></i>
                   <div data-i18n="Analytics">Dashboard</div>
                 </a>
               </li>
-
-
+    
+    
               <li class="menu-item">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                   <i class="menu-icon tf-icons bx bxs-buildings"></i>
                   <div data-i18n="Layouts">Business Application</div>
                 </a>
-
+    
                 <ul class="menu-sub list-inline">
                 <li class="list-inline-block menu-item">
                 <a href="approval-registration.php" class="menu-link">
@@ -84,14 +85,14 @@ header('Location: ../index.php'); // Redirect to the login page if ownerId is no
               </li>
                 </ul>
               </li>
-
-
+    
+    
               <li class="menu-item open active">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                   <i class="menu-icon tf-icons bx bxs-category"></i>
                   <div data-i18n="Layouts">Business Categories</div>
                 </a>
-
+    
                 <ul class="menu-sub">
                   <li class="menu-item active">
                     <a href="top-business.php" class="menu-link">
@@ -111,29 +112,10 @@ header('Location: ../index.php'); // Redirect to the login page if ownerId is no
                   Searching Business
                 </a>
               </li>
-
-              <li class="menu-item">
-                <a href="business-profile.php" class="menu-link">
-                  <i class="menu-icon tf-icons bx bxs-user"></i>
-                  <div data-i18n="Analytics">Profile of Business</div>
-                </a>
-              </li>
               <li class="menu-item">
                 <a href="printing-reports.php" class="menu-link">
                   <i class="menu-icon tf-icons bx bxs-report"></i>
                   <div data-i18n="Analytics">Reports</div>
-                </a>
-              </li>
-              <li class="menu-item">
-                <a href="posting-activities.php" class="menu-link">
-                  <i class="menu-icon tf-icons bx bxs-edit"></i>
-                  <div data-i18n="Analytics">Posting Activities/Events</div>
-                </a>
-              </li>
-              <li class="menu-item">
-                <a href="add-account.php" class="menu-link">
-                  <i class="menu-icon tf-icons bx bxs-edit"></i>
-                  <div data-i18n="Analytics">Add Account</div>
                 </a>
               </li>
             </ul>
@@ -161,13 +143,12 @@ header('Location: ../index.php'); // Redirect to the login page if ownerId is no
                       <div class="d-flex">
                         <div class="flex-shrink-0 me-3">
                           <div class="avatar avatar-online">
-                            <img src="plugins/assets/img/avatars/buds-with-text.png" alt
-                              class="w-px-40 h-auto rounded-circle" />
+                            <img src="plugins/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
                           </div>
                         </div>
                         <div class="flex-grow-1">
-                        <span class="fw-semibold d-block">Super Admin</span>
-                        <small class="text-muted">Super Admin</small>
+                        <span class="fw-semibold d-block"><?php echo $_SESSION['lname'].', '.$_SESSION['fname'] ?></span>
+                        <small class="text-muted"><?php echo $_SESSION['userTypeDesc'] ?></small>
                         </div>
                       </div>
                     </a>
@@ -176,12 +157,14 @@ header('Location: ../index.php'); // Redirect to the login page if ownerId is no
                     <div class="dropdown-divider"></div>
                   </li>
                   <li>
-                    <a class="dropdown-item" href="../logout.php">
+                    <a class="dropdown-item" href="../../logout.php">
                       <i class="bx bx-power-off me-2"></i>
                       <span class="align-middle">Log Out</span>
                     </a>
                   </li>
                 </ul>
+              </li>
+            </ul>
           </div>
         </nav>
     <hr>
