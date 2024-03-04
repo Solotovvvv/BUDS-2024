@@ -137,12 +137,15 @@ if (empty($_SESSION['ownerId'])) {
             <a href="javascript:void(0);" class="menu-link menu-toggle">
               <i class="menu-icon tf-icons bx bxs-buildings"></i>
               <div data-i18n="Layouts">Business Application</div>
+              <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger rounded-circle"></span>
             </a>
+
 
             <ul class="menu-sub list-inline">
               <li class="list-inline-block menu-item active">
                 <a href="approval-registration.php" class="menu-link">
                   <div data-i18n="Without navbar">Approval of Registration</div>
+                  <span class="position-absolute top-6 start-100 translate-middle badge rounded-pill bg-danger" style="margin-left: -0.5rem;">99+</span>
                 </a>
               </li>
 
@@ -174,11 +177,11 @@ if (empty($_SESSION['ownerId'])) {
                   <div data-i18n="Without menu">Top 10 Business Category</div>
                 </a>
               </li>
-              <li class="menu-item">
+              <!-- <li class="menu-item">
                 <a href="business-category.php" class="menu-link">
                   <div data-i18n="Without navbar">Buisness Category </div>
                 </a>
-              </li>
+              </li> -->
             </ul>
           </li>
           <li class="menu-item">
@@ -1171,7 +1174,7 @@ if (empty($_SESSION['ownerId'])) {
             },
             body: `hiddendata1=${encodeURIComponent(hiddendata1)}`,
           });
-        
+
           if (response.ok) {
             // Reload DataTable (assuming you have DataTables initialized)
             $('#approval_tbl').DataTable().ajax.reload();
@@ -1181,7 +1184,7 @@ if (empty($_SESSION['ownerId'])) {
               icon: "info",
               confirmButtonText: "OK"
             });
-            
+
           } else {
             throw new Error(`Failed to update status on the server. Status: ${response.status}`);
           }
