@@ -1,9 +1,30 @@
-<?php 
+<?php
+require_once '../../includes/config.php';
+
 session_start();
-if(empty( $_SESSION['ownerId'] )){
-header('Location: ../index.php'); // Redirect to the login page if ownerId is not set
-    exit; 
+
+// Check if the 'ownerId' session variable is not set
+if (empty($_SESSION['ownerId'])) {
+    header('Location: ../index.php'); // Redirect to the login page if 'ownerId' is not set
+    exit;
 }
+
+$pdo = Database::connection();
+function getCount($pdo, $sql) {
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $row ? $row['count'] : 0;
+}
+
+//TOTAL OF BUSINESS REGISTRATION
+$registration = getCount($pdo, "SELECT COUNT(*) AS count FROM business_list");
+
+// TOTAL OF USERS
+$user = getCount($pdo, "SELECT COUNT(*) AS count FROM login WHERE userType = '3'");
+
+// TOTAL OF BUSINESS OWNERS
+$owner = getCount($pdo, "SELECT COUNT(*) AS count FROM login WHERE userType = '2'");
 ?>
 <!DOCTYPE html>
 <html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default"
@@ -177,10 +198,9 @@ header('Location: ../index.php'); // Redirect to the login page if ownerId is no
               <div class="card">
                 <div class="card-body">
                   <div class="card-title d-flex align-items-center">
-                    <div class="ms-2 d-flex flex-column">
-                      <span class="fw-semibold d-block mb-1">Business Applicant Status</span>
-                      <h1 class="card-title mb-2">150</h1>
-                      <small class="text-success fw-bolder">+72.80%</small>
+                  <div class="ms-2 d-flex flex-column">
+                      <span class="fw-semibold d-block mb-1">Total of Business Registrations</span>
+                      <h1 class="card-title mb-2"><?php echo $registration;?></h1>
                     </div>
                     <i class="bx bx-loader-alt ms-auto" style="font-size: 90px; color: #355E3B;"></i>
                   </div>
@@ -191,10 +211,10 @@ header('Location: ../index.php'); // Redirect to the login page if ownerId is no
               <div class="card">
                 <div class="card-body">
                   <div class="card-title d-flex align-items-center">
-                    <div class="ms-2 d-flex flex-column">
-                      <span class="fw-semibold d-block mb-1">Reports</span>
-                      <h1 class="card-title mb-2">$12,628</h1>
-                      <small class="text-success fw-bolder">+72.80%</small>
+                  <div class="ms-2 d-flex flex-column">
+                      <span class="fw-semibold d-block mb-1">Total of User</span>
+                      <h1 class="card-title mb-2"><?php echo $user;?></h1>
+
                     </div>
                     <i class="bx bx-bar-chart-alt-2 ms-auto" style="font-size: 90px; color: #355E3B;"></i>
                   </div>
@@ -206,9 +226,8 @@ header('Location: ../index.php'); // Redirect to the login page if ownerId is no
                 <div class="card-body">
                   <div class="card-title d-flex align-items-center">
                     <div class="ms-2 d-flex flex-column">
-                      <span class="fw-semibold d-block mb-1">Registrations</span>
-                      <h1 class="card-title mb-2">$12,628</h1>
-                      <small class="text-success fw-bolder">+72.80%</small>
+                      <span class="fw-semibold d-block mb-1">Total of Business Owners</span>
+                      <h1 class="card-title mb-2"><?php echo $owner;?></h1>
                     </div>
                     <i class="bx bx-user-plus ms-auto" style="font-size: 90px; color: #355E3B;"></i>
                   </div>
@@ -217,7 +236,7 @@ header('Location: ../index.php'); // Redirect to the login page if ownerId is no
             </div>
           </div>
           <div class="row">
-            <div class="col-md-6 col-lg-6 col-xl-6">
+            <!-- <div class="col-md-6 col-lg-6 col-xl-6">
               <div class="card card-primary">
                 <div class="card-body text-center">
                   <h2 class="card-title" style="font-size: 30px; font-weight: bold;">Bar Chart</h2>
@@ -236,7 +255,7 @@ header('Location: ../index.php'); // Redirect to the login page if ownerId is no
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
 
             <div class="col-md-6 col-lg-6 col-xl-6">
               <div class="card card-primary">
@@ -273,7 +292,7 @@ header('Location: ../index.php'); // Redirect to the login page if ownerId is no
         <script src="plugins/assets/js/main.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
 
-        <script>
+        <!-- <script>
           var ctx = document.getElementById('barChart').getContext('2d');
           var myChart = new Chart(ctx, {
             type: 'bar',
@@ -310,7 +329,51 @@ header('Location: ../index.php'); // Redirect to the login page if ownerId is no
               maintainAspectRatio: false,
             },
           });
-        </script>
+        </script> -->
+
+        <script>
+            var ctx = document.getElementById('pieChart').getContext('2d');
+            var myChart;
+
+            // Fetch data from the PHP script using AJAX
+            fetch('data.php') // Replace with the correct URL of your PHP script
+              .then(response => response.json())
+              .then(data => {
+                if (myChart) {
+                  myChart.destroy(); // Destroy the previous chart
+                }
+
+                myChart = new Chart(ctx, {
+                  type: 'pie',
+                  data: {
+                    labels: ['Passed', 'Pending', 'Re-Evaluate', 'Approved'],
+                    datasets: [{
+                      data: data,
+                      backgroundColor: [
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(255, 206, 86, 0.7)',
+                        'rgba(144, 238, 144, 0.7)',
+                      ],
+                    }],
+                  },
+                  options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      datalabels: {
+                        color: '#fff',
+                        align: 'end',
+                        formatter: (value, context) => {
+                          return `${context.chart.data.labels[context.dataIndex]}: ${value}`;
+                        },
+                      },
+                    },
+                  },
+                });
+              })
+              .catch(error => console.error('Error fetching data:', error));
+          </script>
 
 
 </body>

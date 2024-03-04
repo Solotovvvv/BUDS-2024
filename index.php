@@ -55,6 +55,11 @@ if ($result->num_rows > 0) {
 }
 // Close the database connection
 $conn->close();
+if (isset($_SESSION['role'])) {
+  if ($_SESSION['role'] == 4) {
+    header('Location: CEIPO/admin_dashboard/index.php');
+  }
+}
 
 $sql = "SELECT * FROM category_list LIMIT 5";
 $pdo = Database::connection();
@@ -928,7 +933,7 @@ if (!$stmt1->execute()) {
 
           } else if (data.role == 4) {
             setTimeout(function() {
-              window.location.href = "super_dashboard/index.php";
+              window.location.href = "ADMIN/client/index.php";
             }, 2000);
           } else {
             if (data.status == "success") {
