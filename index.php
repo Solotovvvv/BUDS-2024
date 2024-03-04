@@ -14,6 +14,7 @@ $sql = "SELECT bl.bus_id, bl.ownerId, bl.BusinessName, bl.Businesslogo, cl.categ
         INNER JOIN brgyzone_list AS blg ON bl.BusinessBrgy = blg.ID
         INNER JOIN business_reviews AS br ON bl.bus_id = br.bus_id
         INNER JOIN owner_list AS ol ON bl.ownerId = ol.ID
+        WHERE bl.BusinessStatus = 1 OR bl.BusinessStatus = 4
         GROUP BY bl.bus_id, bl.ownerId, bl.BusinessName, bl.Businesslogo, cl.category, bl.BusinessDescrip, ol.Firstname, ol.MiddleName, ol.Surname
         ORDER BY average_rating DESC;";
 
