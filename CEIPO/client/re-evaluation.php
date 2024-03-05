@@ -33,95 +33,9 @@ header('Location: ../index.php'); // Redirect to the login page if ownerId is no
 <body class="hold-transition sidebar-mini layout-fixed">
   <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
-        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-            <div class="app-brand demo">
-              <a href="index.html" class="app-brand-link">
-                <span class="app-brand-logo demo">
-                  <img src="plugins/assets/img/avatars/buds-logo.png" alt="" class="brand-image" width="50" height="50">
-                </span>
-                <span class="text-uppercase text-white app-brand-text demo menu-text fw-bolder ms-2">CEIPO</span>
-              </a>
-                <a href="javascript:void(0);"
-                    class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
-                    <i class="bx bx-chevron-left bx-sm align-middle"></i>
-                </a>
-            </div>
-            <div class="menu-inner-shadow"></div>
-            <ul class="menu-inner py-1">
-              <li class="menu-header text-uppercase">
-              </li>
-    
-              <li class="menu-item">
-                <a href="index.php" class="menu-link">
-                  <i class="menu-icon tf-icons bx bxs-dashboard"></i>
-                  <div data-i18n="Analytics">Dashboard</div>
-                </a>
-              </li>
-    
-    
-              <li class="menu-item active open active">
-                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                  <i class="menu-icon tf-icons bx bxs-buildings"></i>
-                  <div data-i18n="Layouts">Business Application</div>
-                  <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger rounded-circle"></span>
-                </a>
-    
-                <ul class="menu-sub list-inline">
-                <li class="list-inline-block menu-item">
-                <a href="approval-registration.php" class="menu-link">
-                  <div data-i18n="Without navbar">Approval of Registration</div>
-                  <span class="position-absolute top-6 start-100 translate-middle badge rounded-pill bg-danger" style="margin-left: -0.5rem;">99+</span>
-                </a>
-              </li>
-
-              <li class="list-inline-block menu-item active">
-                <a href="re-evaluation.php" class="menu-link">
-                  <div data-i18n="Without navbar">Re-Evaluation</div>
-                </a>
-              </li>
-
-              <li class="list-inline-block menu-item ">
-                <a href="business-applicant-status.php" class="menu-link">
-                  <div data-i18n="Without menu">Approved Business</div>
-                </a>
-              </li>
-                </ul>
-              </li>
-    
-    
-              <li class="menu-item">
-                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                  <i class="menu-icon tf-icons bx bxs-category"></i>
-                  <div data-i18n="Layouts">Business Categories</div>
-                </a>
-    
-                <ul class="menu-sub">
-                  <li class="menu-item">
-                    <a href="top-business.php" class="menu-link">
-                      <div data-i18n="Without menu">Top 10 Business Category</div>
-                    </a>
-                  </li>
-                  <!-- <li class="menu-item">
-                    <a href="business-category.php" class="menu-link">
-                      <div data-i18n="Without navbar">Buisness Category </div>
-                    </a>
-                  </li> -->
-                </ul>
-              </li>
-              <li class="menu-item">
-                <a href="viewing-business.php" class="menu-link">
-                  <i class="menu-icon tf-icons bx bxs-search"></i>
-                  Searching Business
-                </a>
-              </li>
-              <li class="menu-item">
-                <a href="printing-reports.php" class="menu-link">
-                  <i class="menu-icon tf-icons bx bxs-report"></i>
-                  <div data-i18n="Analytics">Reports</div>
-                </a>
-              </li>
-            </ul>
-        </aside>
+     <!-- NAV BAR -->
+     <?php include 'Navbar.php'; ?>
+    <!-- end -->
       <div class="layout-page">
         <nav
           class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"

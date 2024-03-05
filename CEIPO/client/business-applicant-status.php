@@ -1,21 +1,19 @@
-<?php 
+<?php
 session_start();
-if(empty( $_SESSION['ownerId'] )){
-header('Location: ../index.php'); // Redirect to the login page if ownerId is not set
-    exit; 
+if (empty($_SESSION['ownerId'])) {
+  header('Location: ../index.php'); // Redirect to the login page if ownerId is not set
+  exit;
 }
 ?>
 <!DOCTYPE html>
-<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default"
-  data-assets-path="plugins/assets/" data-template="vertical-menu-template-free">
+<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="plugins/assets/" data-template="vertical-menu-template-free">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Business Dashboard</title>
   <meta name="description" content="">
-  <link
-  href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-  rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="plugins/assets/vendor/fonts/boxicons.css">
   <link rel="stylesheet" href="plugins/assets/vendor/css/core.css" class="template-customizer-core-css">
@@ -26,108 +24,18 @@ header('Location: ../index.php'); // Redirect to the login page if ownerId is no
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
-    <script src="plugins/assets/vendor/js/helpers.js"></script>
-    <script src="plugins/assets/js/config.js"></script>
+  <script src="plugins/assets/vendor/js/helpers.js"></script>
+  <script src="plugins/assets/js/config.js"></script>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
   <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
-        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-            <div class="app-brand demo">
-              <a href="index.html" class="app-brand-link">
-                <span class="app-brand-logo demo">
-                  <img src="plugins/assets/img/avatars/buds-logo.png" alt="" class="brand-image" width="50" height="50">
-                </span>
-                <span class="text-uppercase text-white app-brand-text demo menu-text fw-bolder ms-2">CEIPO</span>
-              </a>
-                <a href="javascript:void(0);"
-                    class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
-                    <i class="bx bx-chevron-left bx-sm align-middle"></i>
-                </a>
-            </div>
-            <div class="menu-inner-shadow"></div>
-            <ul class="menu-inner py-1">
-              <li class="menu-header text-uppercase">
-              </li>
-    
-              <li class="menu-item">
-                <a href="index.php" class="menu-link">
-                  <i class="menu-icon tf-icons bx bxs-dashboard"></i>
-                  <div data-i18n="Analytics">Dashboard</div>
-                </a>
-              </li>
-    
-    
-              <li class="menu-item active open active">
-                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                  <i class="menu-icon tf-icons bx bxs-buildings"></i>
-                  <div data-i18n="Layouts">Business Application</div>
-                  <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger rounded-circle"></span>
-
-                </a>
-    
-                <ul class="menu-sub list-inline">
-                <li class="list-inline-block menu-item">
-                <a href="approval-registration.php" class="menu-link">
-                  <div data-i18n="Without navbar">Approval of Registration</div>
-                  <span class="position-absolute top-6 start-100 translate-middle badge rounded-pill bg-danger" style="margin-left: -0.5rem;">99+</span>
-
-                </a>
-              </li>
-
-              <li class="list-inline-block menu-item">
-                <a href="re-evaluation.php" class="menu-link">
-                  <div data-i18n="Without navbar">Re-Evaluation</div>
-                </a>
-              </li>
-
-              <li class="list-inline-block menu-item active">
-                <a href="business-applicant-status.php" class="menu-link">
-                  <div data-i18n="Without menu">Approved Business</div>
-                </a>
-              </li>
-                </ul>
-              </li>
-    
-    
-              <li class="menu-item">
-                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                  <i class="menu-icon tf-icons bx bxs-category"></i>
-                  <div data-i18n="Layouts">Business Categories</div>
-                </a>
-    
-                <ul class="menu-sub">
-                  <li class="menu-item">
-                    <a href="top-business.php" class="menu-link">
-                      <div data-i18n="Without menu">Top 10 Business Category</div>
-                    </a>
-                  </li>
-                  <!-- <li class="menu-item">
-                    <a href="business-category.php" class="menu-link">
-                      <div data-i18n="Without navbar">Buisness Category </div>
-                    </a>
-                  </li> -->
-                </ul>
-              </li>
-              <li class="menu-item">
-                <a href="viewing-business.php" class="menu-link">
-                  <i class="menu-icon tf-icons bx bxs-search"></i>
-                  Searching Business
-                </a>
-              </li>
-              <li class="menu-item">
-                <a href="printing-reports.php" class="menu-link">
-                  <i class="menu-icon tf-icons bx bxs-report"></i>
-                  <div data-i18n="Analytics">Reports</div>
-                </a>
-              </li>
-            </ul>
-        </aside>
+      <!-- NAV BAR -->
+      <?php include 'Navbar.php'; ?>
+      <!-- end -->
       <div class="layout-page">
-        <nav
-          class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
-          id="layout-navbar">
+        <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
           <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
             <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
               <i class="bx bx-menu bx-sm"></i>
@@ -151,7 +59,7 @@ header('Location: ../index.php'); // Redirect to the login page if ownerId is no
                           </div>
                         </div>
                         <div class="flex-grow-1">
-                        <span class="fw-semibold d-block"><?php echo $_SESSION['lname'].', '.$_SESSION['fname'] ?></span>
+                          <span class="fw-semibold d-block"><?php echo $_SESSION['lname'] . ', ' . $_SESSION['fname'] ?></span>
                           <small class="text-muted"><?php echo $_SESSION['userTypeDesc'] ?></small>
                         </div>
                       </div>
@@ -171,68 +79,68 @@ header('Location: ../index.php'); // Redirect to the login page if ownerId is no
             </ul>
           </div>
         </nav>
-    <hr>
+        <hr>
 
-      <section class="content">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-12">
-              <div class="card">
-                <div class="card-header">
-                  <h3 class="card-title">Approval of Registration</h3>
-                </div>
-                <div class="card-body">
-                  <div class="table-responsive">
-                    <table id="Approved_tbl" class="table table-bordered table-hover">
-                      <thead>
-                        <tr>
-                          <th>Business Company</th>
-                          <th>Owner</th>
-                          <th>Category</th>
-                          <th>Status</th>
-                        </tr>
-                      </thead>
-                    
-                    </table>
+        <section class="content">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Approval of Registration</h3>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table id="Approved_tbl" class="table table-bordered table-hover">
+                        <thead>
+                          <tr>
+                            <th>Business Company</th>
+                            <th>Owner</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                          </tr>
+                        </thead>
+
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
-    </div>
-    
-
-  <script src="plugins/assets/vendor/libs/jquery/jquery.js"></script>
-  <script src="plugins/assets/vendor/js/bootstrap.js"></script>
-  <script src="plugins/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-  <script src="plugins/assets/vendor/js/menu.js"></script>
-  <script src="plugins/assets/js/main.js"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-    <script>
-      $(document).ready(function () {
+        </section>
+      </div>
 
 
-        
-        $('#Approved_tbl').DataTable({
-                'serverside': true,
-                'processing': true,
-                'paging': true,
-                "columnDefs": [
-                    { "className": "dt-center", "targets": "_all" },
-                ],
-                'ajax': {
-                    'url': 'Registration_approved_tbl.php',
-                    'type': 'post',
-
-                },
-            });
-      });
+      <script src="plugins/assets/vendor/libs/jquery/jquery.js"></script>
+      <script src="plugins/assets/vendor/js/bootstrap.js"></script>
+      <script src="plugins/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+      <script src="plugins/assets/vendor/js/menu.js"></script>
+      <script src="plugins/assets/js/main.js"></script>
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+      <script>
+        $(document).ready(function() {
 
 
-    </script>
+
+          $('#Approved_tbl').DataTable({
+            'serverside': true,
+            'processing': true,
+            'paging': true,
+            "columnDefs": [{
+              "className": "dt-center",
+              "targets": "_all"
+            }, ],
+            'ajax': {
+              'url': 'Registration_approved_tbl.php',
+              'type': 'post',
+
+            },
+          });
+        });
+      </script>
 
 </body>
+
 </html>
