@@ -607,6 +607,7 @@ function addBusiness($request = null)
         // Trigger the event without passing any data
         $pusher->trigger('business-channel', 'business-added', null);
         // $pusher->trigger('business-channel', 'business-event', null);
+        $pusher->trigger('business-channel', 'business-event',null);
 
 
         $msg['title'] = "Successful";

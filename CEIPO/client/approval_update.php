@@ -63,13 +63,13 @@ if (isset($response['status']) && $response['status'] === 'success') {
     // Include Pusher configuration
     require_once 'pusher_config.php';
 
-    // Fetch the pending count or perform any other necessary logic
-    $stmt = $pdo->prepare("SELECT COUNT(*) AS pendingCount FROM business_list WHERE BusinessStatus = 2");
-    $stmt->execute();
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    $pendingCount = $row['pendingCount'];
+    // // Fetch the pending count or perform any other necessary logic
+    // $stmt = $pdo->prepare("SELECT COUNT(*) AS pendingCount FROM business_list WHERE BusinessStatus = 2");
+    // $stmt->execute();
+    // $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    // $pendingCount = $row['pendingCount'];
 
     // Trigger a Pusher event with the pending count
-    $pusher->trigger('business-channel', 'business-event', ['pendingCount' => $pendingCount]);
+    $pusher->trigger('business-channel', 'business-event',null);
 }
 ?>

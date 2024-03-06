@@ -87,23 +87,10 @@
 
 <!-- Script for handling active class -->
 <script>
+
     $(document).ready(function() {
-
-        $.ajax({
-            url: 'update_realtime_notification.php',
-            type: 'POST',
-            data: { trigger_event: true },
-            dataType: 'json',
-            success: function(response) {
-                console.log('Pusher event triggered successfully');
-            },
-            error: function(xhr, status, error) {
-                console.error('Error triggering Pusher event:', error);
-            }
-        });
-
         Pusher.logToConsole = true;
-        
+
         var pusher = new Pusher('5b1eb2892347a33d5be9', {
             cluster: 'ap1',
             encrypted: true
@@ -111,30 +98,43 @@
 
         var channel = pusher.subscribe('business-channel');
 
-        // Handle subscription succeeded event
-        channel.bind('pusher:subscription_succeeded', function(data) {
-            console.log("Subscription to business-channel succeeded");
-        });
+        // Send AJAX request to update UI initially
+        updatePendingCount();
 
         // Handle received events
         channel.bind('business-event', function(data) {
             console.log("Received business-event:", data);
-            var pendingCount = data.pendingCount;
-
-            console.log(pendingCount);
-
-            // Update UI based on pendingCount
-            if (pendingCount > 0) {
-                $('.badge').text(pendingCount).show();
-                $('.rounded-circle').show(); // Show the rounded circle
-            } else {
-                $('.badge').hide();
-                $('.rounded-circle').hide(); // Hide the rounded circle if pendingCount is 0
-            }
+            // Send AJAX request to update UI when business event is received
+            updatePendingCount();
         });
 
+        function updatePendingCount() {
+            $.ajax({
+                url: 'get_total_pending.php', // Replace 'get_total_pending.php' with the actual file path
+                type: 'POST',
+                dataType: 'json',
+                success: function(response) {
+                    // Update UI elements based on the response
+                    if (response.success) {
+                        var pendingCount = response.pendingCount;
 
-       
-    
+                        // Update UI elements here
+                        if (pendingCount > 0) {
+                            $('.badge').text(pendingCount).show();
+                            $('.rounded-circle').show(); // Show the rounded circle
+                        } else {
+                            $('.badge').hide();
+                            $('.rounded-circle').hide(); // Hide the rounded circle if pendingCount is 0
+                        }
+                    } else {
+                        console.error('Error updating UI:', response.error);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error updating UI:', error);
+                }
+            });
+        }
     });
+
 </script>
