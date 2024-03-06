@@ -108,9 +108,9 @@ if (empty($_SESSION['ownerId'])) {
 <body class="hold-transition sidebar-mini layout-fixed">
   <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
-    <!-- NAV BAR -->
-    <?php include 'Navbar.php'; ?>
-    <!-- end -->
+      <!-- NAV BAR -->
+      <?php include 'Navbar.php'; ?>
+      <!-- end -->
       <div class="layout-page">
         <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
           <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
@@ -465,7 +465,7 @@ if (empty($_SESSION['ownerId'])) {
   <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/web3@1.5.3/dist/web3.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.17/dist/sweetalert2.all.min.js"></script>
-  <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script> 
+  <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
   <script>
     let contract;
     let currentAccount;
@@ -638,6 +638,21 @@ if (empty($_SESSION['ownerId'])) {
     });
 
     $(document).ready(function() {
+//Realtime Pusher Js 
+      var pusher = new Pusher('5b1eb2892347a33d5be9', {
+            cluster: 'ap1',
+            encrypted: true
+        });
+
+        var channel = pusher.subscribe('business-channel');
+
+      channel.bind('business-added', function(data) {
+        console.log("Received business-event");
+        $('#approval_tbl').DataTable().ajax.reload();
+        // Call AJAX request or perform any other action here
+      });
+////////////////////////////
+
 
       // Next button click event
       $("#nextStep").click(function() {
@@ -763,51 +778,51 @@ if (empty($_SESSION['ownerId'])) {
 
 
 
-function update() {
-    // Get values from form fields
-    var remarksDataStep2 = $("#remarksStep2").val() || null;
-    var remarksDataStep3 = $("#remarksStep3").val() || null;
-    var remarksDataStep4 = $("#remarksStep4").val() || null;
-    var remarksDataStep5 = $("#remarksStep5").val() || null;
-    var remarksDataStep6 = $("#remarksStep6").val() || null;
-    var hiddendata = $('#hiddendata').val();
+    function update() {
+      // Get values from form fields
+      var remarksDataStep2 = $("#remarksStep2").val() || null;
+      var remarksDataStep3 = $("#remarksStep3").val() || null;
+      var remarksDataStep4 = $("#remarksStep4").val() || null;
+      var remarksDataStep5 = $("#remarksStep5").val() || null;
+      var remarksDataStep6 = $("#remarksStep6").val() || null;
+      var hiddendata = $('#hiddendata').val();
 
-    // Hide modal and clear form fields
-    $('#view').modal("hide");
-    for (var i = 2; i <= 6; i++) {
+      // Hide modal and clear form fields
+      $('#view').modal("hide");
+      for (var i = 2; i <= 6; i++) {
         $("#remarksStep" + i).val("");
-    }
+      }
 
-    // Send AJAX request to update data
-    $.ajax({
+      // Send AJAX request to update data
+      $.ajax({
         type: "POST",
         url: "approval_update.php",
         data: {
-            remarksDataStep2: remarksDataStep2,
-            remarksDataStep3: remarksDataStep3,
-            remarksDataStep4: remarksDataStep4,
-            remarksDataStep5: remarksDataStep5,
-            remarksDataStep6: remarksDataStep6,
-            hiddendata: hiddendata
+          remarksDataStep2: remarksDataStep2,
+          remarksDataStep3: remarksDataStep3,
+          remarksDataStep4: remarksDataStep4,
+          remarksDataStep5: remarksDataStep5,
+          remarksDataStep6: remarksDataStep6,
+          hiddendata: hiddendata
         },
         success: function(response) {
-            var jsons = JSON.parse(response);
-            var status = jsons.status;
-            if (status === 'success') {
-                // Reload DataTable upon successful update
-                $('#approval_tbl').DataTable().ajax.reload();
+          var jsons = JSON.parse(response);
+          var status = jsons.status;
+          if (status === 'success') {
+            // Reload DataTable upon successful update
+            $('#approval_tbl').DataTable().ajax.reload();
 
-                // // Alert user about successful save
-                // alert("Saved");
+            // // Alert user about successful save
+            // alert("Saved");
 
-            }
+          }
         },
         error: function(error) {
-            // Handle error response from the server
-            console.error(error);
+          // Handle error response from the server
+          console.error(error);
         }
-    });
-}
+      });
+    }
 
 
     //Viewing
