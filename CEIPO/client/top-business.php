@@ -82,74 +82,31 @@ if (empty($_SESSION['ownerId'])) {
         <hr>
 
         <section class="content">
-          <div class="container-fluid mx-auto" style="text-align: center;">
+          <div class="container-fluid">
             <div class="row">
               <div class="col-12">
-                <div class="card card-primary">
-                  <div class="card-body">
-                    <h1 style="font-weight: bolder;">Top 10 Business Categories</h1>
-                    <div class="row">
-                      <div class="col-sm-4">
-                        <div class="position-relative p-3" style="background-color:#e6e5e5; height:180px;">
-                          <br><i class="bx bxs-home" style="font-size: 80px;"></i><br>
-                          <h4 style="font-weight: bolder;">Home and Parenting</h4>
-                        </div>
-                      </div>
-                      <div class="col-sm-4">
-                        <div class="position-relative p-3" style="background-color:#e6e5e5; height:180px;">
-                          <br><i class="bx bxs-car" style="font-size: 80px;"></i><br>
-                          <h4 style="font-weight: bolder;">Automotive</h4>
-                        </div>
-                      </div>
-                      <div class="col-sm-4">
-                        <div class="position-relative p-3" style="background-color:#e6e5e5; height:180px;">
-                          <br><i class="bx bxs-wrench" style="font-size: 80px;"></i><br>
-                          <h4 style="font-weight: bolder;">Construction</h4>
-                        </div>
-                      </div>
-                    </div>
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Top 10 Categories</h3>
                   </div>
                   <div class="card-body">
-                    <div class="row">
-                      <div class="col-sm-4">
-                        <div class="position-relative p-3" style="background-color:#e6e5e5; height:180px;">
-                          <br><i class="bx bx-plus-medical" style="font-size: 80px;"></i><br>
-                          <h4 style="font-weight: bolder;">Medical Care</h4>
-                        </div>
-                      </div>
-                      <div class="col-sm-4">
-                        <div class="position-relative p-3" style="background-color:#e6e5e5; height:180px;">
-                          <br><i class="bx bxs-shopping-bags" style="font-size: 80px;"></i><br>
-                          <h4 style="font-weight: bolder;">Shopping & Retails</h4>
-                        </div>
-                      </div>
-                      <div class="col-sm-4">
-                        <div class="position-relative p-3" style="background-color:#e6e5e5; height:180px;">
-                          <br><i class="bx bxs-credit-card" style="font-size: 80px;"></i><br>
-                          <h4 style="font-weight: bolder;">Financial Institution</h4>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-sm-4">
-                        <div class="position-relative p-2" style="background-color:#e6e5e5; height:180px;">
-                          <br><i class="bx bxs-bus" style="font-size: 80px;"></i><br>
-                          <h4 style="font-weight: bolder;">Transportation</h4>
-                        </div>
-                      </div>
-                      <div class="col-sm-4">
-                        <div class="position-relative p-2" style="background-color:#e6e5e5; height:180px;">
-                          <br><i class="bx bxs-building" style="font-size: 80px;"></i><br>
-                          <h4 style="font-weight: bolder;">Manufacturing, Industrial Supplies and Services</h4>
-                        </div>
-                      </div>
+                    <div class="table-responsive">
+                      <table id="topTenCat" class="table table-bordered table-hover">
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>Category</th>
+                            <th>Count</th>
+                          </tr>
+                        </thead>
+
+                      </table>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
         </section>
 
         <script src="plugins/assets/vendor/libs/jquery/jquery.js"></script>
@@ -161,7 +118,22 @@ if (empty($_SESSION['ownerId'])) {
         <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
         <script>
           $(document).ready(function() {
-            $('#Ajax1').DataTable();
+            $('#topTenCat').DataTable({
+              'serverSide': true,
+              'processing': true,
+              'paging': false, // Disables pagination
+              "searching": false, // Disables search feature
+              "info": false, // Disables information display
+              "columnDefs": [{
+                "className": "dt-center",
+                "targets": "_all"
+              }, ],
+              'ajax': {
+                'url': 'topTenCatTbl.php',
+                'type': 'post',
+              },
+            });
+
           });
         </script>
 
