@@ -7,9 +7,9 @@ require_once('./includes/config.php');
 //         header('Location: CEIPO/client/index');
 //     }
 // }
-ini_set('display_errors', 0);
-ini_set('display_startup_errors', 0);
-error_reporting(0);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(1);
 // print_r($_SESSION);
 $role = $_SESSION['role'];
 
