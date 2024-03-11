@@ -59,19 +59,19 @@ $app_id =$_POST['app_id'];
 </head>
 <body>
 <div id="doc2" class="yui-t7">
-    <div id="inner">
-      <div id="resume">
+<div id="inner">
+    <div id="resume">
         <div id="hd">
             <div class="yui-gc">
                 <div class="yui-u first">
-                   <?php
-         foreach ($resumeData as $row) {
+                <?php
+        foreach ($resumeData as $row) {
                     $name = $row['fullname'];
                     $position = $row['position'];
 
                     echo '<h1>'.$name.'</h1>';
-                   echo '<h2>'.$position.'</h2>';
-         }
+                    echo '<h2>'.$position.'</h2>';
+        }
                     ?>
                 </div>
 

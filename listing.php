@@ -687,25 +687,23 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
 </section>
 
 
-  <footer class="footer-section">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-6 col-md-6">
-          <div class="fs-about">
-            <div class="fs-logo">
-              <a href="#">
-                <img src="img/logo-main.png" alt="">
-              </a>
+<footer class="footer-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-8">
+                    <div class="fs-about">
+                        <div class="fs-logo">
+                            <a href="#">
+                                <img src="img/flogo.png" alt="">
+                            </a>
+                        </div>
+                        <p>BuDS (Business Directory System of Caloocan City) is a convenient platform connecting residents and visitors with local businesses, offering easy access to essential information for fostering community engagement and economic growth.</p>
+                    </div>
+                </div>
             </div>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-              labore et dolore magna aliqua ut aliquip ex ea</p>
-          </div>
         </div>
-      </div>
-    </div>
-  </footer>
-  <!-- Footer
-     Footer Section End -->
+    </footer>
+
 
   <!-- Js Plugins -->
   <!-- <script src="js/jquery-3.3.1.min.js"></script> -->

@@ -404,15 +404,14 @@ if ($stmt->errorCode() !== '00000') {
     <footer class="footer-section">
         <div class="container">
             <div class="row">
-                <div class="col-lg-6 col-md-6">
+                <div class="col-lg-8 col-md-8">
                     <div class="fs-about">
                         <div class="fs-logo">
                             <a href="#">
                                 <img src="img/flogo.png" alt="">
                             </a>
                         </div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna aliqua ut aliquip ex ea</p>
+                        <p>BuDS (Business Directory System of Caloocan City) is a convenient platform connecting residents and visitors with local businesses, offering easy access to essential information for fostering community engagement and economic growth.</p>
                     </div>
                 </div>
             </div>

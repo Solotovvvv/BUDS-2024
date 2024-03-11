@@ -18,100 +18,132 @@ if (isset($_SESSION['ownerId'])) {
     }
 }
 ?>
-
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zxx">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>BuDS User Panel</title>
-    <link rel="icon" href="dist/img/ucc-logo.png">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-    <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-    <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bs-stepper@1.7.0/dist/css/bs-stepper.min.css">
-    <!-- <link rel="stylesheet" href="plugins/general/style.css"> -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
-    <style>
-        #active {
-            background: #027d09;
-        }
+    <meta charset="UTF-8">
+    <meta name="description" content="Aler Template">
+    <meta name="keywords" content="Aler, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="css/profilestyle.css">
+    <title>BuDS</title>
 
-        #add-question {
-            width: 8rem;
-        }
-        #fileViewer{
-            padding-left:25px;
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,900&display=swap" rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="css/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="css/style1.css" type="text/css">
+    <link rel="stylesheet" href="css/templatemo-plot-listing1.css" type="text/css">
+    <style>
+        .swal-confirm-button {
+            width: 100px;
+            /* Adjust the width as needed */
         }
     </style>
+
 </head>
 
-<body class="hold-transition sidebar-mini">
+<body>
+    <!-- Page Preloder -->
+    <!-- <div id="preloder">
+        <div class="loader"></div>
+    </div> -->
 
-    <div class="wrapper">
-        <nav class="main-header navbar navbar-white navbar-light">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-                </li>
-               
-            </ul>
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="../logout.php">Logout</a>
-                </li>
-            </ul>
-        </nav>
-
-        <aside class="main-sidebar sidebar-dark-success elevation-5">
-            <a href="index.php" class="brand-link" target="_blank">
-                <img src="dist/img/buds-logo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-                <span class="brand-text font-weight-light">USER NAME</span>
-            </a>
-            <div class="sidebar">
-                <nav class="mt-2">
-                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                        <li class="nav-item">
-                            <a href="Resume_Viewer_User.php" class="nav-link" id="active">
-                                <i class="nav-icon fa-solid fa-magnifying-glass"></i>
-                                <p>Resumes</p>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </aside>
-
-        <!-- <div class="container mt-3 mr-3">
-            <form id="fileUploadForm" enctype="multipart/form-data">
-                <div class="form-group">
-                    <h2><strong>UPLOAD RESUME<strong></h2>
-                    <label for="fileInput">PDF or DOCX only:</label><br>
-                    <div class="custom-file col-6">
-                    <input type="file" class="custom-file-input" id="fileInput" name="resumeFile" accept=".pdf" required>
-                    <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
-                    </div>
-                    
-                </div>
-                <button type="button" class="btn btn-success mb-3" id="uploadBtn">Upload</button>
-                <div id="uploadMessage"></div>
-            </form>
-           
+    <!-- Offcanvas Menu Wrapper Begin -->
+    <div class="offcanvas-menu-overlay"></div>
+    <div class="offcanvas-menu-wrapper">
+        <div class="canvas-close">
+            <span class="icon_close"></span>
         </div>
+        <div class="logo">
+            <a href="../index.php">
+                <img src="img/logo-main.png" alt="">
+            </a>
+        </div>
+        <div id="mobile-menu-wrap"></div>
+    </div>
+    <!-- Offcanvas Menu Wrapper End -->
 
-        <div id="fileViewer"></div> Move the viewer outside the modal -->
-
-        <div class="container">
-            <div class="row">
-                <div class="col-1">
+    <!-- Header Section Begin -->
+    <header class="header-section">
+        <div class="hs-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="logo">
+                            <a href="../index.php"><img src="img/logo-main.png" alt=""></a><br>
+                            <!-- <ul>Business Directory</ul> -->
+                        </div>
+                    </div>
+                    <div class="col-lg-10">
+                        <div class="ht-widget">
+                            <div class="hs-nav">
+                                <nav class="nav-menu">
+                                    <ul>
+                                        <li class="profile-dropdown">
+                                            <div class="user-profile">
+                                                <?php if ($_SESSION['photo'] != "") { ?>
+                                                    <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt="User's Name">
+                                                <?php } else { ?>
+                                                    <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
+                                                <?php } ?>
+                                            </div>
+                                            <ul class="dropdown dropleft">
+                                                <li><a href="../user.php">MY PROFILE</a></li>
+                                                <?php if ($_SESSION['role'] == 3) { ?>
+                                                    <li><a href="user_module-main/index.php">CREATE RESUME</a></li>
+                                                <?php } ?>
+                                                <?php if ($_SESSION['role'] == 2) { ?>
+                                                    <li><a href="../manage.php">MANAGE BUSINESS</a></li>
+                                                    <li><a href="../listing-form.php">ADD BUSINESS</a></li>
+                                                <?php } ?>
+                                                <li><a href="../logout.php">LOGOUT</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                <div class="canvas-open">
+                    <span class="icon_menu"></span>
+                </div>
+            </div>
+        </div>
+        <div class="hs-nav">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-9">
+                        <nav class="nav-menu">
+                            <ul>
+                                <li><a href="./index.php">Home</a></li>
+                                <!-- <li><a href="./listing.html">Business Listing</a></li> -->
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Header End -->
+
+    <!-- Property Details Section Begin -->
+    <section class="property-details-section">
+    <div class="container-fluid" style="padding-left: 50px; padding-right: 40px;">
+            <div class="row">
                 <div class="col-4 border">
                 <form id="fileUploadForm" enctype="multipart/form-data">
                 <div class="form-group">
@@ -134,15 +166,49 @@ if (isset($_SESSION['ownerId'])) {
             </form>
                 </div>
 
-                <div class="col-7">
+                <div class="col-8">
                     <div id="fileViewer"></div> <!-- Move the viewer outside the modal -->
                 </div>
             </div>
         </div>
 
+    </section>
 
+    <footer class="footer-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-8">
+                    <div class="fs-about">
+                        <div class="fs-logo">
+                            <a href="#">
+                                <img src="img/flogo.png" alt="">
+                            </a>
+                        </div>
+                        <p>BuDS (Business Directory System of Caloocan City) is a convenient platform connecting residents and visitors with local businesses, offering easy access to essential information for fostering community engagement and economic growth.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer
+    <!-- Footer Section End -->
 
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!-- Js Plugins -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/mixitup.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery.nice-select.min.js"></script>
+    <script src="js/jquery.slicknav.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/jquery.richtext.min.js"></script>
+    <script src="js/image-uploader.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/myprofile1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bs-stepper@1.7.0/dist/js/bs-stepper.min.js"></script>
 
