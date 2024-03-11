@@ -67,7 +67,7 @@ $faqData = $statement->fetchAll(PDO::FETCH_ASSOC);
                 <div class="app-brand demo">
                     <a href="index.php" class="app-brand-link">
                         <span class="app-brand-logo demo">
-                            <img src="img/logo-main.png" alt="" class="brand-image" width="45" height="50">
+                            <img src="img/logo/buds-logo.png" alt="" class="brand-image" width="45" height="50">
                         </span>
                         <span class="text-uppercase text-white app-brand-text demo menu-text fw-bolder ms-2">BUSINESS</span>
                     </a>
@@ -81,12 +81,12 @@ $faqData = $statement->fetchAll(PDO::FETCH_ASSOC);
                         <span class="menu-header-text">Business Profile</span>
                     </li>
 
-                    <li class="menu-item">
+                    <!-- <li class="menu-item">
                         <a href="<?php echo "bulletin.php?a=" . $bus_id ?>" class="menu-link">
                             <i class="menu-icon tf-icons bx bxs-pin"></i>
                             <div data-i18n="Analytics">Bulletin Board</div>
                         </a>
-                    </li>
+                    </li> -->
 
                     <li class="menu-item">
                         <a href="<?php echo "BusinessPanel.php?a=" . $bus_id ?>" class="menu-link">

@@ -38,9 +38,9 @@ $_SESSION['bus_id'] = $_GET['a'];
         <div class="app-brand demo">
           <a href="index.php" class="app-brand-link">
             <span class="app-brand-logo demo">
-              <img src="plugins/assets/img/avatars/buds-logo.png" alt="" class="brand-image" width="30" height="30">
+              <img src="img/logo/buds-logo.png" alt="" class="brand-image" width="45" height="50">
             </span>
-            <span class="text-uppercase text-white app-brand-text demo menu-text fw-bolder ms-2">BuDS | Admin</span>
+            <span class="text-uppercase text-white app-brand-text demo menu-text fw-bolder ms-2">BUSINESS</span>
           </a>
           <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
             <i class="bx bx-chevron-left bx-sm align-middle"></i>
@@ -51,12 +51,12 @@ $_SESSION['bus_id'] = $_GET['a'];
           <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Business Profile</span>
           </li>
-          <li class="menu-item">
+          <!-- <li class="menu-item">
             <a href="<?php echo "bulletin.php?a=" . $bus_id ?>" class="menu-link">
               <i class="menu-icon tf-icons bx bxs-pin"></i>
               <div data-i18n="Analytics">Bulletin Board</div>
             </a>
-          </li>
+          </li> -->
           <li class="menu-item">
             <a href="<?php echo "BusinessPanel.php?a=" . $bus_id ?>" class="menu-link">
               <i class="menu-icon tf-icons bx bx-info-circle"></i>
@@ -84,6 +84,14 @@ $_SESSION['bus_id'] = $_GET['a'];
               <div data-i18n="Analytics">Comments & Rating</div>
             </a>
           </li>
+
+          <li class="menu-item">
+            <a href="<?php echo "FAQ.php?a=" . $bus_id ?>" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-message-rounded"></i>
+              <div data-i18n="Analytics">FAQ</div>
+            </a>
+          </li>
+
           <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Business Document</span>
           </li>

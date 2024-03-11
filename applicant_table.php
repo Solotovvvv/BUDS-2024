@@ -17,7 +17,8 @@ $sql = "SELECT
         al.`Status`,
         ba.`bus_id`, 
         ba.`pos_vacant`, 
-        ur.`fullname`
+        CONCAT(ol.`Firstname`, ' ', ol.`Surname`) AS fullname
+ 
     FROM 
         `application_list` AS al
     INNER JOIN 
@@ -25,9 +26,9 @@ $sql = "SELECT
     ON 
         al.`bus_app` = ba.`bus_applicant`
     INNER JOIN 
-        `user_resume` AS ur
+        `owner_list` AS ol
     ON 
-        al.`app_id` = ur.`app_id`
+        al.`app_id` = ol.`id`
     WHERE 
         ba.`bus_id` = :bus_id";
 

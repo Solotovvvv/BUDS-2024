@@ -34,8 +34,7 @@ foreach ($datas as $data) {
 
 ?>
 <!DOCTYPE html>
-<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default"
-    data-assets-path="plugins/assets/" data-template="vertical-menu-template-free">
+<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="plugins/assets/" data-template="vertical-menu-template-free">
 
 <head>
     <meta charset="utf-8">
@@ -45,9 +44,7 @@ foreach ($datas as $data) {
     <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="plugins/assets/vendor/fonts/boxicons.css">
     <link rel="stylesheet" href="plugins/assets/vendor/css/core.css" class="template-customizer-core-css">
     <link rel="stylesheet" href="plugins/assets/vendor/css/theme-default.css" class="template-customizer-theme-css">
@@ -65,13 +62,11 @@ foreach ($datas as $data) {
                 <div class="app-brand demo">
                     <a href="index.php" class="app-brand-link">
                         <span class="app-brand-logo demo">
-                            <img src="img/logo-main.png" alt="" class="brand-image" width="45" height="50">
+                            <img src="img/logo/buds-logo.png" alt="" class="brand-image" width="45" height="50">
                         </span>
-                        <span
-                            class="text-uppercase text-white app-brand-text demo menu-text fw-bolder ms-2">BUSINESS</span>
+                        <span class="text-uppercase text-white app-brand-text demo menu-text fw-bolder ms-2">BUSINESS</span>
                     </a>
-                    <a href="javascript:void(0);"
-                        class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+                    <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
                         <i class="bx bx-chevron-left bx-sm align-middle"></i>
                     </a>
                 </div>
@@ -80,12 +75,12 @@ foreach ($datas as $data) {
                     <li class="menu-header small text-uppercase">
                         <span class="menu-header-text">Business Profile</span>
                     </li>
-                    <li class="menu-item">
+                    <!-- <li class="menu-item">
                         <a href="<?php echo "bulletin.php?a=" . $bus_id ?>" class="menu-link">
                             <i class="menu-icon tf-icons bx bxs-pin"></i>
                             <div data-i18n="Analytics">Bulletin Board</div>
                         </a>
-                    </li>
+                    </li> -->
                     <li class="menu-item">
                         <a href="<?php echo "BusinessPanel.php?a=" . $bus_id ?>" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-info-circle"></i>
@@ -113,6 +108,14 @@ foreach ($datas as $data) {
                             <div data-i18n="Analytics">Comments & Rating</div>
                         </a>
                     </li>
+
+                    <li class="menu-item">
+                        <a href="<?php echo "FAQ.php?a=" . $bus_id ?>" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-message-rounded"></i>
+                            <div data-i18n="Analytics">FAQ</div>
+                        </a>
+                    </li>
+
                     <li class="menu-header small text-uppercase">
                         <span class="menu-header-text">Business Document</span>
                     </li>
@@ -140,8 +143,7 @@ foreach ($datas as $data) {
                 </ul>
             </aside>
             <div class="layout-page">
-                <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
-                    id="layout-navbar">
+                <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
                     <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
                         <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
                             <i class="bx bx-menu bx-sm"></i>
@@ -150,12 +152,10 @@ foreach ($datas as $data) {
                     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
                         <ul class="navbar-nav flex-row align-items-center ms-auto">
                             <li class="nav-item navbar-dropdown dropdown-user dropdown">
-                                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);"
-                                    data-bs-toggle="dropdown">
+                                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                                     <div class="avatar avatar-online">
                                         <?php if ($_SESSION['photo'] != "") { ?>
-                                            <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>"
-                                                alt="User's Name">
+                                            <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt="User's Name">
                                         <?php } else { ?>
                                             <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
                                         <?php } ?>
@@ -168,8 +168,7 @@ foreach ($datas as $data) {
                                                 <div class="flex-shrink-0 me-3">
                                                     <div class="avatar avatar-online">
                                                         <?php if ($_SESSION['photo'] != "") { ?>
-                                                            <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>"
-                                                                alt="User's Name">
+                                                            <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt="User's Name">
                                                         <?php } else { ?>
                                                             <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
                                                         <?php } ?>
@@ -213,21 +212,17 @@ foreach ($datas as $data) {
                                                 <div class="card-body">
                                                     <h3 class="card-title"><b>Barangay Clearance</b></h3>
                                                     <?php if ($brgyClearance != "") { ?>
-                                                        <img class="img-fluid d-flex mx-auto"
-                                                            src="<?php echo "img/requirements/" . $brgyClearance ?>"
-                                                            alt="Card image cap" />
+                                                        <img class="img-fluid d-flex mx-auto" src="<?php echo "img/requirements/" . $brgyClearance ?>" alt="Card image cap" />
                                                         <br>
                                                     <?php } ?>
                                                     <?php if ($remarks_brgyClearance != 1) { ?>
                                                         <div class="mb-3 row align-items-center">
                                                             <label for="fileUpload" class="form-label">Upload File</label>
                                                             <div class="col-sm-8">
-                                                                <input type="file" name="barangayClearance"
-                                                                    class="form-control" id="fileUpload">
+                                                                <input type="file" name="barangayClearance" class="form-control" id="fileUpload">
                                                             </div>
                                                             <div class="col-sm-2">
-                                                                <button type="button" onclick="editBrgyClearance()"
-                                                                    class="btn btn-success">Submit</button>
+                                                                <button type="button" onclick="editBrgyClearance()" class="btn btn-success">Submit</button>
                                                             </div>
                                                         </div>
                                                     <?php }
@@ -248,21 +243,17 @@ foreach ($datas as $data) {
                                                 <div class="card-body">
                                                     <h3 class="card-title"><b>DTI Permit</b></h3>
                                                     <?php if ($dtiPermit != "") { ?>
-                                                        <img class="img-fluid d-flex mx-auto"
-                                                            src="<?php echo "img/requirements/" . $dtiPermit ?>"
-                                                            alt="Card image cap" />
+                                                        <img class="img-fluid d-flex mx-auto" src="<?php echo "img/requirements/" . $dtiPermit ?>" alt="Card image cap" />
                                                         <br>
                                                     <?php } ?>
                                                     <?php if ($remarks_dti != 1) { ?>
                                                         <div class="mb-3 row align-items-center">
                                                             <label for="fileUpload" class="form-label">Upload File</label>
                                                             <div class="col-sm-8">
-                                                                <input type="file" name="DTIPermit" class="form-control"
-                                                                    id="fileUpload">
+                                                                <input type="file" name="DTIPermit" class="form-control" id="fileUpload">
                                                             </div>
                                                             <div class="col-sm-2">
-                                                                <button type="butoon" onclick="editDTIPermit()"
-                                                                    class="btn btn-success">Submit</button>
+                                                                <button type="butoon" onclick="editDTIPermit()" class="btn btn-success">Submit</button>
                                                             </div>
                                                         </div>
                                                     <?php }
@@ -283,21 +274,17 @@ foreach ($datas as $data) {
                                                 <div class="card-body">
                                                     <h3 class="card-title"><b>Sanitary Permit</b></h3>
                                                     <?php if ($sanitaryPermit != "") { ?>
-                                                        <img class="img-fluid d-flex mx-auto"
-                                                            src="<?php echo "img/requirements/", $sanitaryPermit ?>"
-                                                            alt="Card image cap" />
+                                                        <img class="img-fluid d-flex mx-auto" src="<?php echo "img/requirements/", $sanitaryPermit ?>" alt="Card image cap" />
                                                         <br>
                                                     <?php } ?>
                                                     <?php if ($remarks_sanitary != 1) { ?>
                                                         <div class="mb-3 row align-items-center">
                                                             <label for="fileUpload" class="form-label">Upload File</label>
                                                             <div class="col-sm-8">
-                                                                <input type="file" name="sanitaryPermit"
-                                                                    class="form-control" id="fileUpload">
+                                                                <input type="file" name="sanitaryPermit" class="form-control" id="fileUpload">
                                                             </div>
                                                             <div class="col-sm-2">
-                                                                <button type="button" onclick="editSanitaryPermit()"
-                                                                    class="btn btn-success">Submit</button>
+                                                                <button type="button" onclick="editSanitaryPermit()" class="btn btn-success">Submit</button>
                                                             </div>
                                                         </div>
                                                     <?php }
@@ -318,21 +305,17 @@ foreach ($datas as $data) {
                                                 <div class="card-body">
                                                     <h3 class="card-title"><b>Cedula</b></h3>
                                                     <?php if ($cedula != "") { ?>
-                                                        <img class="img-fluid d-flex mx-auto"
-                                                            src="<?php echo "img/requirements/" . $cedula ?>"
-                                                            alt="Card image cap" />
+                                                        <img class="img-fluid d-flex mx-auto" src="<?php echo "img/requirements/" . $cedula ?>" alt="Card image cap" />
                                                         <br>
                                                     <?php } ?>
                                                     <?php if ($remarks_cedula != 1) { ?>
                                                         <div class="mb-3 row align-items-center">
                                                             <label for="fileUpload" class="form-label">Upload File</label>
                                                             <div class="col-sm-8">
-                                                                <input type="file" name="edtCedula" class="form-control"
-                                                                    id="fileUpload">
+                                                                <input type="file" name="edtCedula" class="form-control" id="fileUpload">
                                                             </div>
                                                             <div class="col-sm-2">
-                                                                <button type="button" onclick="editCedula()"
-                                                                    class="btn btn-success">Submit</button>
+                                                                <button type="button" onclick="editCedula()" class="btn btn-success">Submit</button>
                                                             </div>
                                                         </div>
                                                     <?php }
@@ -353,21 +336,17 @@ foreach ($datas as $data) {
                                                 <div class="card-body">
                                                     <h3 class="card-title"><b>Mayor's Permit</b></h3>
                                                     <?php if ($mayorPermit != "") { ?>
-                                                        <img class="img-fluid d-flex mx-auto"
-                                                            src="<?php echo "img/requirements/" . $mayorPermit ?>"
-                                                            alt="Card image cap" />
+                                                        <img class="img-fluid d-flex mx-auto" src="<?php echo "img/requirements/" . $mayorPermit ?>" alt="Card image cap" />
                                                         <br>
                                                     <?php } ?>
                                                     <?php if ($remarks_mayorsPermit != 1) { ?>
                                                         <div class="mb-3 row align-items-center">
                                                             <label for="fileUpload" class="form-label">Upload File</label>
                                                             <div class="col-sm-8">
-                                                                <input type="file" name="mayorPermit" class="form-control"
-                                                                    id="fileUpload">
+                                                                <input type="file" name="mayorPermit" class="form-control" id="fileUpload">
                                                             </div>
                                                             <div class="col-sm-2">
-                                                                <button type="button" onclick="editMayorPermit()"
-                                                                    class="btn btn-success">Submit</button>
+                                                                <button type="button" onclick="editMayorPermit()" class="btn btn-success">Submit</button>
                                                             </div>
                                                         </div>
                                                     <?php }
@@ -419,7 +398,7 @@ foreach ($datas as $data) {
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "controllers/business.php", true);
 
-            xhr.onreadystatechange = function () {
+            xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
                     console.log("Server response:", xhr.responseText);
                     if (xhr.status === 200) {
@@ -427,7 +406,7 @@ foreach ($datas as $data) {
                         var data = JSON.parse(xhr.responseText);
                         // console.log("Data received:", data);
                         swal.fire(data.title, data.message, data.icon);
-                        setTimeout(function () {
+                        setTimeout(function() {
                             window.location.reload();
                         }, 2000);
                     } else {
@@ -459,7 +438,7 @@ foreach ($datas as $data) {
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "controllers/business.php", true);
 
-            xhr.onreadystatechange = function () {
+            xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
                     console.log("Server response:", xhr.responseText);
                     if (xhr.status === 200) {
@@ -467,7 +446,7 @@ foreach ($datas as $data) {
                         var data = JSON.parse(xhr.responseText);
                         // console.log("Data received:", data);
                         swal.fire(data.title, data.message, data.icon);
-                        setTimeout(function () {
+                        setTimeout(function() {
                             window.location.reload();
                         }, 2000);
                     } else {
@@ -499,7 +478,7 @@ foreach ($datas as $data) {
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "controllers/business.php", true);
 
-            xhr.onreadystatechange = function () {
+            xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
                     console.log("Server response:", xhr.responseText);
                     if (xhr.status === 200) {
@@ -507,7 +486,7 @@ foreach ($datas as $data) {
                         var data = JSON.parse(xhr.responseText);
                         // console.log("Data received:", data);
                         swal.fire(data.title, data.message, data.icon);
-                        setTimeout(function () {
+                        setTimeout(function() {
                             window.location.reload();
                         }, 2000);
                     } else {
@@ -539,7 +518,7 @@ foreach ($datas as $data) {
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "controllers/business.php", true);
 
-            xhr.onreadystatechange = function () {
+            xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
                     console.log("Server response:", xhr.responseText);
                     if (xhr.status === 200) {
@@ -547,7 +526,7 @@ foreach ($datas as $data) {
                         var data = JSON.parse(xhr.responseText);
                         // console.log("Data received:", data);
                         swal.fire(data.title, data.message, data.icon);
-                        setTimeout(function () {
+                        setTimeout(function() {
                             window.location.reload();
                         }, 2000);
                     } else {
@@ -579,7 +558,7 @@ foreach ($datas as $data) {
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "controllers/business.php", true);
 
-            xhr.onreadystatechange = function () {
+            xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
                     console.log("Server response:", xhr.responseText);
                     if (xhr.status === 200) {
@@ -587,7 +566,7 @@ foreach ($datas as $data) {
                         var data = JSON.parse(xhr.responseText);
                         // console.log("Data received:", data);
                         swal.fire(data.title, data.message, data.icon);
-                        setTimeout(function () {
+                        setTimeout(function() {
                             window.location.reload();
                         }, 2000);
                     } else {
