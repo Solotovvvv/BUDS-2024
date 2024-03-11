@@ -12,12 +12,23 @@ if (isset($_SESSION['ownerId'])) {
     $query = "SELECT `file` FROM `user_resume` WHERE `app_id` = '$ownerId'";
     $result = mysqli_query($conn, $query); // Use $conn instead of $your_db_connection
 
-    if ($result) {
+    // Check if the query was successful and if it returned rows
+    if ($result && mysqli_num_rows($result) > 0) {
+        // Fetch the data from the result set
         $row = mysqli_fetch_assoc($result);
         $filePath = $row['file'];
+    } else {
+        // Set a default file path if no rows were returned by the query
+        $filePath = ''; // You can set it to any default value you want
     }
+} else {
+    // Handle the case when $_SESSION['ownerId'] is not set
+    // For example, you can redirect the user to a login page
+    header("Location: login.php");
+    exit(); // Make sure to exit after redirecting
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="zxx">
 
