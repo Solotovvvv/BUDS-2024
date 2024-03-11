@@ -461,7 +461,7 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
     </div>
   </div>
 
-  <!-- Header End -->
+  <!-- Header End
   <section class="property-section latest-property-section spad">
     <div class="container">
       <div class="row">
@@ -572,7 +572,120 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
         </div>
       </div>
     </div>
-  </section>
+  </section> -->
+
+  <section class="property-section latest-property-section spad">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-5">
+        <div class="section-title">
+          <h4>BUSINESS LISTING</h4>
+        </div>
+      </div>
+      <div class="container">
+        <div id="content">
+          <div class="d-sm-flex align-items-sm-center py-sm-3 location">
+            <input type="text" required placeholder="Search" id="searchVal" class="mx-sm-2 my-sm-0 form-control">
+            <button type="button" onclick="searchpage()" class="btn btn-success my-sm-0 mb-2">Search</button>
+          </div>
+          <div class="d-sm-flex">
+            <div class="col-lg-4 me-sm-2">
+              <div id="filter" class="p-5 bg-light ms-lg-4 ms-lg-2 border">
+                <div class="border-bottom h5 text-uppercase">Filter By</div>
+                <div class="box border-bottom">
+                  <div class="box-label text-uppercase d-flex align-items-center">Location </div>
+                  <div class="my-1">
+                    <div><input type="checkbox" onclick="filterBus()" class="tick busloc" value="North" id="north"> <label>NORTH </label></div>
+                    <div><input type="checkbox" onclick="filterBus()" class="tick busloc" value="South" id="south"> <label>SOUTH </label></div>
+                  </div>
+                </div>
+                <div class="box border-bottom">
+                  <div class="box-label text-uppercase d-flex align-items-center">Category</div>
+                  <div class="my-1">
+                    <?php
+                    $query = "SELECT * FROM category_list";
+                    $result = $conn->query($query);
+                    while ($row = $result->fetch_assoc()) {
+                      echo '<div><input type="checkbox" class="tick buscat" onclick="filterBus()" value="' . $row['ID'] . '" id="brand_' . $row['ID'] . '"> <label> ' . $row['category'] . ' </label></div>';
+                    }
+                    ?>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-8 bg-white p-2 border">
+              <div class="py-3 px-2 pb-1 border-bottom">
+                <div id="newFilteredUi">
+                  <?php if ((isset($_GET['a']) && $_GET['a'] != null) || (isset($_GET['b']) && $_GET['b'] != null)
+                    || (isset($_GET['c']) && $_GET['c'] != null)) { ?>
+                    <?php foreach ($datas as $data) {
+                      ?>
+                      <div class="row">
+                        <div class="col-lg-4">
+                          <img src="<?php echo "img/logo/" . $data['Businesslogo'] ?>" style="border-radius: 20px;" alt="no pic">
+                        </div>
+                        <div class="col-lg-8">
+                          <div class="d-md-flex align-items-md-center">
+                            <div class="name">
+                              <h4><a href=<?php echo "details.php?ID=" . $data['bus_id'] ?>><strong><?php echo $data['BusinessName'] ?></strong></a></h4>
+                              <span class="city"><?php echo $data['BusinessAddress'] . ' Brgy ' . $data['BusinessBrgy'] ?></span>
+                            </div>
+                          </div>
+                          <?php
+                          $id_rating = $data['bus_id'];
+                          $populateRatingQuery = "SELECT * FROM business_reviews WHERE bus_id = :id;";
+                          $stmt3 = $pdo->prepare($populateRatingQuery);
+                          $stmt3->bindParam(':id', $id_rating, PDO::PARAM_STR);
+                          if (!$stmt3->execute()) {
+                            $errorInfo = $stmt3->errorInfo();
+                            echo "SQL Error: " . $errorInfo[2];
+                          } else {
+                            $datas2 = $stmt3->fetchAll();
+                            if (empty($datas2)) {
+                              echo "Please rate us.";
+                            }
+                          }
+                          ?>
+                          <div class="text-warning mb-1 me-2">
+                            <?php $counter = 0;
+                            $totalRating2 = 0; // Initialize the variable?>
+                            <?php foreach ($datas2 as $data2) {
+                              if ($data2['rating'] != null) {
+                                $totalRating2 += $data2['rating'];
+                                $counter++;
+                              }
+                            }
+                            if ($totalRating2 != null) {
+                              $totalAve = $totalRating2 / $counter;
+                              for ($j = 0; $j < $totalAve; $j++) {
+                                ?>
+                                <i class="fa fa-star"></i>
+                              <?php }
+                            }
+
+                            ?>
+                          </div>
+                          <p class="text-truncate mb-4 mb-md-0">
+                            <?php echo $data['BusinessDescrip'] ?>
+                          </p>
+                        </div>
+                      </div>
+                    <?php } ?>
+                  <?php } else { ?>
+                    <div id="newFilteredUi">
+                      <?php echo $disp; ?>
+                    </div>
+                  <?php } ?>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 
   <footer class="footer-section">
     <div class="container">
