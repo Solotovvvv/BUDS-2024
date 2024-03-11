@@ -7,9 +7,9 @@ require_once('./includes/config.php');
 //         header('Location: CEIPO/client/index');
 //     }
 // }
-ini_set('display_errors', 0);
-ini_set('display_startup_errors', 0);
-error_reporting(0);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(1);
 // print_r($_SESSION);
 $role = $_SESSION['role'];
 
@@ -68,18 +68,31 @@ if ($rs = $conn->query($sql)) {
             $overview .= '<div class="tab-desc">
                         <p>' . $row['BusinessDescrip'] . '</p>
                 </div>';
-            $FAQs .= '<div class="tab-desc">
-                <div class="dropdown">
-                    <button class="btn btn-success dropdown-toggle" type="button" id="collapseDropdownButton" data-toggle="collapse" data-target="#collapseContent" aria-expanded="false" aria-controls="collapseContent">
-                    Question #1
-                    </button>
-                        <div class="collapse" id="collapseContent">
-                            <div class="card card-body" style="border: 1px solid rgba(0,0,0,.125)">
-                                Hello Bitches!
-                            </div>
-                        </div>
-                </div>
-            </div>';
+//business faqs updated
+                $sqlfaq = "SELECT * FROM business_faq WHERE bus_id = $id";
+                if ($rsfaq = $conn->query($sqlfaq)) {
+                    if ($rsfaq->num_rows > 0) {
+                        $FAQs .= '<div class="tab-desc">';
+                        $counter = 1;
+                        while ($faqRow = $rsfaq->fetch_assoc()) {
+                            $FAQs .= '<div class="dropdown mb-2">
+                                <button class="btn btn-success dropdown-toggle" type="button" id="collapseDropdownButton' . $counter . '" data-toggle="collapse" data-target="#collapseContent' . $counter . '" aria-expanded="false" aria-controls="collapseContent' . $counter . '">
+                                Question #' . $counter. '. ' . $faqRow['questions'] . '
+                                </button>
+                                    <div class="c  ollapse" id="collapseContent' . $counter . '">
+                                      <div class="card card-body" style="border: 1px solid rgba(0,0,0,.125)">
+                                            ' . $faqRow['answer'] . '
+                                        </div>
+                                    </div>
+                            </div>';
+                            $counter++;
+                        }
+                        $FAQs .= '</div>';
+                    } else {
+                        $FAQs = '<div class="tab-desc">No FAQs available</div>';
+                    }
+                }
+
             $socialMedia .= '<div class="section-title sidebar-title">
                         <h5>FOLLOW US</h5>
                     </div>
@@ -363,7 +376,7 @@ if (isset($_SESSION['ownerId'])) {
                 </div>
             </div>
         </div>
-        <div class="hs-nav">
+        <div class="hs-nav" style="border: 1px solid rgba(0,0,0,.125)">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-9">

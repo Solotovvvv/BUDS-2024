@@ -1,5 +1,6 @@
 <?php
 require_once("../includes/config.php");
+require '../vendor/autoload.php'; // Include Pusher PHP library
 session_start();
 
 if (isset($_SESSION['bus_id'])) {
@@ -593,6 +594,22 @@ function addBusiness($request = null)
             return;
         }
 
+
+
+        // Trigger Pusher event after adding the business
+        $pusher = new Pusher\Pusher(
+            '5b1eb2892347a33d5be9',
+            '0dbf6b6d40bb6a4ee500',
+            '1766635',
+            array('cluster' => 'ap1')
+        );
+
+        // Trigger the event without passing any data
+        $pusher->trigger('business-channel', 'business-added', null);
+        // $pusher->trigger('business-channel', 'business-event', null);
+        $pusher->trigger('business-channel', 'business-event',null);
+
+
         $msg['title'] = "Successful";
         $msg['message'] = "Business added successfully";
         $msg['icon'] = "success";
@@ -775,8 +792,7 @@ function edtBusinessDetails($request = null)
             echo json_encode($msg);
         }
     }
-}
-;
+};
 
 function edtBusinessBrgyClear($request = null)
 {
@@ -862,8 +878,7 @@ function edtBusinessBrgyClear($request = null)
         $msg['status'] = "error";
         echo json_encode($msg);
     }
-}
-;
+};
 
 function edtDTIPermit($request = null)
 {
@@ -959,8 +974,7 @@ function edtDTIPermit($request = null)
         $msg['status'] = "error";
         echo json_encode($msg);
     }
-}
-;
+};
 
 function edtSanitaryPermit($request = null)
 {
@@ -1046,8 +1060,7 @@ function edtSanitaryPermit($request = null)
         $msg['status'] = "error";
         echo json_encode($msg);
     }
-}
-;
+};
 
 function edtCedulaPermit($request = null)
 {
@@ -1133,8 +1146,7 @@ function edtCedulaPermit($request = null)
         $msg['status'] = "error";
         echo json_encode($msg);
     }
-}
-;
+};
 
 function edtMayorPermit($request = null)
 {
@@ -1220,8 +1232,7 @@ function edtMayorPermit($request = null)
         $msg['status'] = "error";
         echo json_encode($msg);
     }
-}
-;
+};
 
 function addJobSpec1($request = null)
 {
@@ -1239,8 +1250,7 @@ function addJobSpec1($request = null)
     <button type='button' class='btn btn-icon btn-success' onclick='addJobSpec1()'><i class='bx bx-plus'></i></button>
     </div>";
     echo json_encode($response);
-}
-;
+};
 
 function addJobSpec2($request = null)
 {
@@ -1259,8 +1269,7 @@ function addJobSpec2($request = null)
     <button type='button' class='btn btn-icon btn-success' onclick='addJobSpec2()'><i class='bx bx-plus'></i></button>
     </div>";
     echo json_encode($response);
-}
-;
+};
 
 function addJob($request = null)
 {
@@ -1320,8 +1329,7 @@ function addJob($request = null)
         $msg['status'] = "success";
         echo json_encode($msg);
     }
-}
-;
+};
 
 function edtJob($request = null)
 {
@@ -1384,8 +1392,7 @@ function edtJob($request = null)
         $msg['icon'] = "success";
         echo json_encode($msg);
     }
-}
-;
+};
 
 function edtJobStatus($request = null)
 {
@@ -1419,8 +1426,7 @@ function edtJobStatus($request = null)
         $msg['icon'] = "success";
         echo json_encode($msg);
     }
-}
-;
+};
 
 function addPics($request = null)
 {
@@ -1599,8 +1605,7 @@ function addPics($request = null)
             }
         }
     }
-}
-;
+};
 
 function edtPic1($request = null)
 {
@@ -1674,8 +1679,7 @@ function edtPic1($request = null)
         $msg['status'] = "error";
         echo json_encode($msg);
     }
-}
-;
+};
 
 function edtPic2($request = null)
 {
@@ -1749,8 +1753,7 @@ function edtPic2($request = null)
         $msg['status'] = "error";
         echo json_encode($msg);
     }
-}
-;
+};
 
 function edtPic3($request = null)
 {
@@ -1824,8 +1827,7 @@ function edtPic3($request = null)
         $msg['status'] = "error";
         echo json_encode($msg);
     }
-}
-;
+};
 
 function edtPic4($request = null)
 {
@@ -1899,8 +1901,7 @@ function edtPic4($request = null)
         $msg['status'] = "error";
         echo json_encode($msg);
     }
-}
-;
+};
 
 function uploadPost($request = null)
 {
@@ -1980,8 +1981,7 @@ function uploadPost($request = null)
         $msg['status'] = "error";
         echo json_encode($msg);
     }
-}
-;
+};
 
 function editPost($request = null)
 {
@@ -2088,8 +2088,7 @@ function editPost($request = null)
             echo json_encode($msg);
         }
     }
-}
-;
+};
 
 function edtPostStatus($request = null)
 {
@@ -2123,8 +2122,7 @@ function edtPostStatus($request = null)
         $msg['icon'] = "success";
         echo json_encode($msg);
     }
-}
-;
+};
 
 function commentAndRating($request = null)
 {
@@ -2159,8 +2157,7 @@ function commentAndRating($request = null)
         $msg['icon'] = "success";
         echo json_encode($msg);
     }
-}
-;
+};
 
 function reply($request = null)
 {
@@ -2183,8 +2180,7 @@ function reply($request = null)
         $msg['icon'] = "success";
         echo json_encode($msg);
     }
-}
-;
+};
 
 function searchBusinessFilter($request = null)
 {
@@ -2308,5 +2304,4 @@ function searchBusinessFilter($request = null)
     }
 
     echo $disp;
-}
-;
+};

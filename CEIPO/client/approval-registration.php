@@ -108,93 +108,9 @@ if (empty($_SESSION['ownerId'])) {
 <body class="hold-transition sidebar-mini layout-fixed">
   <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
-      <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-        <div class="app-brand demo">
-          <a href="index.html" class="app-brand-link">
-            <span class="app-brand-logo demo">
-              <img src="plugins/assets/img/avatars/buds-logo.png" alt="" class="brand-image" width="50" height="50">
-            </span>
-            <span class="text-uppercase text-white app-brand-text demo menu-text fw-bolder ms-2">CEIPO</span>
-          </a>
-          <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
-            <i class="bx bx-chevron-left bx-sm align-middle"></i>
-          </a>
-        </div>
-        <div class="menu-inner-shadow"></div>
-        <ul class="menu-inner py-1">
-          <li class="menu-header text-uppercase">
-          </li>
-
-          <li class="menu-item">
-            <a href="index.php" class="menu-link">
-              <i class="menu-icon tf-icons bx bxs-dashboard"></i>
-              <div data-i18n="Analytics">Dashboard</div>
-            </a>
-          </li>
-
-
-          <li class="menu-item open active">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-              <i class="menu-icon tf-icons bx bxs-buildings"></i>
-              <div data-i18n="Layouts">Business Application</div>
-            </a>
-
-            <ul class="menu-sub list-inline">
-              <li class="list-inline-block menu-item active">
-                <a href="approval-registration.php" class="menu-link">
-                  <div data-i18n="Without navbar">Approval of Registration</div>
-                </a>
-              </li>
-
-              <li class="list-inline-block menu-item">
-                <a href="re-evaluation.php" class="menu-link">
-                  <div data-i18n="Without navbar">Re-Evaluation</div>
-                </a>
-              </li>
-
-              <li class="list-inline-block menu-item">
-                <a href="business-applicant-status.php" class="menu-link">
-                  <div data-i18n="Without menu">Approved Business</div>
-                </a>
-              </li>
-
-            </ul>
-          </li>
-
-
-          <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-              <i class="menu-icon tf-icons bx bxs-category"></i>
-              <div data-i18n="Layouts">Business Categories</div>
-            </a>
-
-            <ul class="menu-sub">
-              <li class="menu-item">
-                <a href="top-business.php" class="menu-link">
-                  <div data-i18n="Without menu">Top 10 Business Category</div>
-                </a>
-              </li>
-              <li class="menu-item">
-                <a href="business-category.php" class="menu-link">
-                  <div data-i18n="Without navbar">Buisness Category </div>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li class="menu-item">
-            <a href="viewing-business.php" class="menu-link">
-              <i class="menu-icon tf-icons bx bxs-search"></i>
-              Searching Business
-            </a>
-          </li>
-          <li class="menu-item">
-            <a href="printing-reports.php" class="menu-link">
-              <i class="menu-icon tf-icons bx bxs-report"></i>
-              <div data-i18n="Analytics">Reports</div>
-            </a>
-          </li>
-        </ul>
-      </aside>
+      <!-- NAV BAR -->
+      <?php include 'Navbar.php'; ?>
+      <!-- end -->
       <div class="layout-page">
         <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
           <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
@@ -549,6 +465,7 @@ if (empty($_SESSION['ownerId'])) {
   <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/web3@1.5.3/dist/web3.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.17/dist/sweetalert2.all.min.js"></script>
+  <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
   <script>
     let contract;
     let currentAccount;
@@ -721,6 +638,21 @@ if (empty($_SESSION['ownerId'])) {
     });
 
     $(document).ready(function() {
+//Realtime Pusher Js 
+      var pusher = new Pusher('5b1eb2892347a33d5be9', {
+            cluster: 'ap1',
+            encrypted: true
+        });
+
+        var channel = pusher.subscribe('business-channel');
+
+      channel.bind('business-added', function(data) {
+        console.log("Received business-event");
+        $('#approval_tbl').DataTable().ajax.reload();
+        // Call AJAX request or perform any other action here
+      });
+////////////////////////////
+
 
       // Next button click event
       $("#nextStep").click(function() {
@@ -843,31 +775,25 @@ if (empty($_SESSION['ownerId'])) {
     }
 
 
+
+
+
     function update() {
+      // Get values from form fields
+      var remarksDataStep2 = $("#remarksStep2").val() || null;
+      var remarksDataStep3 = $("#remarksStep3").val() || null;
+      var remarksDataStep4 = $("#remarksStep4").val() || null;
+      var remarksDataStep5 = $("#remarksStep5").val() || null;
+      var remarksDataStep6 = $("#remarksStep6").val() || null;
+      var hiddendata = $('#hiddendata').val();
 
-
-      remarksDataStep2 = $("#remarksStep2").val() || null;
-      remarksDataStep3 = $("#remarksStep3").val() || null;
-      remarksDataStep4 = $("#remarksStep4").val() || null;
-      remarksDataStep5 = $("#remarksStep5").val() || null;
-      remarksDataStep6 = $("#remarksStep6").val() || null;
-
-      hiddendata = $('#hiddendata').val();
-
-
-
-      // console.log(remarksDataStep2)
-      // console.log(remarksDataStep3)
-      // console.log(remarksDataStep4)
-      // console.log(remarksDataStep5)
-      // console.log(remarksDataStep6)
-      // console.log(hiddendata)
-
+      // Hide modal and clear form fields
       $('#view').modal("hide");
       for (var i = 2; i <= 6; i++) {
         $("#remarksStep" + i).val("");
       }
 
+      // Send AJAX request to update data
       $.ajax({
         type: "POST",
         url: "approval_update.php",
@@ -881,11 +807,14 @@ if (empty($_SESSION['ownerId'])) {
         },
         success: function(response) {
           var jsons = JSON.parse(response);
-          status = jsons.status;
-          if (status == 'success') {
-            var update = $('#approval_tbl').DataTable().ajax.reload();
+          var status = jsons.status;
+          if (status === 'success') {
+            // Reload DataTable upon successful update
+            $('#approval_tbl').DataTable().ajax.reload();
 
-            alert("Saved")
+            // // Alert user about successful save
+            // alert("Saved");
+
           }
         },
         error: function(error) {
@@ -894,6 +823,7 @@ if (empty($_SESSION['ownerId'])) {
         }
       });
     }
+
 
     //Viewing
     function approval_status(views) {
@@ -1171,7 +1101,7 @@ if (empty($_SESSION['ownerId'])) {
             },
             body: `hiddendata1=${encodeURIComponent(hiddendata1)}`,
           });
-        
+
           if (response.ok) {
             // Reload DataTable (assuming you have DataTables initialized)
             $('#approval_tbl').DataTable().ajax.reload();
@@ -1181,7 +1111,7 @@ if (empty($_SESSION['ownerId'])) {
               icon: "info",
               confirmButtonText: "OK"
             });
-            
+
           } else {
             throw new Error(`Failed to update status on the server. Status: ${response.status}`);
           }
