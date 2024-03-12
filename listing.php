@@ -737,7 +737,7 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
                     <div class="container">
                       <div class="row">
                         <div class="col-12 text-center">
-                          <a class="btn btn-success text" href="#" onclick="increaseLimit(5)" role="button">See More</a>
+                          <a class="btn btn-success text" href="#" onclick="increaseLimit(10)" role="button">See More</a>
                         </div>
                       </div>
                     </div>
@@ -816,8 +816,8 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
     };
 
     function increaseLimit(value) {
-        var currentLimit = parseInt(<?php echo isset($_GET['d']) ? $_GET['d'] : 0; ?>);
-        var newLimit = currentLimit + value;
+        var currentLimit = parseInt(<?php echo isset($_GET['d']) ? $_GET['d'] : 5; ?>);
+        var newLimit = currentLimit + 5;
         window.location.href = "listing.php?d=" + newLimit;
     }
 
