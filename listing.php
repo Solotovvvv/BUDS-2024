@@ -103,7 +103,8 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
     }
   }
 } elseif (isset($_GET['d']) && $_GET['d'] != null) {
-  $sql = "SELECT * FROM business_list WHERE BusinessStatus = 1 OR BusinessStatus = 4";
+  $limit = $_GET['d'];
+  $sql = "SELECT * FROM business_list WHERE BusinessStatus = 1 OR BusinessStatus = 4 LIMIT ".$limit."";
 
   $stmt = $pdo->prepare($sql);
   // $stmt->bindParam(':subcat', $subcat, PDO::PARAM_STR);
@@ -736,7 +737,7 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
                     <div class="container">
                       <div class="row">
                         <div class="col-12 text-center">
-                          <a class="btn btn-success text" href="listing.php?d=all" role="button">See More</a>
+                          <a class="btn btn-success text" href="#" onclick="increaseLimit(5)" role="button">See More</a>
                         </div>
                       </div>
                     </div>
@@ -813,6 +814,12 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
         window.location.href = "listing.php?a=" + searchVal;
       }, 1);
     };
+
+    function increaseLimit(value) {
+        var currentLimit = parseInt(<?php echo isset($_GET['d']) ? $_GET['d'] : 0; ?>);
+        var newLimit = currentLimit + value;
+        window.location.href = "listing.php?d=" + newLimit;
+    }
 
     function createUser() {
       var fname = $('#f_name').val();
