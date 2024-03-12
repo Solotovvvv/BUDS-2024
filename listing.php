@@ -104,7 +104,7 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
   }
 } elseif (isset($_GET['d']) && $_GET['d'] != null) {
   $limit = $_GET['d'];
-  $sql = "SELECT * FROM business_list WHERE BusinessStatus = 1 OR BusinessStatus = 4 LIMIT ".$limit."";
+  $sql = "SELECT * FROM business_list WHERE BusinessStatus = 1 OR BusinessStatus = 4 LIMIT " . $limit . "";
 
   $stmt = $pdo->prepare($sql);
   // $stmt->bindParam(':subcat', $subcat, PDO::PARAM_STR);
@@ -816,9 +816,9 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
     };
 
     function increaseLimit(value) {
-        var currentLimit = parseInt(<?php echo isset($_GET['d']) ? $_GET['d'] : 5; ?>);
-        var newLimit = currentLimit + 5;
-        window.location.href = "listing.php?d=" + newLimit;
+      var currentLimit = parseInt(<?php echo isset($_GET['d']) ? $_GET['d'] : 5; ?>);
+      var newLimit = currentLimit + 5;
+      window.location.href = "listing.php?d=" + newLimit;
     }
 
     function createUser() {
@@ -1037,6 +1037,8 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
       });
     };
 
+    var currentLimit = 5; // Initialize current limit
+
     function filterBus() {
       var locSpecificationsValue = [];
       $(".busloc:checked").each(function() {
@@ -1068,13 +1070,21 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
         url: 'controllers/business.php',
         data: {
           payload: JSON.stringify(payload),
-          setFunction: 'searchBusinessFilter'
+          setFunction: 'searchBusinessFilter',
+          limit: currentLimit // Send current limit to PHP function
         },
         success: function(response) {
           $("#newFilteredUi").html(response);
         }
       });
     };
+
+    function increaseLimitFilter() {
+      currentLimit += 5; // Increase limit by 5
+      filterBus(); // Call filter function again with increased limit
+    }
+
+
 
     function toggleDescription(button, uniqueId, fullDescription) {
       var descriptionElement = document.getElementById(uniqueId);

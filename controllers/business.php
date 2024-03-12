@@ -2182,7 +2182,7 @@ function reply($request = null)
     }
 };
 
-function searchBusinessFilter($request = null)
+function searchBusinessFilter($request = null, $limit = 5)
 {
     $pdo = Database::connection();
     $location = $request->location;
@@ -2220,7 +2220,7 @@ function searchBusinessFilter($request = null)
             ($imploadedData1)
             AND
             (bl.BusinessStatus = 1 OR bl.BusinessStatus = 4)
-        LIMIT 5;
+        LIMIT $limit;
         ";
     } else if (!empty($imploadedData)) {
         // Only location condition exists
@@ -2232,7 +2232,7 @@ function searchBusinessFilter($request = null)
             ($imploadedData)
             AND
             (bl.BusinessStatus = 1 OR bl.BusinessStatus = 4)
-        LIMIT 5;";
+        LIMIT $limit;";
     } else if (!empty($imploadedData1)) {
         // Only category condition exists
         $query1 = "SELECT *
@@ -2243,9 +2243,9 @@ function searchBusinessFilter($request = null)
             ($imploadedData1)
             AND
             (bl.BusinessStatus = 1 OR bl.BusinessStatus = 4)
-        LIMIT 5;";
+        LIMIT $limit;";
     } else {
-        $query1 = "SELECT * FROM business_list WHERE BusinessStatus = 1 OR BusinessStatus = 4  LIMIT 5";
+        $query1 = "SELECT * FROM business_list WHERE BusinessStatus = 1 OR BusinessStatus = 4  LIMIT $limit";
     }
 
     $counter1 = 0;
@@ -2303,16 +2303,17 @@ function searchBusinessFilter($request = null)
             }
             // Add "See More" button after displaying businesses
             $disp .= '
-                <div class="container">
-                    <div class="row">
-                        <div class="col-12 text-center">
-                            <a class="btn btn-success text" href="#" onclick="increaseLimit(10)" role="button">See More</a>
-                        </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <button class="btn btn-success text" onclick="increaseLimitFilter(' . ($limit + 5) . ')" role="button">See More</button>
                     </div>
-                </div>';
+                </div>
+            </div>';
         }
     }
 
     echo $disp;
 }
+
 
