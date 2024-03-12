@@ -230,13 +230,13 @@ $faqData = $statement->fetchAll(PDO::FETCH_ASSOC);
                                                         <!-- Input Field 1 -->
                                                         <div class="mb-3">
                                                             <label for="Question" class="form-label">Question</label>
-                                                            <input type="text" class="form-control question-input" value="<?php echo htmlspecialchars($faqItem['questions']); ?>" disabled>
+                                                            <input type="text" class="form-control question-input" value="<?php echo htmlspecialchars($faqItem['Questions']); ?>" disabled>
                                                         </div>
 
                                                         <!-- Input Field 2 -->
                                                         <div class="mb-3">
                                                             <label for="Answer" class="form-label">Answer</label>
-                                                            <input type="text" class="form-control answer-input" value="<?php echo htmlspecialchars($faqItem['answer']); ?>" disabled>
+                                                            <input type="text" class="form-control answer-input" value="<?php echo htmlspecialchars($faqItem['Answer']); ?>" disabled>
                                                         </div>
                                                     </div>
 
