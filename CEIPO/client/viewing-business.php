@@ -568,7 +568,7 @@ if (empty($_SESSION['ownerId'])) {
         //viewDetails in button
         function viewDetails(businessID) {
           // Redirect to details.php with businessID
-          window.location.href = `http://localhost/buds/details.php?ID=${businessID}`;
+          window.location.href = `http://localhost//BUDS-2024/details.php?ID=${businessID}`;
         }
 
 
@@ -584,7 +584,7 @@ if (empty($_SESSION['ownerId'])) {
           localStorage.setItem('reloadPage', 'true');
 
           // Redirect to details.php with businessID
-          window.location.href = `http://localhost/buds/details.php?ID=${businessID}`;
+          window.location.href = `http://localhost//BUDS-2024/details.php?ID=${businessID}`;
         }
 
 
