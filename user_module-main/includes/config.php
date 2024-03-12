@@ -1,14 +1,11 @@
-<?php 
-//connection of database
-
-
-$server="localhost";
-$user="u943563710_buds";		
-$pass="$Buds123";		
-$dbname="u943563710_buds";
-
-
-$conn= new mysqli($server,$user,$pass,$dbname);
+<?php
+// DB credentials.
+$server="localhost";//server name
+$user=`u943563710_buds`;		//user name
+$pass=`$Buds123`;			//user password
+$db_name=`u943563710_buds`;//database name
+// Establish database connection.
+$conn= new mysqli($server,$user,$pass,$db_name);
 if($conn->connect_error){
 	die('Connection Failed'.$conn->connect_error);
 }
@@ -17,7 +14,7 @@ class Database {
     private static $host = "localhost";
     private static $dbname = "u943563710_buds";
     private static $user = "u943563710_buds";
-    private static $pass = "$Buds123";
+    private static $pass = `$Buds123`;
     // private static $host = "localhost";
     // private static $dbname = "ucc_admission";
     // private static $user = "ucc_admin";
