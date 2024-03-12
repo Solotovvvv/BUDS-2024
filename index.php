@@ -248,9 +248,9 @@ if (!$stmt1->execute()) {
             <nav class="nav-menu">
               <ul>
                 <li class="active"><a href="./index.php">Home</a></li>
-                <li><a href="./listing.php">Business Listing</a></li>
                 <li><a href="./category.php">Categories</a></li>
-              
+                <li><a href="./listing.php">Business Listing</a></li>
+             
               </ul>
             </nav>
           </div>
