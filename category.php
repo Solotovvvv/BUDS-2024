@@ -94,7 +94,7 @@ if ($stmt->errorCode() !== '00000') {
             <span class="icon_close"></span>
         </div>
         <div class="logo">
-            <a href="./index.php">
+            <a href="index.php">
                 <img src="img/logo-main.png" alt="">
             </a>
         </div>
@@ -109,7 +109,7 @@ if ($stmt->errorCode() !== '00000') {
                 <div class="row">
                     <div class="col-lg-2">
                         <div class="logo">
-                            <a href="./index.html"><img src="img/logo-main.png" alt=""></a><br>
+                            <a href="index.php"><img src="img/logo-main.png" alt=""></a><br>
                             <!-- <ul>Business Directory</ul> -->
                         </div>
                     </div>
