@@ -1,5 +1,5 @@
 <?php
-include '../../includes../config.php';
+include '../../includes/config.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['categoryId'])) {
     $categoryId = $_GET['categoryId'];

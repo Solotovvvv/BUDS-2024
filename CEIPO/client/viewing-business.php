@@ -105,7 +105,7 @@ if (empty($_SESSION['ownerId'])) {
                             <select class="form-select" id="Category" name="category" aria-label="Floating label select example">
                               <option selected value=0>Select</option>
                               <?php
-                              include '../../includes../config.php'; // Include your database connection code
+                             include '../../includes/config.php'; // Include your database connection code
                               $pdo = DATABASE::connection();
 
                               try {

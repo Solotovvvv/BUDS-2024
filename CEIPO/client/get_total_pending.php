@@ -1,5 +1,5 @@
 <?php
-require_once '../../includes/config.php'; // Use require_once for better file inclusion
+include '../../includes/config.php';
 
 try {
     // Establish database connection
