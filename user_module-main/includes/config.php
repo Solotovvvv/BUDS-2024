@@ -3,9 +3,9 @@
 
 
 $server="localhost";
-$user="root";		
-$pass="";		
-$dbname="buds_2023";
+$user="u943563710_buds";		
+$pass="$Buds123";		
+$dbname="u943563710_buds";
 
 
 $conn= new mysqli($server,$user,$pass,$dbname);
@@ -15,9 +15,9 @@ if($conn->connect_error){
 
 class Database {
     private static $host = "localhost";
-    private static $dbname = "buds_2023";
-    private static $user = "root";
-    private static $pass = "";
+    private static $dbname = "u943563710_buds";
+    private static $user = "u943563710_buds";
+    private static $pass = "$Buds123";
     // private static $host = "localhost";
     // private static $dbname = "ucc_admission";
     // private static $user = "ucc_admin";
