@@ -2184,6 +2184,11 @@ function reply($request = null)
 
 function searchBusinessFilter($request = null, $limit = 5)
 {
+    // echo $limit;
+    if(isset($_POST['limit'])) {
+        $limit = intval($_POST['limit']);
+        echo $limit;
+    }
     $pdo = Database::connection();
     $location = $request->location;
     $category = $request->category;
