@@ -2299,9 +2299,20 @@ function searchBusinessFilter($request = null)
                     </div>
                     </div>
                     </div>';
+                    
             }
+            // Add "See More" button after displaying businesses
+            $disp .= '
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <a class="btn btn-success text" href="#" onclick="increaseLimit(10)" role="button">See More</a>
+                        </div>
+                    </div>
+                </div>';
         }
     }
 
     echo $disp;
-};
+}
+
