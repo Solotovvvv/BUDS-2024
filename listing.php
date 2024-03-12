@@ -102,6 +102,22 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
       echo "No results found.";
     }
   }
+} elseif (isset($_GET['d']) && $_GET['d'] != null) {
+  $sql = "SELECT * FROM business_list WHERE BusinessStatus = 1 OR BusinessStatus = 4";
+
+  $stmt = $pdo->prepare($sql);
+  // $stmt->bindParam(':subcat', $subcat, PDO::PARAM_STR);
+
+  if (!$stmt->execute()) {
+    $errorInfo = $stmt->errorInfo();
+    echo "SQL Error: " . $errorInfo[2];
+  } else {
+    $datas = $stmt->fetchAll();
+
+    if (empty($datas)) {
+      echo "No results found.";
+    }
+  }
 } else {
   // die("No search query provided.");
   $counter1 = 0;
@@ -149,7 +165,6 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
         $disp .= '<p class="text-truncate mb-4 mb-md-0">
                     <i class="fa fa-info"></i>
                     <span id="' . $uniqueId . '">' . substr($row['BusinessDescrip'], 0, 50) . '</span>
-                    <button class="link-button center text-info" onclick="toggleDescription(this, \'' . $uniqueId . '\', \'' . htmlspecialchars(json_encode($row['BusinessDescrip'])) . '\')">See More</button>
         </p>
     </div>
 </div>
@@ -651,7 +666,7 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
                 <div class="py-3 px-2 pb-1 border-bottom">
                   <div id="newFilteredUi">
                     <?php if ((isset($_GET['a']) && $_GET['a'] != null) || (isset($_GET['b']) && $_GET['b'] != null)
-                      || (isset($_GET['c']) && $_GET['c'] != null)
+                      || (isset($_GET['c']) && $_GET['c'] != null) || (isset($_GET['d']) && $_GET['d'] != null)
                     ) { ?>
                       <?php foreach ($datas as $data) {
                         $uniqueId = 'businessDescription_' . $data['bus_id'];
@@ -703,11 +718,11 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
                               ?>
                             </div>
                             <p class="text-truncate mb-4 mb-md-0">
-                                <i class="fa fa-info"></i>
-                                <span id="<?php echo $uniqueId; ?>">
-                                  <?php echo substr($data['BusinessDescrip'], 0, 50); ?>
-                                </span>
-                                <button class="link-button center text-info" onclick="toggleDescription(this, '<?php echo $uniqueId; ?>', '<?php echo htmlspecialchars(json_encode($data['BusinessDescrip'])); ?>')">See More</button>
+                              <i class="fa fa-info"></i>
+                              <span id="<?php echo $uniqueId; ?>">
+                                <?php echo substr($data['BusinessDescrip'], 0, 50); ?>
+                              </span>
+                              <!-- <button class="link-button center text-info" onclick="toggleDescription(this, '<?php echo $uniqueId; ?>', '<?php echo htmlspecialchars(json_encode($data['BusinessDescrip'])); ?>')">See More</button> -->
                             </p>
                           </div>
                         </div>
@@ -717,15 +732,24 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
                         <?php echo $disp; ?>
                       </div>
                     <?php } ?>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-12 text-center">
+                          <a class="btn btn-success text" href="listing.php?d=all" role="button">See More</a>
+                        </div>
+                      </div>
+                    </div>
   </section>
+
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>
 
 
   <footer class="footer-section">
