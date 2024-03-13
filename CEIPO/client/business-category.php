@@ -4,7 +4,7 @@ if(empty( $_SESSION['ownerId'] )){
 header('Location: ../index.php'); // Redirect to the login page if ownerId is not set
     exit;
 }
-require_once '../../includes../config.php';
+include '../../includes/config.php';
 
 $pdo = Database::connection();
 

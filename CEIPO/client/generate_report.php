@@ -1,6 +1,6 @@
 <?php
 // fetchData.php
-include '../../includes../config.php';
+include '../../includes/config.php';
 
 // Fetch data based on selected criteria
 $category = isset($_POST['category']) ? $_POST['category'] : '';

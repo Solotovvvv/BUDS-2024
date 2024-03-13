@@ -1,6 +1,6 @@
 <?php
 // Include your config.php to establish the database connection
- include '../../includes../config.php';
+include '../../includes/config.php';
 $pdo = DATABASE::connection();
 
 $offset = $_POST['offset'];

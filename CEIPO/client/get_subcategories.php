@@ -1,5 +1,5 @@
 <?php
- include '../../includes../config.php'; // Include your database connection code
+ include '../../includes/config.php';
 $pdo = DATABASE::connection();
 
 if (isset($_POST['catId'])) {
