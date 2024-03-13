@@ -1,6 +1,6 @@
 <?php
 // Include the database configuration
-include '../../includes../config.php';
+include '../../includes/config.php';
 
 // Establish a database connection
 $pdo = DATABASE::connection();

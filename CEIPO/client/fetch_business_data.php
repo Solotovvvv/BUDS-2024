@@ -1,6 +1,6 @@
 <?php
 // Include your database configuration here
-include '../../includes../config.php';
+include '../../includes/config.php';
 
 // Check if the businessId is provided in the POST request
 if (isset($_POST['businessId'])) {

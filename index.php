@@ -16,40 +16,11 @@ $sql = "SELECT bl.bus_id, bl.ownerId, bl.BusinessName, bl.Businesslogo, cl.categ
         INNER JOIN owner_list AS ol ON bl.ownerId = ol.ID
         WHERE bl.BusinessStatus = 1 OR bl.BusinessStatus = 4
         GROUP BY bl.bus_id, bl.ownerId, bl.BusinessName, bl.Businesslogo, cl.category, bl.BusinessDescrip, ol.Firstname, ol.MiddleName, ol.Surname
-        ORDER BY average_rating DESC;";
+        ORDER BY average_rating DESC LIMIT 10;";
 
 $result = $conn->query($sql);
 
-if ($result->num_rows > 0) {
-  $data = array();
-  while ($row = $result->fetch_assoc()) {
-    $data[] = $row;
-  }
 
-  // Convert the PHP array to JSON with proper formatting
-  $jsonData = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-
-  // Pass JSON data as a base64-encoded string to avoid issues with special characters
-  $base64_json_data = base64_encode(json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
-
-  // Construct the command with base64-encoded JSON data as a separate argument
-  $temp_file = tempnam(sys_get_temp_dir(), 'json_data');
-  file_put_contents($temp_file, $jsonData);
-
-  // Construct the command with the path to the temporary file
-  $command = "python py-script/script.py " . escapeshellarg($temp_file);
-
-  // Execute the command and capture both standard output and standard error
-  $output = shell_exec($command . ' 2>&1');
-
-  // Remove the temporary file after execution
-  unlink($temp_file);
-
-
-  $decoded_output = json_decode($output, true);
-} else {
-  echo "No results found";
-}
 // Close the database connection
 $conn->close();
 if (isset($_SESSION['role'])) {
@@ -250,7 +221,7 @@ if (!$stmt1->execute()) {
                 <li class="active"><a href="./index.php">Home</a></li>
                 <li><a href="./category.php">Categories</a></li>
                 <li><a href="./listing.php">Business Listing</a></li>
-             
+
               </ul>
             </nav>
           </div>
@@ -528,11 +499,11 @@ if (!$stmt1->execute()) {
       </div>
       <?php
 
-      // Check if decoding was successful
-      if ($decoded_output !== null) {
-        // Access the extracted data as an associative array
-        foreach ($decoded_output as $business) {
-          // Access individual elements of each business
+      if ($result->num_rows > 0) {
+        $data = array();
+        while ($row = $result->fetch_assoc()) {
+          $data[] = $row;
+
       ?>
 
           <div class="container-fluid">
@@ -543,7 +514,7 @@ if (!$stmt1->execute()) {
                     <div class="row">
                       <div class="col-lg-12 col-lg-5 col-xl-5 mb-lg-0">
                         <div class="bg-image hover-zoom ripple rounded ripple-surface">
-                          <img src="<?php echo 'img/logo/' . $business['Businesslogo'] ?>" class="w-100" />
+                          <img src="<?php echo 'img/logo/' . $row['Businesslogo'] ?>" class="w-100" />
                           <a href="#!">
                             <div class="hover-overlay">
                               <div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>
@@ -553,12 +524,12 @@ if (!$stmt1->execute()) {
                       </div>
                       <div class="col-md-6 col-lg-6 col-xl-6">
                         <br>
-                        <h5><?php echo $business['BusinessName'] ?></h5>
-                        <h6><?php echo $business['Firstname'] . ' ' . $business['MiddleName'] . ' ' . $business['Surname'] ?></h6>
+                        <h5><?php echo $row['BusinessName'] ?></h5>
+                        <h6><?php echo $row['Firstname'] . ' ' . $row['MiddleName'] . ' ' . $row['Surname'] ?></h6>
                         <div class="d-flex flex-row">
                           <div class="text-warning mb-1 me-2">
                             <?php
-                            $totalRating2 = (int)$business['average_rating'];
+                            $totalRating2 = (int)$row['average_rating'];
                             if ($totalRating2 != null) {
                               for ($j = 0; $j < $totalRating2; $j++) {
                             ?>
@@ -570,13 +541,13 @@ if (!$stmt1->execute()) {
                         <div class="mt-1 mb-0 text-muted small">
                           <span>Category</span>
                           <span class="text-primary"> • </span>
-                          <span><?php echo $business['category'] ?></span>
+                          <span><?php echo $row['category'] ?></span>
                         </div>
                         <p class="text-truncate mb-4 mb-md-0">
-                          <?php echo $business['BusinessDescrip'] ?>
+                          <?php echo $row['BusinessDescrip'] ?>
                         </p>
                         <br>
-                        <a class="btn btn-success" href="details.php?ID=<?php echo $business['bus_id']; ?>" role="button"><i class="fa fa-eye"></i> View
+                        <a class="btn btn-success" href="details.php?ID=<?php echo $row['bus_id']; ?>" role="button"><i class="fa fa-eye"></i> View
                           Info</a>
                       </div>
                     </div>
@@ -589,7 +560,7 @@ if (!$stmt1->execute()) {
       <?php
         }
       } else {
-        echo "Error decoding JSON data from Python script";
+        echo "No results found";
       }
       ?>
       <!-- <div class="container-fluid">
