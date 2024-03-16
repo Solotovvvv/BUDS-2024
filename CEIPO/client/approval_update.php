@@ -101,7 +101,7 @@ if (isset($_POST['views'])) {
     }
 } else {
     $response = array(
-        'status' => 'failed',
+        'status' => 'failed status',
         'message' => 'Invalid request'
     );
 }
