@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('./includes/config.php');
+require_once('includes/config.php');
 
 // if (isset($_SESSION['role'])) {
 //     if ($_SESSION['role'] == 1) {
@@ -18,12 +18,14 @@ $id = $_GET['ID'];
 $_SESSION['bus_id'] = $_GET['ID'];
 //old query
 // $sql = "SELECT * FROM business_list WHERE bus_id = '$id'";
-$sql = "SELECT * FROM business_list AS bl 
-INNER JOIN business_links AS bll ON bl.bus_id = bll.bus_id
-INNER JOIN brgyzone_list AS bzl ON bl.BusinessBrgy = bzl.ID
-INNER JOIN business_location AS bloc ON bl.bus_id = bloc.bus_id
-WHERE 
-bl.bus_id = $id";
+$sql = "SELECT bl.*, bll.*, bzl.*, bloc.*, COALESCE(AVG(br.rating), 0) AS avg_rating
+        FROM business_list AS bl 
+        INNER JOIN business_links AS bll ON bl.bus_id = bll.bus_id
+        INNER JOIN brgyzone_list AS bzl ON bl.BusinessBrgy = bzl.ID
+        INNER JOIN business_location AS bloc ON bl.bus_id = bloc.bus_id
+        LEFT JOIN business_reviews AS br ON bl.bus_id = br.bus_id
+        WHERE bl.bus_id = $id
+        GROUP BY bl.bus_id";
 $disp = "";
 $overview = "";
 $FAQs = "";
@@ -31,13 +33,14 @@ $socialMedia = "";
 if ($rs = $conn->query($sql)) {
     if ($rs->num_rows > 0) {
         while ($row = $rs->fetch_assoc()) {
+            $avg_rating = ($row['avg_rating']) ? number_format($row['avg_rating'], 1) : "N/A"; // Calculate average rating or set to "N/A" if there are no reviews
             $disp .= '<div class="row">
                         <div class="col-lg-4">
                             <div class="profile-agent-info">
                                 <div class="pi-pic">
                                     <img src=" img/logo/' . $row['Businesslogo'] . '" alt="">
                                     <div class="rating-point">
-                                        4.5
+                                    ' .$avg_rating . '
                                     </div>
                                 </div>
                                 <div class="pi-text">
