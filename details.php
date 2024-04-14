@@ -63,7 +63,7 @@ if ($rs = $conn->query($sql)) {
                                 <h5>Mark Us!</h5>
                                 <form action="#">
                                     <div class="btn btn-success mx"><i class="fa fa-phone"></i> Call</div>
-                                    <div class="btn btn-success mx"><i class="fa fa-star"></i> Rate Us!</div>
+                                    <div class="btn btn-success mx" id="rateUs"><i class="fa fa-star"></i> Rate Us!</div>
                                 </form>
                             </div>
                         </div>
@@ -739,7 +739,7 @@ if (isset($_SESSION['ownerId'])) {
                                     </div>
                                 </div>
                                 <!-- Leave a Comment Section -->
-                                <div class="pd-widget">
+                                <div class="pd-widget" id="Ratee">
                                     <div class="col-sm-12">
                                         <div class="row">
                                             <h4>LEAVE A COMMENT</h4><br>
@@ -1043,6 +1043,13 @@ if (isset($_SESSION['ownerId'])) {
             });
 
             fetchData();
+
+            $('#rateUs').click(function() {
+                $('html, body').animate({
+                    scrollTop: $('#Ratee').offset().top
+                }, 1000);
+            });
+
         });
 
         // for comment and ratings
