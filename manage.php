@@ -138,12 +138,10 @@ if ($rs = $conn->query($sql)) {
                                 <nav class="nav-menu">
                                     <ul>
                                         <li class="profile-dropdown">
+                                         
                                             <div class="user-profile">
-                                                <?php if ($_SESSION['photo'] != "") { ?>
-                                                    <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt="User's Name">
-                                                <?php } else { ?>
-                                                    <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
-                                                <?php } ?>
+                                                <img  id="user-profile-img" alt="User's Name">
+                                          
                                             </div>
                                             <ul class="dropdown dropleft">
                                                 <li>
@@ -242,6 +240,42 @@ if ($rs = $conn->query($sql)) {
     <script src="js/jquery.richtext.min.js"></script>
     <script src="js/image-uploader.min.js"></script>
     <script src="js/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+
+    <script>
+        $(document).ready(function() {
+            // Fetch data when the page loads
+            fetchData();
+        });
+    
+        function fetchData() {
+            // Make an AJAX request to fetch data from the server
+            $.ajax({
+                url: 'fetchUserData.php', // Replace 'fetchUserData.php' with the actual file path to fetch data from your server
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+
+                    if (data.photo) {
+                        $('#user-profile-img').attr('src', data.photo);
+              
+                    } else {
+                        $('#user-profile-img').attr('src', 'img/testimonial-author/unknown.jpg');
+                
+                    }
+
+                
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    // Handle error
+                }
+            });
+        }
+       
+        
+    </script>
 </body>
 
 </html>

@@ -40,7 +40,7 @@ if ($rs = $conn->query($sql)) {
                                 <div class="pi-pic">
                                     <img src=" img/logo/' . $row['Businesslogo'] . '" alt="">
                                     <div class="rating-point">
-                                    ' .$avg_rating . '
+                                    ' . $avg_rating . '
                                     </div>
                                 </div>
                                 <div class="pi-text">
@@ -351,12 +351,10 @@ if (isset($_SESSION['ownerId'])) {
                                     <nav class="nav-menu">
                                         <ul>
                                             <li class="profile-dropdown">
-                                                <div class="user-profile">
-                                                    <?php if ($_SESSION['photo'] != "") { ?>
-                                                        <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt="User's Name">
-                                                    <?php } else { ?>
-                                                        <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
-                                                    <?php } ?>
+                                                <div class="flex-shrink-0 me-3">
+                                                    <div class="avatar avatar-online">
+                                                        <img id="user-profile-img" alt="User's Name" class="w-px-40 h-auto rounded-circle" style="width: 40px; height: auto; border-radius: 50%;">
+                                                    </div>
                                                 </div>
                                                 <ul class="dropdown dropleft">
                                                     <li>
@@ -977,6 +975,7 @@ if (isset($_SESSION['ownerId'])) {
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-76614800-1"></script>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         $(document).ready(function() {
             var map = L.map('map').setView([14.6577, 120.9842], 15);
@@ -1042,6 +1041,8 @@ if (isset($_SESSION['ownerId'])) {
                     // You can add your code to handle the unchecked state here
                 }
             });
+
+            fetchData();
         });
 
         // for comment and ratings
@@ -1512,6 +1513,32 @@ if (isset($_SESSION['ownerId'])) {
 
 
         };
+
+
+        function fetchData() {
+            // Make an AJAX request to fetch data from the server
+            $.ajax({
+                url: 'fetchUserData.php', // Replace 'fetchUserData.php' with the actual file path to fetch data from your server
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+
+                    if (data.photo) {
+                        $('#user-profile-img').attr('src', data.photo);
+
+                    } else {
+                        $('#user-profile-img').attr('src', 'img/testimonial-author/unknown.jpg');
+
+                    }
+
+
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    // Handle error
+                }
+            });
+        }
     </script>
 </body>
 

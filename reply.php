@@ -176,12 +176,10 @@ if (isset($data['rating']) && $data['rating'] != null) {
             <ul class="navbar-nav flex-row align-items-center ms-auto">
               <li class="nav-item navbar-dropdown dropdown-user dropdown">
                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
-                  <div class="avatar avatar-online">
-                    <?php if ($_SESSION['photo'] != "") { ?>
-                      <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt="User's Name">
-                    <?php } else { ?>
-                      <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
-                    <?php } ?>
+                  <div class="flex-shrink-0 me-3">
+                    <div class="avatar avatar-online">
+                      <img id="user-profile-img" alt class="w-px-40 h-auto rounded-circle" />
+                    </div>
                   </div>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
@@ -190,11 +188,7 @@ if (isset($data['rating']) && $data['rating'] != null) {
                       <div class="d-flex">
                         <div class="flex-shrink-0 me-3">
                           <div class="avatar avatar-online">
-                            <?php if ($_SESSION['photo'] != "") { ?>
-                              <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt="User's Name">
-                            <?php } else { ?>
-                              <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
-                            <?php } ?>
+                            <img id="user-profile-imgs" alt class="w-px-40 h-auto rounded-circle" />
                           </div>
                         </div>
                         <div class="flex-grow-1">
@@ -349,6 +343,37 @@ if (isset($data['rating']) && $data['rating'] != null) {
       <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.8.2/js/lightbox.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
       <script>
+        $(document).ready(function() {
+          // Fetch data when the page loads
+          fetchData();
+        });
+
+        function fetchData() {
+          // Make an AJAX request to fetch data from the server
+          $.ajax({
+            url: 'fetchUserData.php', // Replace 'fetchUserData.php' with the actual file path to fetch data from your server
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+
+              if (data.photo) {
+                $('#user-profile-img').attr('src', data.photo);
+                $('#user-profile-imgs').attr('src', data.photo);
+
+              } else {
+                $('#user-profile-img').attr('src', 'img/testimonial-author/unknown.jpg');
+                $('#user-profile-imgs').attr('src', 'img/testimonial-author/unknown.jpg');
+
+              }
+
+            },
+            error: function(xhr, status, error) {
+              console.error(xhr.responseText);
+              // Handle error
+            }
+          });
+        }
+
         function reply(repId) {
           var reply = $('#replyVal' + repId).val();
           var replyId = repId;
