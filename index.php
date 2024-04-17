@@ -177,7 +177,7 @@ if (!$stmt1->execute()) {
                     <ul>
                       <li class="profile-dropdown">
                         <div class="user-profile">
-                        <img  id="user-profile-img" alt="User's Name">
+                          <img id="user-profile-img" alt="User's Name">
                         </div>
                         <ul class="dropdown dropleft">
                           <li>
@@ -244,7 +244,7 @@ if (!$stmt1->execute()) {
               <div class="forms-inputs mb-4">
                 <span>Password</span>
                 <input type="password" name="txtUserPass" id="password_log" required>
-                <h6><a href="#">Forgot Password?</a></h6>
+                <h6><a href="javascript:void(0);" onclick="forgotPasswordModalShow()">Forgot Password?</a></h6>
               </div>
               <div class="mb-3">
                 <button type="button" class="btn w-100" onclick="loginUser()">LOG IN</button>
@@ -268,6 +268,37 @@ if (!$stmt1->execute()) {
       </div>
     </div>
   </div>
+
+  <!-- modal for forgot password -->
+  <div class="modal fade" id="forgotPassModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Forgot Password</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row justify-content-center">
+            <div class="col-md-6"> <!-- Adjust the column size as needed -->
+              <div class="form-group">
+                <label for="inputEmail">Enter Your Email:</label>
+                <input type="email" id="inputEmail" class="form-control">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
   <!-- modal for user create -->
   <div id="id02" class="modal">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
@@ -611,6 +642,7 @@ if (!$stmt1->execute()) {
       </div> -->
 
 
+
   </section>
 
   <!-- Footer Section Begin -->
@@ -690,29 +722,29 @@ if (!$stmt1->execute()) {
 
 
     function fetchData() {
-            // Make an AJAX request to fetch data from the server
-            $.ajax({
-                url: 'fetchUserData.php', // Replace 'fetchUserData.php' with the actual file path to fetch data from your server
-                type: 'GET',
-                dataType: 'json',
-                success: function(data) {
+      // Make an AJAX request to fetch data from the server
+      $.ajax({
+        url: 'fetchUserData.php', // Replace 'fetchUserData.php' with the actual file path to fetch data from your server
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
 
-                    if (data.photo) {
-                        $('#user-profile-img').attr('src', data.photo);
-              
-                    } else {
-                        $('#user-profile-img').attr('src', 'img/testimonial-author/unknown.jpg');
-                
-                    }
+          if (data.photo) {
+            $('#user-profile-img').attr('src', data.photo);
 
-                
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                    // Handle error
-                }
-            });
+          } else {
+            $('#user-profile-img').attr('src', 'img/testimonial-author/unknown.jpg');
+
+          }
+
+
+        },
+        error: function(xhr, status, error) {
+          console.error(xhr.responseText);
+          // Handle error
         }
+      });
+    }
 
     function searchpage() {
       var searchVal = encodeURIComponent($('#searchVal').val()); // Encode the searchVal
@@ -954,6 +986,11 @@ if (!$stmt1->execute()) {
           button.innerText = 'See More';
         }
       }
+    }
+
+    const forgotPasswordModalShow = async () => {
+      $("#forgotPassModal").modal('show'); // Corrected jQuery selector
+      document.getElementById('id01').style.display = 'none';
     }
   </script>
 </body>
