@@ -291,7 +291,7 @@ if (!$stmt1->execute()) {
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" onclick="">Save changes</button>
+          <button type="button" class="btn btn-primary" onclick="submitForgotPass()">Save changes</button>
         </div>
       </div>
     </div>
@@ -991,6 +991,34 @@ if (!$stmt1->execute()) {
     const forgotPasswordModalShow = async () => {
       $("#forgotPassModal").modal('show'); // Corrected jQuery selector
       document.getElementById('id01').style.display = 'none';
+    }
+
+    const submitForgotPass = async () => {
+      try {
+        var email = $("#inputEmail").val();
+
+        var payload = {
+          email: email
+        };
+
+
+        const response = await $.ajax({
+          type: "POST",
+          url: 'controllers/users.php',
+          data: {
+            payload: JSON.stringify(payload),
+            setFunction: 'forgotPass'
+          }
+        });
+
+        // Handle the response here
+        console.log(response); // Log the response to the console
+        // You can add more code here to update the UI based on the response
+
+      } catch (error) {
+        console.error('Error:', error); // Log any errors to the console
+        // You can add more code here to handle errors
+      }
     }
   </script>
 </body>

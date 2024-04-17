@@ -1,6 +1,9 @@
 <?php
 session_start();
 require_once("../includes/config.php");
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['payload'])) {
     $receivedData = json_decode($_POST['payload']);
@@ -12,6 +15,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['payload'])) {
     } else {
         echo "Invalid function name.";
     }
+}
+
+function forgotPass($request = null)
+{
+    
+    // Create a new PHPMailer instance
+    require '../vendor/autoload.php';
+    $mail = new PHPMailer(true);
+    //Server settings
+    $mail->SMTPDebug  = SMTP::DEBUG_OFF;                        //Enable verbose debug output
+    $mail->isSMTP();                                            //Send using SMTP
+    $mail->Host = 'smtp.gmail.com';                        //Set the SMTP server to send through
+    $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+    $mail->Username   = 'cruzcedric66@gmail.com';              //from //SMTP username
+    $mail->Password   = 'dccnynwlpcqjkvlw';                         //SMTP password
+    $mail->SMTPSecure = 'ssl';                                  //Enable implicit TLS encryption
+    $mail->Port       =  465;
+    //Recipients
+    $mail->setFrom('cruzcedric66@gmail.com', 'buds');
+    $mail->addAddress("cruzcedric22@gmail.com");                                //sent to
+    //Content
+    $mail->Subject = 'Forget Password OTP:';
+    $mail->Body    = "test";
+    $mail->send();
 }
 
 function createUser($request = null)
@@ -223,8 +250,6 @@ function loginUser($request = null)
                 $_SESSION['photo'] = $data['photo'];
                 $_SESSION['userTypeDesc'] = $data['userDesccription'];
                 $_SESSION['role'] = $data['userType'];
-          
-
             }
             $msg['title'] = "Successful";
             $msg['message'] = "Welcome";
@@ -275,7 +300,7 @@ function applyJobUser($request = null)
         $msg['message'] = $errorMsg;
         $msg['icon'] = "error";
         echo json_encode($msg);
-    }else{
+    } else {
         $msg['title'] = "Successful";
         $msg['message'] = "Welcome";
         $msg['icon'] = "success";
