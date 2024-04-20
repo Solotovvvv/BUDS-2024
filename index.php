@@ -1001,20 +1001,49 @@ if (!$stmt1->execute()) {
           email: email
         };
 
+        if (email != "") {
+          const response = await $.ajax({
+            type: "POST",
+            url: 'controllers/users.php',
+            data: {
+              payload: JSON.stringify(payload),
+              setFunction: 'forgotPass'
+            }
+          });
 
-        const response = await $.ajax({
-          type: "POST",
-          url: 'controllers/users.php',
-          data: {
-            payload: JSON.stringify(payload),
-            setFunction: 'forgotPass'
-          }
-        });
+          // console.log('Response:', response); // Log the response to the console
 
-        // Handle the response here
-        console.log(response); // Log the response to the console
-        // You can add more code here to update the UI based on the response
+          const jsonResponse = JSON.parse(response);
+          Swal.fire({
+            title: jsonResponse.title,
+            text: jsonResponse.message,
+            icon: jsonResponse.icon,
+            customClass: {
+              confirmButton: 'swal-confirm-button',
+            },
+            showCancelButton: false,
+          }).then((result) => {
+            // Check if the request was successful and then redirect
+            if (result.isConfirmed) {
+              $("#inputEmail").val("");
+              $("#forgotPassModal").modal('hide');
+            }
+          });
 
+         
+    
+
+        } else {
+          Swal.fire({
+            title: 'Warning',
+            text: 'The input field is required',
+            icon: 'warning',
+            customClass: {
+              confirmButton: 'swal-confirm-button',
+            },
+            showCancelButton: false,
+          });
+        }
       } catch (error) {
         console.error('Error:', error); // Log any errors to the console
         // You can add more code here to handle errors
