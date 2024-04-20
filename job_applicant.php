@@ -145,7 +145,7 @@ $_SESSION['bus_id'] = $_GET['a'];
                     <div class="dropdown-divider"></div>
                   </li>
                   <li>
-                    <a class="dropdown-item" href="auth-login-basic.php">
+                    <a class="dropdown-item" href="logout.php">
                       <i class="bx bx-power-off me-2"></i>
                       <span class="align-middle">Log Out</span>
                     </a>
@@ -186,12 +186,6 @@ $_SESSION['bus_id'] = $_GET['a'];
                         </thead>
 
                       </table>
-
-
-
-
-
-
 
                       <!-- Modal -->
                       <div class="modal fade" id="Status" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

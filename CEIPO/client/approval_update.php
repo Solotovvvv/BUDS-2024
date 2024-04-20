@@ -1,8 +1,8 @@
 <?php
-include '../../includes../config.php';
+include '../../includes/config.php';
 $pdo = DATABASE::connection();
 
-$response = array();
+$response = array('status' => 'failed'); // Initialize response with a default status
 
 if (isset($_POST['views'])) {
     $id = $_POST['views'];
@@ -23,39 +23,21 @@ if (isset($_POST['views'])) {
         if ($userData) {
             $response = $userData;
         } else {
-            $response = array(
-                'status' => 'failed',
-                'message' => 'Data not found'
-            );
+            $response['message'] = 'Data not found';
         }
     } else {
-        $response = array(
-            'status' => 'failed',
-            'error' => $stmt->errorInfo()
-        );
+        $response['error'] = $stmt->errorInfo();
     }
 } elseif (isset($_POST['hiddendata'])) {
     $hiddendata = $_POST['hiddendata'];
 
-
-
-
-    $remarksDataStep1 = ($_POST['remarksDataStep2']);
-    $remarksDataStep2 = ($_POST['remarksDataStep3']);
-    $remarksDataStep3 = ($_POST['remarksDataStep4']);
-    $remarksDataStep4 = ($_POST['remarksDataStep5']);
-    $remarksDataStep5 = ($_POST['remarksDataStep6']);
-
-
-    $total1 = intval($_POST['remarksDataStep2']);
-    $total2 = intval($_POST['remarksDataStep3']);
-    $total3 = intval($_POST['remarksDataStep4']);
-    $total4 = intval($_POST['remarksDataStep5']);
-    $total5 = intval($_POST['remarksDataStep6']);
+    $remarksData = array();
+    for ($i = 2; $i <= 6; $i++) {
+        $remarksData[] = intval($_POST['remarksDataStep' . $i]);
+    }
 
     // Calculate the sum of remarksDataStep2 to remarksDataStep6
-    $totalRemarks = ($total1 + $total2 + $total3 + $total4 + $total5) / 5;
-
+    $totalRemarks = array_sum($remarksData) / count($remarksData);
 
     // Update BusinessStatus in the business_list table
     $updateBusinessListSql = "UPDATE business_list SET BusinessStatus = :status WHERE bus_id = :hiddendata";
@@ -65,48 +47,33 @@ if (isset($_POST['views'])) {
         ':status' => ($totalRemarks == 1) ? 1 : 3,
         ':hiddendata' => $hiddendata,
     ])) {
-        // Update remarks fields in the business_requirement table
-        $updateBusinessRequirementSql = "UPDATE business_requirement
-                                             SET remarks_brgyClearance = :remarks_brgyClearance,
-                                                 remarks_dti = :remarks_dti,
-                                                 remarks_sanitary = :remarks_sanitary,
-                                                 remarks_cedula = :remarks_cedula,
-                                                 remarks_mayorsPermit = :remarks_mayorsPermit
-                                             WHERE bus_id = :hiddendata";
-
-        $updateBusinessRequirementStmt = $pdo->prepare($updateBusinessRequirementSql);
-
-        if ($updateBusinessRequirementStmt->execute([
-            ':remarks_brgyClearance' => ($totalRemarks == 1) ? 1 : $remarksDataStep1,
-            ':remarks_dti' => ($totalRemarks == 1) ? 1 : $remarksDataStep2,
-            ':remarks_sanitary' => ($totalRemarks == 1) ? 1 : $remarksDataStep3,
-            ':remarks_cedula' => ($totalRemarks == 1) ? 1 : $remarksDataStep4,
-            ':remarks_mayorsPermit' => ($totalRemarks == 1) ? 1 : $remarksDataStep5,
-            ':hiddendata' => $hiddendata,
-        ])) {
-            $response = array(
-                'status' => 'success'
-            );
-        } else {
-            $response = array(
-                'status' => 'failed',
-                'error' => $updateBusinessRequirementStmt->errorInfo()
-            );
-        }
+        $response['status'] = 'success';
     } else {
-        $response = array(
-            'status' => 'failed',
-            'error' => $updateBusinessListStmt->errorInfo()
-        );
+        $response['error'] = $updateBusinessListStmt->errorInfo();
     }
 } else {
     $response = array(
         'status' => 'failed status',
         'message' => 'Invalid request'
     );
+    $response['message'] = 'Invalid request';
 }
 
-
-
-
+// Encode the response as JSON and output it
 echo json_encode($response);
+
+// Trigger Pusher event if status is success
+if (isset($response['status']) && $response['status'] === 'success') {
+    // Include Pusher configuration
+    require_once 'pusher_config.php';
+
+    // // Fetch the pending count or perform any other necessary logic
+    // $stmt = $pdo->prepare("SELECT COUNT(*) AS pendingCount FROM business_list WHERE BusinessStatus = 2");
+    // $stmt->execute();
+    // $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    // $pendingCount = $row['pendingCount'];
+
+    // Trigger a Pusher event with the pending count
+    $pusher->trigger('business-channel', 'business-event',null);
+}
+?>

@@ -1,12 +1,63 @@
 <?php
 session_start();
 
-// print_r($_SESSION);
 require_once "includes/config.php";
 
+if (isset($_SESSION['role']) && $_SESSION['role'] == 1) {
+  header('Location: CEIPO/client/index.php');
+  exit();  // Add exit to stop script execution after redirection
+}
+
+$sql = "SELECT bl.bus_id, bl.ownerId, bl.BusinessName, bl.Businesslogo, cl.category, bl.BusinessDescrip, AVG(br.rating) AS average_rating, ol.Firstname, ol.MiddleName, ol.Surname
+        FROM business_list AS bl
+        INNER JOIN category_list AS cl ON bl.BusinessCategory = cl.ID
+        INNER JOIN brgyzone_list AS blg ON bl.BusinessBrgy = blg.ID
+        INNER JOIN business_reviews AS br ON bl.bus_id = br.bus_id
+        INNER JOIN owner_list AS ol ON bl.ownerId = ol.ID
+        WHERE bl.BusinessStatus = 1 OR bl.BusinessStatus = 4
+        GROUP BY bl.bus_id, bl.ownerId, bl.BusinessName, bl.Businesslogo, cl.category, bl.BusinessDescrip, ol.Firstname, ol.MiddleName, ol.Surname
+        ORDER BY average_rating DESC;";
+
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+  $data = array();
+  while ($row = $result->fetch_assoc()) {
+    $data[] = $row;
+  }
+
+  // Convert the PHP array to JSON with proper formatting
+  $jsonData = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+    // Pass JSON data as a base64-encoded string to avoid issues with special characters
+    $base64_json_data = base64_encode(json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+
+    // Construct the command with base64-encoded JSON data as a separate argument
+    $temp_file = tempnam(sys_get_temp_dir(), 'json_data');
+    file_put_contents($temp_file, $jsonData);
+    
+    // Construct the command with the path to the temporary file
+    $command = "python py-script/script.py " . escapeshellarg($temp_file);
+  
+  // Execute the command and capture both standard output and standard error
+  $output = shell_exec($command . ' 2>&1');
+  
+  // Remove the temporary file after execution
+  unlink($temp_file);
+
+ 
+  $decoded_output = json_decode($output, true);
+
+
+
+} else {
+  echo "No results found";
+}
+// Close the database connection
+$conn->close();
 if (isset($_SESSION['role'])) {
-  if ($_SESSION['role'] == 1) {
-    header('Location: CEIPO/client/index.php');
+  if ($_SESSION['role'] == 4) {
+    header('Location: CEIPO/admin_dashboard/index.php');
   }
 }
 
@@ -474,6 +525,15 @@ if (!$stmt1->execute()) {
           </div>
         </div>
       </div>
+      <?php 
+      
+        // Check if decoding was successful
+  if ($decoded_output !== null) {
+    // Access the extracted data as an associative array
+    foreach ($decoded_output as $business) {
+      // Access individual elements of each business
+      ?>
+
       <div class="container-fluid">
         <div class="row justify-content-center mb-3">
           <div class="col-lg-12 col-xl-12">
@@ -482,7 +542,7 @@ if (!$stmt1->execute()) {
                 <div class="row">
                   <div class="col-lg-12 col-lg-5 col-xl-5 mb-lg-0">
                     <div class="bg-image hover-zoom ripple rounded ripple-surface">
-                      <img src="img/property/listing-09.jpg" class="w-100" />
+                      <img src="<?php echo 'img/logo/' . $business['Businesslogo'] ?>" class="w-100" />
                       <a href="#!">
                         <div class="hover-overlay">
                           <div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>
@@ -492,30 +552,30 @@ if (!$stmt1->execute()) {
                   </div>
                   <div class="col-md-6 col-lg-6 col-xl-6">
                     <br>
-                    <h5>Businesss Name</h5>
-                    <h6>Business Owner</h6>
+                    <h5><?php echo $business['BusinessName'] ?></h5>
+                    <h6><?php echo $business['Firstname'] . ' ' . $business['MiddleName'] . ' ' . $business['Surname'] ?></h6>
                     <div class="d-flex flex-row">
                       <div class="text-warning mb-1 me-2">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
+                        <?php   
+                         $totalRating2 =(int)$business['average_rating'];
+                        if($totalRating2 != null){
+                                for ($j = 0; $j < $totalRating2; $j++) { 
+                                ?> 
+                              <i class="fa fa-star"></i>
+                              <?php }
+                              }  ?>
                       </div>
-                      <span> (310) Reviews</span>
                     </div>
                     <div class="mt-1 mb-0 text-muted small">
                       <span>Category</span>
                       <span class="text-primary"> • </span>
-                      <span>Category</span>
-                      <span class="text-primary"> • </span>
-                      <span>Category<br /></span>
+                      <span><?php echo $business['category'] ?></span>
                     </div>
                     <p class="text-truncate mb-4 mb-md-0">
-                      Brief Description about the Business
+                      <?php echo $business['BusinessDescrip'] ?>
                     </p>
                     <br>
-                    <a class="btn btn-success" href="./details.html" role="button"><i class="fa fa-eye"></i> View
+                    <a class="btn btn-success" href="details.php?ID=<?php echo $business['bus_id']; ?>" role="button"><i class="fa fa-eye"></i> View
                       Info</a>
                   </div>
                 </div>
@@ -524,7 +584,14 @@ if (!$stmt1->execute()) {
           </div>
         </div>
       </div>
-      <div class="container-fluid">
+
+      <?php 
+        }
+      } else {
+          echo "Error decoding JSON data from Python script";
+      }
+      ?>
+      <!-- <div class="container-fluid">
         <div class="row justify-content-center mb-3">
           <div class="col-lg-12 col-xl-12">
             <div class="card shadow-0 border rounded-3">
@@ -573,80 +640,28 @@ if (!$stmt1->execute()) {
             </div>
           </div>
         </div>
-      </div>
-      <div class="container-fluid">
-        <div class="row justify-content-center mb-3">
-          <div class="col-lg-12 col-xl-12">
-            <div class="card shadow-0 border rounded-3">
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-lg-12 col-lg-5 col-xl-5 mb-lg-0">
-                    <div class="bg-image hover-zoom ripple rounded ripple-surface">
-                      <img src="img/property/listing-07.jpg" class="w-100" />
-                      <a href="#!">
-                        <div class="hover-overlay">
-                          <div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>
-                        </div>
-                      </a>
-                    </div>
-                  </div>
-                  <div class="col-md-6 col-lg-6 col-xl-6">
-                    <br>
-                    <h5>Businesss Name</h5>
-                    <h6>Business Owner</h6>
-                    <div class="d-flex flex-row">
-                      <div class="text-warning mb-1 me-2">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                      </div>
-                      <span> (310) Reviews</span>
-                    </div>
-                    <div class="mt-1 mb-0 text-muted small">
-                      <span>Category</span>
-                      <span class="text-primary"> • </span>
-                      <span>Category</span>
-                      <span class="text-primary"> • </span>
-                      <span>Category<br /></span>
-                    </div>
-                    <p class="text-truncate mb-4 mb-md-0">
-                      Brief Description about the Business
-                    </p>
-                    <br>
-                    <a class="btn btn-success" href="./details.html" role="button"><i class="fa fa-eye"></i> View
-                      Info</a>
-                    <!-- <div class="btn btn-outline-success">
-                                    <a href="contact.html"><i class="fa fa-search"></i> View More</a>
-                                  </div> -->
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      </div> -->
+      
+     
   </section>
 
   <!-- Footer Section Begin -->
   <footer class="footer-section">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-6 col-md-6">
-          <div class="fs-about">
-            <div class="fs-logo">
-              <a href="#">
-                <img src="img/flogo.png" alt="">
-              </a>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-8">
+                    <div class="fs-about">
+                        <div class="fs-logo">
+                            <a href="#">
+                                <img src="img/flogo.png" alt="">
+                            </a>
+                        </div>
+                        <p>BuDS (Business Directory System of Caloocan City) is a convenient platform connecting residents and visitors with local businesses, offering easy access to essential information for fostering community engagement and economic growth.</p>
+                    </div>
+                </div>
             </div>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-              labore et dolore magna aliqua ut aliquip ex ea</p>
-          </div>
         </div>
-      </div>
-    </div>
-  </footer>
+    </footer>
 
   <!-- Footer Section End -->
 
@@ -917,7 +932,7 @@ if (!$stmt1->execute()) {
 
           } else if (data.role == 4) {
             setTimeout(function() {
-              window.location.href = "super_dashboard/index.php";
+              window.location.href = "ADMIN/client/index.php";
             }, 2000);
           } else {
             if (data.status == "success") {
@@ -933,17 +948,17 @@ if (!$stmt1->execute()) {
     };
 
     function toggleDescription(button, uniqueId, fullDescription) {
-        var descriptionElement = document.getElementById(uniqueId);
+      var descriptionElement = document.getElementById(uniqueId);
 
-        if (descriptionElement) {
-            if (descriptionElement.innerText.length < fullDescription.length) {
-                descriptionElement.innerText = fullDescription;
-                button.innerText = 'See Less';
-            } else {
-                descriptionElement.innerText = fullDescription.substring(0, 50);
-                button.innerText = 'See More';
-            }
+      if (descriptionElement) {
+        if (descriptionElement.innerText.length < fullDescription.length) {
+          descriptionElement.innerText = fullDescription;
+          button.innerText = 'See Less';
+        } else {
+          descriptionElement.innerText = fullDescription.substring(0, 50);
+          button.innerText = 'See More';
         }
+      }
     }
   </script>
 </body>
