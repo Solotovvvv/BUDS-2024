@@ -77,6 +77,10 @@ if ($stmt->errorCode() !== '00000') {
             width: 100px;
             /* Adjust the width as needed */
         }
+
+        .hs-nav {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* This adds a shadow */
+        }
     </style>
 
 </head>
@@ -164,6 +168,7 @@ if ($stmt->errorCode() !== '00000') {
                         <nav class="nav-menu">
                             <ul>
                                 <li><a href="./index.php">Home</a></li>
+                                <li class="active"><a href="./category.php">Categories</a></li>
                                 <li><a href="./listing.php">Business Listing</a></li>
                             </ul>
                         </nav>
@@ -185,7 +190,7 @@ if ($stmt->errorCode() !== '00000') {
                         <div class="pd-widget">
                             <div class="col-lg-5">
                                 <div class="section-title">
-                                    <h4>FIND BY CATEGORY</h4>
+                                    <br><h4>FIND BY CATEGORY</h4>
                                 </div>
                             </div>
 
@@ -220,7 +225,7 @@ if ($stmt->errorCode() !== '00000') {
                                     <div class="mt-3 bg-white border rounded px-2 py-3 p-md-4">
                                         <!-- Category 1 -->
                                         <div class="col-lg-12">
-                                            <h3><a href="#" class="category-link"><i class="fa fa-car circular-icon" style="font-size: 25px;"></i><?php echo $data['category'] ?></a></h3><br>
+                                            <h3><a href="#" class="category-link"><strong><i class="fa fa-star circular-icon" style="font-size: 30px;"></i></strong>  <?php echo $data['category'] ?></a></h3><br>
                                             <?php if ($numRows1 > 0) {
                                                 foreach ($datas1 as $data1) {
                                             ?>

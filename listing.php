@@ -33,7 +33,7 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
           (bl.BusinessStatus = '1' 
           OR
           bl.BusinessStatus = '4')
-         LIMIT 5");
+          LIMIT 5");
 
   $stmt->bindParam(':search_query', $search_query, PDO::PARAM_STR);
   $stmt->execute();
@@ -134,7 +134,7 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
           <div class="py-3 px-2 pb-1 border-bottom">
           <div class="row">
             <div class="col-lg-4">
-              <img src="img/logo/' . $row['Businesslogo'] . '" style="border-radius: 20px;" alt="no pic">
+              <img src="img/logo/' . $row['Businesslogo'] . '" style="border: 2px solid #355E3B; border-radius: 20px; width: 300px; height: 200px;" alt="no pic">
             </div>
             <div class="col-lg-8">
               <div class="d-md-flex align-items-md-center">
@@ -232,6 +232,9 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
     .link-button:focus {
       outline: none;
     }
+    .hs-nav {
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* This adds a shadow */
+    }
   </style>
 
 </head>
@@ -325,6 +328,7 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
             <nav class="nav-menu">
               <ul>
                 <li><a href="./index.php">Home</a></li>
+                <li><a href="./category.php">Categories</a></li>
                 <li class="active"><a href="./listing.php">Business Listing</a></li>
               </ul>
             </nav>
@@ -547,7 +551,7 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
                     ?>
                       <div class="row">
                         <div class="col-lg-4">
-                          <img src="<?php echo "img/logo/" . $data['Businesslogo'] ?>" style="border-radius: 20px;" alt="no pic">
+                          <img src="<?php echo "img/logo/" . $data['Businesslogo'] ?>" style="border: 2px solid #355E3B; border-radius: 20px; width: 300px; height: 200px;" alt="no pic">
                         </div>
                         <div class="col-lg-8">
                           <div class="d-md-flex align-items-md-center">
@@ -592,7 +596,7 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
                               ?>
                           </div>
                           <p class="text-truncate mb-4 mb-md-0">
-                           <ul>
+                            <ul>
                               <li>
                                 <i class="fa fa-info"></i>
                                 <span id="<?php echo $uniqueId; ?>">
@@ -607,8 +611,9 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
                             </div>
                     <?php } ?>
                     <?php } else { ?>
+                      
                       <div id="newFilteredUi">
-                       <?php echo $disp; ?>
+                        <?php echo $disp; ?>
                       </div>
                       <?php } ?>
                 </div>
@@ -670,7 +675,7 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
                       ?>
                         <div class="row">
                           <div class="col-lg-4">
-                            <img src="<?php echo "img/logo/" . $data['Businesslogo'] ?>" style="border-radius: 20px;" alt="no pic">
+                            <img src="<?php echo "img/logo/" . $data['Businesslogo'] ?>" style="border: 2px solid #355E3B; border-radius: 20px; width: 300px; height: 200px;" alt="no pic">
                           </div>
                           <div class="col-lg-8">
                             <div class="d-md-flex align-items-md-center">
@@ -725,6 +730,7 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
                         </div>
                       <?php } ?>
                     <?php } else { ?>
+                      
                       <div id="newFilteredUi">
                         <?php echo $disp; ?>
                       </div>
@@ -733,7 +739,7 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
                     <div class="container">
                       <div class="row">
                         <div class="col-12 text-center">
-                          <a class="btn btn-success text" href="#" onclick="increaseLimit(10)" role="button">See More</a>
+                          <br><a class="btn btn-success text" href="#" onclick="increaseLimit(10)" role="button">See More</a>
                         </div>
                       </div>
                     </div>

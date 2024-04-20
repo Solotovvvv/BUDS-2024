@@ -119,6 +119,10 @@ if (!$stmt1->execute()) {
     .link-button:focus {
       outline: none;
     }
+    
+    .hs-nav {
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* This adds a shadow */
+    }
   </style>
 
 
@@ -541,7 +545,7 @@ if (!$stmt1->execute()) {
                     <div class="row">
                       <div class="col-lg-12 col-lg-5 col-xl-5 mb-lg-0">
                         <div class="bg-image hover-zoom ripple rounded ripple-surface">
-                          <img src="<?php echo 'img/logo/' . $row['Businesslogo'] ?>" class="w-100" />
+                          <img src="<?php echo 'img/logo/' . $row['Businesslogo'] ?>" class="w-100" style="border-radius: 10px; border: 2px solid #355E3B; width: 300px; height: 350px;" />
                           <a href="#!">
                             <div class="hover-overlay">
                               <div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>

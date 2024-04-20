@@ -33,17 +33,90 @@ $decrypted_forgotPass = openssl_decrypt($forgotPass, 'aes-256-cbc', $encryption_
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="css/style1.css" type="text/css">
     <link rel="stylesheet" href="css/templatemo-plot-listing1.css" type="text/css">
+
+    <style>
+        body {
+            background-image: url('img/hero/hero-2.jpg'); /* Your background image */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            
+        }
+
+        .background-blur {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+	        background-repeat: no-repeat;
+            overflow: hidden;
+            background-image: url('img/hero/hero-2.jpg'); /* Your background image */
+            filter: blur(5px); /* Add blur effect to background */
+            z-index: -1;
+        }
+
+        .logo-container {
+            background-color: #355E3B; /* Green background */
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .logo img {
+            max-width: 200px; /* Adjust the size as needed */
+            width: 100%;
+            height: auto;
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Add shadow */
+        }
+    </style>
 </head>
 
+<!-- <header class="header-section">
+    <div class="hs-top">
+        <div class="container">
+            <div class="col-lg-2">
+                <div class="logo">
+                    <a href="./index.php"><img src="img/logo-main.png" alt="" style="margin-bottom: 13px;"></a><br>
+                </div>
+            </div>
+        </div>
+    </div>
+</header> -->
+
 <body>
-    <div class="form-group">
-        <label for="inputPassword">Enter Your New Password:</label>
-        <input type="password" id="inputPassword" class="form-control">
-
-        <label for="inputConfirmPass">Confirm Your New Password:</label>
-        <input type="password" id="inputConfirmPass" class="form-control">
-
-        <button type="button" class="small" onclick="resetPass()">Submit</button>
+<div class="background-blur"></div>
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div class="logo-container">
+                            <img src="img/hero/logo-main.png" alt="Logo" class="img-fluid" style="max-width: 350px;">
+                        </div>
+                        <form action="#" method="post" class="mt-4">
+                            <div class="form-group">
+                                <label for="newPassword">New Password:</label>
+                                <input type="password" id="newPassword" name="newPassword" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirm Password:</label>
+                                <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="js/jquery-3.3.1.min.js"></script>
