@@ -94,7 +94,7 @@ if ($stmt->errorCode() !== '00000') {
             <span class="icon_close"></span>
         </div>
         <div class="logo">
-            <a href="./index.php">
+            <a href="index.php">
                 <img src="img/logo-main.png" alt="">
             </a>
         </div>
@@ -109,7 +109,7 @@ if ($stmt->errorCode() !== '00000') {
                 <div class="row">
                     <div class="col-lg-2">
                         <div class="logo">
-                            <a href="./index.html"><img src="img/logo-main.png" alt=""></a><br>
+                            <a href="index.php"><img src="img/logo-main.png" alt=""></a><br>
                             <!-- <ul>Business Directory</ul> -->
                         </div>
                     </div>
@@ -127,11 +127,7 @@ if ($stmt->errorCode() !== '00000') {
                                         <ul>
                                             <li class="profile-dropdown">
                                                 <div class="user-profile">
-                                                    <?php if ($_SESSION['photo'] != "") { ?>
-                                                        <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt="User's Name">
-                                                    <?php } else { ?>
-                                                        <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
-                                                    <?php } ?>
+                                                    <img id="user-profile-img" alt="User's Name">
                                                 </div>
                                                 <ul class="dropdown dropleft">
                                                     <li>
@@ -229,7 +225,7 @@ if ($stmt->errorCode() !== '00000') {
                                                 foreach ($datas1 as $data1) {
                                             ?>
                                                     <div class="subcategory">
-                                                        <a href="<?php echo "listing.php?c=".$data1['ID'] ?>" class="subcategory-link"><?php echo $data1['subCategory'] ?></a>
+                                                        <a href="<?php echo "listing.php?c=" . $data1['ID'] ?>" class="subcategory-link"><?php echo $data1['subCategory'] ?></a>
                                                     </div>
                                             <?php }
                                             } ?>
@@ -453,6 +449,8 @@ if ($stmt->errorCode() !== '00000') {
                     // You can add your code to handle the unchecked state here
                 }
             });
+
+            fetchData();
         });
 
         $('#id02, #id03').on('show.bs.modal', function(e) {
@@ -584,6 +582,31 @@ if ($stmt->errorCode() !== '00000') {
                 });
             }
         };
+
+        function fetchData() {
+            // Make an AJAX request to fetch data from the server
+            $.ajax({
+                url: 'fetchUserData.php', // Replace 'fetchUserData.php' with the actual file path to fetch data from your server
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+
+                    if (data.photo) {
+                        $('#user-profile-img').attr('src', data.photo);
+
+                    } else {
+                        $('#user-profile-img').attr('src', 'img/testimonial-author/unknown.jpg');
+
+                    }
+
+
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    // Handle error
+                }
+            });
+        }
 
         function loginUser() {
             var username = $("#email_log").val();

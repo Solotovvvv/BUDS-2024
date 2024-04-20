@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 // echo $_SESSION['ownerId'];
@@ -6,7 +5,7 @@ if (empty($_SESSION['ownerId']) || empty($_GET['a'])) {
   header('Location: manage.php');
 }
 $bus_id = $_GET['a'];
-$_SESSION['bus_id'] = $_GET['a']; 
+$_SESSION['bus_id'] = $_GET['a'];
 ?>
 
 <!DOCTYPE html>
@@ -50,9 +49,9 @@ $_SESSION['bus_id'] = $_GET['a'];
         <div class="app-brand demo">
           <a href="index.php" class="app-brand-link">
             <span class="app-brand-logo demo">
-              <img src="plugins/assets/img/avatars/buds-logo.png" alt="" class="brand-image" width="30" height="30">
+              <img src="img/logo/buds-logo.png" alt="" class="brand-image" width="45" height="50">
             </span>
-            <span class="text-uppercase text-white app-brand-text demo menu-text fw-bolder ms-2">BuDS | Admin</span>
+            <span class="text-uppercase text-white app-brand-text demo menu-text fw-bolder ms-2">BUSINESS</span>
           </a>
           <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
             <i class="bx bx-chevron-left bx-sm align-middle"></i>
@@ -63,12 +62,12 @@ $_SESSION['bus_id'] = $_GET['a'];
           <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Business Profile</span>
           </li>
-          <li class="menu-item">
+          <!-- <li class="menu-item">
             <a href="<?php echo "bulletin.php?a=" . $bus_id ?>" class="menu-link">
               <i class="menu-icon tf-icons bx bxs-pin"></i>
               <div data-i18n="Analytics">Bulletin Board</div>
             </a>
-          </li>
+          </li> -->
           <li class="menu-item">
             <a href="<?php echo "BusinessPanel.php?a=" . $bus_id ?>" class="menu-link">
               <i class="menu-icon tf-icons bx bx-info-circle"></i>
@@ -96,6 +95,14 @@ $_SESSION['bus_id'] = $_GET['a'];
               <div data-i18n="Analytics">Comments & Rating</div>
             </a>
           </li>
+
+          <li class="menu-item">
+            <a href="<?php echo "FAQ.php?a=" . $bus_id ?>" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-message-rounded"></i>
+              <div data-i18n="Analytics">FAQ</div>
+            </a>
+          </li>
+
           <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Business Document</span>
           </li>
@@ -135,11 +142,7 @@ $_SESSION['bus_id'] = $_GET['a'];
               <li class="nav-item navbar-dropdown dropdown-user dropdown">
                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                   <div class="avatar avatar-online">
-                    <?php if ($_SESSION['photo'] != "") { ?>
-                      <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt="User's Name">
-                    <?php } else { ?>
-                      <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
-                    <?php } ?>
+                  <img id="user-profile-img" alt class="w-px-40 h-auto rounded-circle" />
                   </div>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
@@ -148,11 +151,7 @@ $_SESSION['bus_id'] = $_GET['a'];
                       <div class="d-flex">
                         <div class="flex-shrink-0 me-3">
                           <div class="avatar avatar-online">
-                            <?php if ($_SESSION['photo'] != "") { ?>
-                              <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt="User's Name">
-                            <?php } else { ?>
-                              <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
-                            <?php } ?>
+                          <img id="user-profile-imgs" alt class="w-px-40 h-auto rounded-circle" />
                           </div>
                         </div>
                         <div class="flex-grow-1">
@@ -242,7 +241,7 @@ $_SESSION['bus_id'] = $_GET['a'];
                               <div class="row">
                                 <div class="col mb-3">
                                   <label for="nameWithTitle" class="form-label">Salary</label>
-                                  <input class="form-control" id="edtSalary" ></input>
+                                  <input class="form-control" id="edtSalary"></input>
                                 </div>
                               </div>
                               <div class="row">
@@ -303,7 +302,7 @@ $_SESSION['bus_id'] = $_GET['a'];
                               <div class="row">
                                 <div class="col mb-3">
                                   <label for="nameWithTitle" class="form-label">Salary</label>
-                                  <input class="form-control" id="jobSalary" ></input>
+                                  <input class="form-control" id="jobSalary"></input>
                                 </div>
                               </div>
                               <div class="row">
@@ -406,8 +405,11 @@ $_SESSION['bus_id'] = $_GET['a'];
             var key = $(this).data("key");
             removeAuthorDiv(this, key);
           });
+
+          fetchData();
         });
 
+        
         function addJobSpec1() {
           let allVal = [];
           $(".addJobSpec1").each(function() {
@@ -447,6 +449,32 @@ $_SESSION['bus_id'] = $_GET['a'];
 
         };
 
+        function fetchData() {
+            // Make an AJAX request to fetch data from the server
+            $.ajax({
+                url: 'fetchUserData.php', // Replace 'fetchUserData.php' with the actual file path to fetch data from your server
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+
+                    if (data.photo) {
+                        $('#user-profile-img').attr('src', data.photo);
+                        $('#user-profile-imgs').attr('src', data.photo);
+              
+                    } else {
+                        $('#user-profile-img').attr('src', 'img/testimonial-author/unknown.jpg');
+                        $('#user-profile-imgs').attr('src', 'img/testimonial-author/unknown.jpg');
+                
+                    }
+
+                
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    // Handle error
+                }
+            });
+        }
         function addJobSpec2() {
           let allVal = [];
           $(".addJobSpec2").each(function() {

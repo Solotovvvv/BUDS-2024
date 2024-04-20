@@ -122,11 +122,7 @@ if ($rs = $conn->query($sql)) {
                   <ul>
                     <li class="profile-dropdown">
                       <div class="user-profile">
-                        <?php if ($_SESSION['photo'] != "") { ?>
-                          <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt="User's Name">
-                        <?php } else { ?>
-                          <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
-                        <?php } ?>
+                        <img id="user-profile-img" alt="User's Name">
                       </div>
                       <ul class="dropdown dropleft">
                         <li>
@@ -191,7 +187,7 @@ if ($rs = $conn->query($sql)) {
                 <h4>Business Name</h4>
                 <input name="BusinessName" id="busName" type="text" placeholder="Enter Business Name">
               </div>
-              
+
               <h4>Business Email</h4>
               <div class="custom-file">
                 <!-- add this to form data -->
@@ -200,7 +196,8 @@ if ($rs = $conn->query($sql)) {
               </div>
 
               <div class="pf-title">
-              <br><h4>Business Email</h4>
+                <br>
+                <h4>Business Email</h4>
                 <input name="BusinessEmail" id="BusinessEmail" type="email" placeholder="Enter Business Email">
               </div>
               <div class="pf-title">
@@ -211,7 +208,7 @@ if ($rs = $conn->query($sql)) {
                 <h4>Business Year Established</h4>
                 <input name="BusinessEstablish" id="BusinessEstablish" type="date" placeholder="Enter Business Year Establish"> <br>
                 <br>
-                <input  id="BusinessCapital" type="text" placeholder="Enter the Estimated Capital.">
+                <input id="BusinessCapital" type="text" placeholder="Enter the Estimated Capital.">
               </div>
               <div class="pf-summernote">
                 <h4>Business Description</h4>
@@ -238,11 +235,11 @@ if ($rs = $conn->query($sql)) {
                   <input name="BusinessAddress" id="BusinessAddress" type="text" placeholder="Enter your Complete Address - [Unit No] [Building Name] [Street No] [Street Name] [City]."><br>
                   <br>
 
-                  <input type="text" id="BusinessZone" placeholder="Enter Zone">     <br>
+                  <input type="text" id="BusinessZone" placeholder="Enter Zone"> <br>
 
                   <br>
 
-                  <input type="text" id="BusinessDistrict" placeholder="Enter District">   <br>
+                  <input type="text" id="BusinessDistrict" placeholder="Enter District"> <br>
 
                   <br>
 
@@ -268,7 +265,7 @@ if ($rs = $conn->query($sql)) {
                   <div class="col-lg-4">
                     <div class="map-inputs">
                       <h4>Directions:</h4>
-                      <p>First, 
+                      <p>First,
                         select the barangay. Then, pin the exact location of the business by simply dragging the pin on the map below to the desired location, ensuring it accurately reflects the business's position</p>
                       <!-- <br><input id="Zone" name="BusinessZone" type="text" placeholder="Zone" readonly> -->
                       <input id="lat" type="hidden" name="Latitude" placeholder="Latitude" readonly>
@@ -316,104 +313,108 @@ if ($rs = $conn->query($sql)) {
                 </div>
               </div>
 
-                <div class="property-details-inputs">     
-                  <h4>Upload Scan Picture of Barangay Clearance</h4>
-                  <div class="custom-file">
-                    <!-- add this to form data -->
-                    <input class="custom-file-input" name="uploadBrgyClearance" id="uploadBrgyClearance" type="file">
-                    <label class="custom-file-label" for="uploadBrgyClearance">Choose file...</label>
-                  </div>
+              <div class="property-details-inputs">
+                <h4>Upload Scan Picture of Barangay Clearance</h4>
+                <div class="custom-file">
+                  <!-- add this to form data -->
+                  <input class="custom-file-input" name="uploadBrgyClearance" id="uploadBrgyClearance" type="file">
+                  <label class="custom-file-label" for="uploadBrgyClearance">Choose file...</label>
                 </div>
-                <div class="property-details-inputs">
-                  <br><h4>Upload Scan Picture of DTI Permit</h4>
-                  <div class="custom-file">
-                    <!-- add this to form data -->
-                    <input class="custom-file-input" name="uploadDTIPermit" id="uploadDTIPermit" type="file">
-                    <label class="custom-file-label" for="uploadDTIPermit">Choose file...</label>
-                  </div>
+              </div>
+              <div class="property-details-inputs">
+                <br>
+                <h4>Upload Scan Picture of DTI Permit</h4>
+                <div class="custom-file">
+                  <!-- add this to form data -->
+                  <input class="custom-file-input" name="uploadDTIPermit" id="uploadDTIPermit" type="file">
+                  <label class="custom-file-label" for="uploadDTIPermit">Choose file...</label>
                 </div>
+              </div>
 
-                <div class="property-details-inputs">
-                  <br><h4>Upload Scan Picture of Sanitary Document</h4>
-                  <div class="custom-file">
-                    <!-- add this to form data -->
-                    <input class="custom-file-input" name="uploadSanitaryPermit" id="uploadSanitaryPermit" type="file">
-                    <label class="custom-file-label" for="uploadSanitaryPermit">Choose file...</label>
-                  </div>
+              <div class="property-details-inputs">
+                <br>
+                <h4>Upload Scan Picture of Sanitary Document</h4>
+                <div class="custom-file">
+                  <!-- add this to form data -->
+                  <input class="custom-file-input" name="uploadSanitaryPermit" id="uploadSanitaryPermit" type="file">
+                  <label class="custom-file-label" for="uploadSanitaryPermit">Choose file...</label>
                 </div>
-                
-                <div class="property-details-inputs">
-                  <br><h4>Upload Scan Picture of Sanitary Document</h4>
-                  <div class="custom-file">
-                    <!-- add this to form data -->
-                    <input class="custom-file-input" name="uploadCedula" id="uploadCedula" type="file">
-                    <label class="custom-file-label" for="uploadCedula">Choose file...</label>
-                  </div>
-                </div>
+              </div>
 
-                <div class="property-details-inputs">
-                  <br><h4>Upload Scan Picture of Business Permit</h4>
-                  <div class="custom-file">
-                    <!-- add this to form data -->
-                    <input class="custom-file-input" name="uploadBusinessPermit" id="uploadBusinessPermit" type="file">
-                    <label class="custom-file-label" for="uploadBusinessPermit">Choose file...</label>
-                  </div>
+              <div class="property-details-inputs">
+                <br>
+                <h4>Upload Scan Picture of Sanitary Document</h4>
+                <div class="custom-file">
+                  <!-- add this to form data -->
+                  <input class="custom-file-input" name="uploadCedula" id="uploadCedula" type="file">
+                  <label class="custom-file-label" for="uploadCedula">Choose file...</label>
                 </div>
+              </div>
 
-                <!-- <div class="property-details-inputs"> -->
-                  <!-- <div class="property-details-inputs">
+              <div class="property-details-inputs">
+                <br>
+                <h4>Upload Scan Picture of Business Permit</h4>
+                <div class="custom-file">
+                  <!-- add this to form data -->
+                  <input class="custom-file-input" name="uploadBusinessPermit" id="uploadBusinessPermit" type="file">
+                  <label class="custom-file-label" for="uploadBusinessPermit">Choose file...</label>
+                </div>
+              </div>
+
+              <!-- <div class="property-details-inputs"> -->
+              <!-- <div class="property-details-inputs">
                   <br><h4>Upload Scan Picture of Barangay Clearance</h4>
                     <div type="file" class="feature-image-content" name="uploadBrgyClearance"></div>
                     <input type="file" class="feature-image-content" name="uploadBrgyClearance">
                   </div><br> -->
-                  <!-- <div class="property-details-inputs">
+              <!-- <div class="property-details-inputs">
                     <h4>Upload Scan Picture of DTI Permit</h4>
                     <div type="file" class="feature-image-content" name="uploadDTIPermit"></div>
                     <input type="file" class="feature-image-content" name="uploadDTIPermit">
                   </div><br> -->
-                  <!-- <div class="property-details-inputs">
+              <!-- <div class="property-details-inputs">
                     <h4>Upload Scan Picture of Sanitary Document</h4>
                     <div type="file"class="feature-image-content" name="uploadSanitaryPermit"></div>
                     <input type="file" class="feature-image-content" name="uploadSanitaryPermit">
                   </div><br> -->
-                  <!-- <div class="property-details-inputs">
+              <!-- <div class="property-details-inputs">
                     <h4>Upload Scan Picture of Cedula</h4>
                     <div type="file"class="feature-image-content" name="uploadSanitaryPermit"></div>
                     <input type="file" class="feature-image-content" name="uploadCedula">
                   </div><br> -->
-                  <!-- <div class="property-details-inputs">
+              <!-- <div class="property-details-inputs">
                     <h4>Upload Scan Picture of Business Permit</h4>
                     <div type="file" class="feature-image-content" name="uploadBusinessPermit"></div>
                     <input type="file" class="feature-image-content" name="uploadBusinessPermit">
                   </div> -->
-                <!-- </div> -->
-                <br><button name="SubmitProperty" type="button" onclick="addBusiness()" class="site-btn">Submit Property</button>
-              </div>
-            </form>
+              <!-- </div> -->
+              <br><button name="SubmitProperty" type="button" onclick="addBusiness()" class="site-btn">Submit Property</button>
           </div>
+          </form>
         </div>
       </div>
+    </div>
     </div>
   </section>
   <!-- Property Submit Section End -->
 
   <!-- Footer Section Begin -->
   <footer class="footer-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-md-8">
-                    <div class="fs-about">
-                        <div class="fs-logo">
-                            <a href="#">
-                                <img src="img/flogo.png" alt="">
-                            </a>
-                        </div>
-                        <p>BuDS (Business Directory System of Caloocan City) is a convenient platform connecting residents and visitors with local businesses, offering easy access to essential information for fostering community engagement and economic growth.</p>
-                    </div>
-                </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-8">
+          <div class="fs-about">
+            <div class="fs-logo">
+              <a href="#">
+                <img src="img/flogo.png" alt="">
+              </a>
             </div>
+            <p>BuDS (Business Directory System of Caloocan City) is a convenient platform connecting residents and visitors with local businesses, offering easy access to essential information for fostering community engagement and economic growth.</p>
+          </div>
         </div>
-    </footer>
+      </div>
+    </div>
+  </footer>
 
   <!-- Js Plugins -->
   <script src="js/jquery-3.3.1.min.js"></script>
@@ -429,17 +430,21 @@ if ($rs = $conn->query($sql)) {
   <script src="js/main.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+
   <script>
     $(document).ready(function() {
-        $('#filter').on('click', function() {
-            $(this).attr('size', 5); // Set the size of the dropdown to 5 options
-        });
+      $('#filter').on('click', function() {
+        $(this).attr('size', 5); // Set the size of the dropdown to 5 options
+      });
 
-        $('#filter').on('focusout', function() {
-            $(this).removeAttr('size'); // Remove the size attribute when focus is lost
-        });
+      $('#filter').on('focusout', function() {
+        $(this).removeAttr('size'); // Remove the size attribute when focus is lost
+      });
+
+
+      fetchData();
     });
-</script>
+  </script>
 
   <script type="text/javascript">
     function get_subcategory() {
@@ -602,7 +607,7 @@ if ($rs = $conn->query($sql)) {
         !subCategory ||
         !businessZone ||
         !businessDistrict ||
-        !businessCapital 
+        !businessCapital
       ) {
         // Display an error message or alert to the user
         Swal.fire({
@@ -701,16 +706,43 @@ if ($rs = $conn->query($sql)) {
 
 
     };
+
+
+    function fetchData() {
+            // Make an AJAX request to fetch data from the server
+            $.ajax({
+                url: 'fetchUserData.php', // Replace 'fetchUserData.php' with the actual file path to fetch data from your server
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+
+                    if (data.photo) {
+                        $('#user-profile-img').attr('src', data.photo);
+              
+                    } else {
+                        $('#user-profile-img').attr('src', 'img/testimonial-author/unknown.jpg');
+                
+                    }
+
+                
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    // Handle error
+                }
+            });
+        }
   </script>
 
   <script>
-      $(document).ready(function() {
-          $('.custom-file-input').on('change', function() {
-              // Get the file name and display it in the label
-              var fileName = $(this).val().split('\\').pop();
-              $(this).next('.custom-file-label').addClass("selected").html(fileName);
-          });
+    $(document).ready(function() {
+      $('.custom-file-input').on('change', function() {
+        // Get the file name and display it in the label
+        var fileName = $(this).val().split('\\').pop();
+        $(this).next('.custom-file-label').addClass("selected").html(fileName);
       });
+      fetchData();
+    });
   </script>
 
 </body>

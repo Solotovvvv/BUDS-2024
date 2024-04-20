@@ -67,7 +67,7 @@ $faqData = $statement->fetchAll(PDO::FETCH_ASSOC);
                 <div class="app-brand demo">
                     <a href="index.php" class="app-brand-link">
                         <span class="app-brand-logo demo">
-                            <img src="img/logo-main.png" alt="" class="brand-image" width="45" height="50">
+                            <img src="img/logo/buds-logo.png" alt="" class="brand-image" width="45" height="50">
                         </span>
                         <span class="text-uppercase text-white app-brand-text demo menu-text fw-bolder ms-2">BUSINESS</span>
                     </a>
@@ -81,12 +81,12 @@ $faqData = $statement->fetchAll(PDO::FETCH_ASSOC);
                         <span class="menu-header-text">Business Profile</span>
                     </li>
 
-                    <li class="menu-item">
+                    <!-- <li class="menu-item">
                         <a href="<?php echo "bulletin.php?a=" . $bus_id ?>" class="menu-link">
                             <i class="menu-icon tf-icons bx bxs-pin"></i>
                             <div data-i18n="Analytics">Bulletin Board</div>
                         </a>
-                    </li>
+                    </li> -->
 
                     <li class="menu-item">
                         <a href="<?php echo "BusinessPanel.php?a=" . $bus_id ?>" class="menu-link">
@@ -161,12 +161,10 @@ $faqData = $statement->fetchAll(PDO::FETCH_ASSOC);
                         <ul class="navbar-nav flex-row align-items-center ms-auto">
                             <li class="nav-item navbar-dropdown dropdown-user dropdown">
                                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
-                                    <div class="avatar avatar-online">
-                                        <?php if ($_SESSION['photo'] != "") { ?>
-                                            <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt="User's Name">
-                                        <?php } else { ?>
-                                            <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
-                                        <?php } ?>
+                                    <div class="flex-shrink-0 me-3">
+                                        <div class="avatar avatar-online">
+                                            <img id="user-profile-img" alt class="w-px-40 h-auto rounded-circle" />
+                                        </div>
                                     </div>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
@@ -175,11 +173,7 @@ $faqData = $statement->fetchAll(PDO::FETCH_ASSOC);
                                             <div class="d-flex">
                                                 <div class="flex-shrink-0 me-3">
                                                     <div class="avatar avatar-online">
-                                                        <?php if ($_SESSION['photo'] != "") { ?>
-                                                            <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt="User's Name">
-                                                        <?php } else { ?>
-                                                            <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
-                                                        <?php } ?>
+                                                    <img id="user-profile-imgs" alt class="w-px-40 h-auto rounded-circle" />
                                                     </div>
                                                 </div>
                                                 <div class="flex-grow-1">
@@ -222,26 +216,26 @@ $faqData = $statement->fetchAll(PDO::FETCH_ASSOC);
                                                         <i class='bx bx-x cursor-pointer remove-icon' style="font-size: 1.5rem;" data-faq-id="<?php echo $faqItem['id']; ?>"></i>
                                                         <!-- Boxicon for edit in the upper right corner -->
                                                         <i class='bx bx-edit cursor-pointer edit-icon' style="font-size: 1.5rem;" data-faq-ids="<?php echo isset($faqItem['id']) ? $faqItem['id'] : ''; ?>"></i>
-                                                      
-                                                     
+
+
                                                     </div>
 
                                                     <div class="card-body">
                                                         <!-- Input Field 1 -->
                                                         <div class="mb-3">
                                                             <label for="Question" class="form-label">Question</label>
-                                                            <input type="text" class="form-control question-input" value="<?php echo htmlspecialchars($faqItem['questions']); ?>" disabled>
+                                                            <input type="text" class="form-control question-input" value="<?php echo htmlspecialchars($faqItem['Questions']); ?>" disabled>
                                                         </div>
 
                                                         <!-- Input Field 2 -->
                                                         <div class="mb-3">
                                                             <label for="Answer" class="form-label">Answer</label>
-                                                            <input type="text" class="form-control answer-input" value="<?php echo htmlspecialchars($faqItem['answer']); ?>" disabled>
+                                                            <input type="text" class="form-control answer-input" value="<?php echo htmlspecialchars($faqItem['Answer']); ?>" disabled>
                                                         </div>
                                                     </div>
 
-                                                    <i class='bx bx-save cursor-pointer save-icon position-absolute bottom-0 end-0 m-2' style="font-size: 1.5rem; display: none;" ></i>
-                                                       
+                                                    <i class='bx bx-save cursor-pointer save-icon position-absolute bottom-0 end-0 m-2' style="font-size: 1.5rem; display: none;"></i>
+
                                                 </div>
                                             <?php } ?>
 
@@ -309,7 +303,7 @@ $faqData = $statement->fetchAll(PDO::FETCH_ASSOC);
 
                 var cardCounter = <?php echo count($faqData); ?>;
 
-            
+
 
                 $('.edit-icon').on('click', function() {
                     // Find the closest parent with the class 'card'
@@ -505,10 +499,35 @@ $faqData = $statement->fetchAll(PDO::FETCH_ASSOC);
                     }
                 });
 
+                fetchData();
 
             });
 
+            function fetchData() {
+            // Make an AJAX request to fetch data from the server
+            $.ajax({
+                url: 'fetchUserData.php', // Replace 'fetchUserData.php' with the actual file path to fetch data from your server
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
 
+                    if (data.photo) {
+                        $('#user-profile-img').attr('src', data.photo);
+                        $('#user-profile-imgs').attr('src', data.photo);
+              
+                    } else {
+                        $('#user-profile-img').attr('src', 'img/testimonial-author/unknown.jpg');
+                        $('#user-profile-imgs').attr('src', 'img/testimonial-author/unknown.jpg');
+                
+                    }
+                
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    // Handle error
+                }
+            });
+        }
         </script>
 
 

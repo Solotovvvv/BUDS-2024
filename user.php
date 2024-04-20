@@ -78,12 +78,9 @@ session_start();
                                     <ul>
                                         <li class="profile-dropdown">
                                             <div class="user-profile">
-                                                <?php if ($_SESSION['photo'] != "") { ?>
-                                                    <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt="User's Name">
-                                                <?php } else { ?>
-                                                    <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
-                                                <?php } ?>
+                                                <img id="user-profile-img" alt="User's Name">
                                             </div>
+
                                             <ul class="dropdown dropleft">
                                                 <li><a href="user.php">MY PROFILE</a></li>
                                                 <?php if ($_SESSION['role'] == 3) { ?>
@@ -114,7 +111,6 @@ session_start();
                         <nav class="nav-menu">
                             <ul>
                                 <li><a href="./index.php">Home</a></li>
-                                <!-- <li><a href="./listing.html">Business Listing</a></li> -->
                             </ul>
                         </nav>
                     </div>
@@ -140,23 +136,23 @@ session_start();
                             <div class="container">
                                 <div class="bg-white shadow rounded-lg d-block d-sm-flex">
                                     <div class="profile-tab-nav border-right">
-                                        <form class="" method="post">
-                                            <div class="p-4">
-                                                <div class="img-circle text-center mb-3" style="position: relative;">
-                                                    <?php if ($_SESSION['photo'] != "") { ?>
-                                                        <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt="User's Name">
-                                                    <?php } else { ?>
-                                                        <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
-                                                    <?php } ?>
-                                                    <input type="file" id="uploadButton" name="uploadProfilePic" style="position: absolute; top: 0; left: 0; opacity: 0; width: 100%; height: 100%;">
-                                                    <!-- You can style the input to make it look like a button -->
-                                                    <label for="uploadButton" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; cursor: pointer; color: #fff; display: flex; justify-content: center; align-items: center;">
-                                                        Upload
-                                                    </label>
+
+                                        <div class="p-4">
+                                            <div class="img-circle text-center mb-3" style="position: relative;">
+
+                                                <div class="profile">
+                                                    <img id="uploadedImage" src="https://as1.ftcdn.net/v2/jpg/03/53/11/00/1000_F_353110097_nbpmfn9iHlxef4EDIhXB1tdTD0lcWhG9.jpg" alt="Profile Picture" width="150">
                                                 </div>
-                                                <h4 class="text-center"><?php echo $_SESSION['fname'] . ' ' . $_SESSION['mname'] . ', ' . $_SESSION['lname'] ?></h4>
+
+                                                <div class="form-group mb-3">
+
+                                                    <input type="file" class="form-control-file" id="fileUpload" style="display: none">
+                                                    <button id="uploadBtn" type="button" class="btn btn-primary" style="display: none" onclick="document.getElementById('fileUpload').click()">Upload Photo</button>
+                                                </div>
                                             </div>
-                                        </form>
+                                            <h4 class="text-center" id="name"></h4>
+                                        </div>
+
 
                                         <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                                             <a class="nav-link active" id="account-tab" data-toggle="pill" href="#account" role="tab" aria-controls="account" aria-selected="true">
@@ -169,103 +165,123 @@ session_start();
                                             </a>
                                         </div>
                                     </div>
+
                                     <div class="tab-content p-4 p-md-5" id="v-pills-tabContent">
                                         <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
+                                            <button type="button" class="btn btn-primary float-right" id="editUserInfo"><i class="fa fa-cogs text-center"></i></button>
                                             <h3 class="mb-4">User's Information</h3>
+                                            <div class="row">
+                                                <div class="col-md-6">
 
-                                            <form class="" action="user.php" method="post">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label>Name: </label>
-                                                            <p class="dispname" id="idName"><?php echo $_SESSION['fname'] . ' ' . $_SESSION['mname'] . ', ' . $_SESSION['lname'] ?></p>
-                                                            <input type="hidden" id="token" value="<?php echo $_SESSION['email'] ?>">
-                                                            <input type="text" name="surname" id="inputSurname" value="<?php echo $_SESSION['lname'] ?>" placeholder="Input your Surname">
-                                                            <input type="text" name="firstname" id="inputFirstname" value="<?php echo $_SESSION['fname'] ?>" placeholder="Input your Firstname">
-                                                            <input type="text" name="middlename" id="inputMiddlename" value="<?php echo $_SESSION['mname'] ?>" placeholder="Input your Middle Name">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label>Email</label>
-                                                            <p><?php echo $_SESSION['email'] ?></p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label>Age:</label>
-                                                            <p class="dispage" id="idAge"><?php echo $_SESSION['Age'] ?></p>
-                                                            <input type="text" name="age" id="inputAge" value="<?php echo $_SESSION['Age'] ?>" placeholder="Input your Age">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label>Birthday</label>
-                                                            <p class="dispbirthday"><?php echo $_SESSION['Birthday'] ?></p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label>Sex</label>
-                                                            <p><?php echo $_SESSION['Sex'] ?></p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label>Address</label>
-                                                            <p class="dispaddress" id="idAddress"><?php echo $_SESSION['Address'] ?></p>
-                                                            <input type="text" name="address" id="inputAddress" value="<?php echo $_SESSION['Address'] ?>" placeholder="Input your Address">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label>Contact Number</label>
-                                                            <p class="dispcontactnumber" id="idContactnumber"><?php echo $_SESSION['contactNumber'] ?></p>
-                                                            <input type="text" name="contactnumber" id="inputContactnumber" value="<?php echo $_SESSION['contactNumber'] ?>" placeholder="Input your Contact Number">
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col">
                                                     <div class="form-group">
-                                                        <button class="btn btn-success" type="button" name="update" id="btnupdate">Update</button>
-                                                        <button class="btn btn-success" type="button" name="save" id="btnsave" onclick="UpdateInfo()">Save</button>
-                                                        <button class="btn btn-success" type="button" name="cancel" id="btncancel">Cancel</button>
+                                                        <label for="inputName" id="nameLabel">Name:</label>
+                                                        <input type="text" id="update_fname" class="form-control mb-2" style="display: none">
+                                                        <input type="text" id="update_mname" class="form-control mb-2" style="display: none">
+                                                        <input type="text" id="update_sname" class="form-control" style="display: none">
+                                                        <p id="nameParagraph"></p>
                                                     </div>
                                                 </div>
-                                            </form>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="inputEmail">Email:</label>
+                                                        <input type="text" id="update_email" class="form-control" style="display: none">
+                                                        <p id="emailParagraph"></p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="inputAddress">Addresss:</label>
+                                                        <input type="text" id="update_address" class="form-control" style="display: none">
+                                                        <p id="addressParagraph"></p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="inputBirthday">Birthday:</label>
+                                                        <input type="date" id="update_birthday" class="form-control" style="display: none">
+                                                        <p id="bdayParagraph"></p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="inputContactNumber">Contact Number:</label>
+                                                        <input type="text" id="update_number" class="form-control" style="display: none">
+                                                        <p id="numberParagraph"></p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="inputAge">Age:</label>
+                                                        <input type="text" id="update_age" class="form-control" style="display: none">
+                                                        <p id="ageParagraph"></p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="inputGender">Gender:</label>
+                                                        <input type="text" id="update_gender" class="form-control" style="display: none">
+                                                        <p id="genderParagraph"></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <button type="button" id="SaveBtn" class="btn btn-primary" style="display: none" onclick="Save()">Save</button>
+                                                </div>
+                                            </div>
                                         </div>
 
-                                        <!-- changing password -->
                                         <div class="tab-pane fade" id="password" role="tabpanel" aria-labelledby="password-tab">
                                             <h3 class="mb-4">Password Settings</h3>
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label>Old password</label>
-                                                        <input type="password" name="oldpass" class="form-control">
+                                                        <label for="inputOldPassword">Old password:</label>
+                                                        <div class="input-group">
+                                                            <input type="password" id="inputOldPassword" class="form-control">
+                                                            <div class="input-group-append">
+                                                                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="#inputOldPassword">
+                                                                    <i class="fa fa-eye"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label>New password</label>
-                                                        <input type="password" name="newpass" class="form-control">
+                                                        <label for="inputNewPassword">New password:</label>
+                                                        <div class="input-group">
+                                                            <input type="password" id="inputNewPassword" class="form-control">
+                                                            <div class="input-group-append">
+                                                                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="#inputNewPassword">
+                                                                    <i class="fa fa-eye"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label>Confirm new password</label>
-                                                        <input type="password" name="confirmpass" class="form-control">
+                                                        <label for="inputConfirmPassword">Confirm new password:</label>
+                                                        <div class="input-group">
+                                                            <input type="password" id="inputConfirmPassword" class="form-control">
+                                                            <div class="input-group-append">
+                                                                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="#inputConfirmPassword">
+                                                                    <i class="fa fa-eye"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="text-right">
-                                                <button class="btn btn-success" type="submit" name="updatepass">Update</button>
+                                                <!-- Add an ID to the button for easier selection -->
+                                                <button class="btn btn-success" id="updatePasswordBtn">Update</button>
                                             </div>
                                         </div>
-                                    </div>
+
 
     </section>
 
@@ -299,62 +315,257 @@ session_start();
     <script src="js/main.js"></script>
     <script src="js/myprofile1.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
     <script>
-        function UpdateInfo() {
-            var form_data = new FormData();
+        $(document).ready(function() {
+            // Fetch data when the page loads
+            $('.toggle-password').click(function() {
+                var target = $($(this).data('target'));
+                var icon = $(this).find('i');
 
-            var token = $('#token').val();
-            var surname = $('#inputSurname').val();
-            var firstname = $('#inputFirstname').val();
-            var middlename = $('#inputMiddlename').val();
-            var age = $('#inputAge').val();
-            var address = $('#inputAddress').val();
-            var contactnumber = $('#inputContactnumber').val();
+                if (target.attr('type') === 'password') {
+                    target.attr('type', 'text');
+                    icon.removeClass('fa-eye').addClass('fa-eye-slash');
+                } else {
+                    target.attr('type', 'password');
+                    icon.removeClass('fa-eye-slash').addClass('fa-eye');
+                }
+            });
+
+            fetchData();
+
+            // Add click event listener to the "Settings" button
+            $('#editUserInfo').click(function() {
+                toggleFields();
+            });
 
 
-            form_data.append('token', token);
-            form_data.append('surname', surname);
-            form_data.append('firstname', firstname);
-            form_data.append('middlename', middlename);
-            form_data.append('age', age);
-            form_data.append('address', address);
-            form_data.append('contactnumber', contactnumber);
-            var abstractPicInput = $("input[name='uploadProfilePic']")[0]; // Assuming it's the first input element
-            var abstractPicFile = abstractPicInput.files[0];
-            form_data.append('abstractPic', abstractPicFile);
+        });
 
-            var PhpFile = 'updatemyprofile.php';
-            $.ajax({
-                url: PhpFile, //php file
-                method: "POST",
-                data: form_data,
-                contentType: false,
-                cache: false,
-                processData: false,
-                beforeSend: function(rs) {
-                    $("#err_msg").html(
-                        '<center><img src="asset/images/loading.gif"/><br/><small>Loading Information...</small></center>'
-                    );
+
+
+
+        function toggleFields() {
+            // Toggle display between input field and paragraph for each field
+            var fieldsToToggle = [{
+                    input: '#uploadBtn, #SaveBtn',
+                    paragraph: null
                 },
-                success: function(rs) {
-                    var res = JSON.parse(rs);
-                    Swal.fire({
-                        title: res.title,
-                        text: res.message,
-                        icon: res.icon,
-                        customClass: {
-                            confirmButton: 'swal-confirm-button',
-                        },
-                        showCancelButton: false,
-                    });
-                    // window.location.reload();    
+                {
+                    input: '#update_fname',
+                    paragraph: '#nameParagraph'
                 },
-                async: true,
-                error: function(e) {
-                    console.log(e);
+                {
+                    input: '#update_mname',
+                    paragraph: null
                 },
+                {
+                    input: '#update_sname',
+                    paragraph: '#nameParagraph'
+                },
+                {
+                    input: '#update_gender',
+                    paragraph: '#genderParagraph'
+                },
+                {
+                    input: '#update_age',
+                    paragraph: '#ageParagraph'
+                },
+                {
+                    input: '#update_number',
+                    paragraph: '#numberParagraph'
+                },
+                {
+                    input: '#update_birthday',
+                    paragraph: '#bdayParagraph'
+                },
+                {
+                    input: '#update_address',
+                    paragraph: '#addressParagraph'
+                },
+                {
+                    input: '#update_email',
+                    paragraph: '#emailParagraph'
+                }
+            ];
+
+            fieldsToToggle.forEach(function(field) {
+                $(field.input).toggle();
+                if (field.paragraph) {
+                    $(field.paragraph).toggle();
+                }
             });
         }
+
+        function fetchData() {
+            // Make an AJAX request to fetch data from the server
+            $.ajax({
+                url: 'fetchUserData.php', // Replace 'fetchUserData.php' with the actual file path to fetch data from your server
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    // Populate input field with fetched data when Settings button is clicked
+                    $('#update_fname').val(data.Firstname);
+                    $('#update_mname').val(data.MiddleName);
+                    $('#update_sname').val(data.Surname);
+                    $('#nameParagraph').text(data.FullName);
+
+                    $('#update_gender').val(data.Sex);
+                    $('#genderParagraph').text(data.Sex);
+
+                    $('#update_age').val(data.Age);
+                    $('#ageParagraph').text(data.Age);
+
+                    $('#update_number').val(data.contactNumber);
+                    $('#numberParagraph').text(data.contactNumber);
+
+                    $('#update_birthday').val(data.Birthday);
+                    $('#bdayParagraph').text(data.Birthday);
+
+                    $('#update_address').val(data.Address);
+                    $('#addressParagraph').text(data.Address);
+
+                    $('#update_email').val(data.Email);
+                    $('#emailParagraph').text(data.Email);
+
+
+                    if (data.photo) {
+                        $('#user-profile-img').attr('src', data.photo);
+                        $('#uploadedImage').attr('src', data.photo);
+                    } else {
+                        $('#user-profile-img').attr('src', 'img/testimonial-author/unknown.jpg');
+                        $('#uploadedImage').attr('src', 'img/testimonial-author/unknown.jpg');
+                    }
+
+                    $('#name').text(data.FullName);
+
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    // Handle error
+                }
+            });
+        }
+
+        function Save() {
+            // Get the selected file from the file input
+            var file = $('#fileUpload')[0].files[0];
+
+            // Prepare form data to send both the file and the user data
+            var formData = new FormData();
+            formData.append('file', file);
+            formData.append('Firstname', $('#update_fname').val());
+            formData.append('MiddleName', $('#update_mname').val());
+            formData.append('Surname', $('#update_sname').val());
+            formData.append('Sex', $('#update_gender').val());
+            formData.append('Age', $('#update_age').val());
+            formData.append('contactNumber', $('#update_number').val());
+            formData.append('Birthday', $('#update_birthday').val());
+            formData.append('Address', $('#update_address').val());
+            formData.append('Email', $('#update_email').val());
+
+            // Make an AJAX request to save the data and the image
+            $.ajax({
+                url: 'saveUserDataAndImage.php',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    // Handle success
+                    console.log('Data and image saved successfully:', response);
+
+                    // Toggle visibility based on the "Settings" button state
+                    var settingsVisible = $('#uploadBtn').is(':visible');
+                    if (!settingsVisible) {
+                        // If settings are not visible, show input fields and hide p tags
+                        toggleFields();
+                    } else {
+                        // If settings are visible, hide input fields and show p tags
+                        toggleFields();
+                    }
+
+
+                    // For other fields, toggle visibility based on the same logic
+                    // Repeat for other fields
+
+                    fetchData();
+                    swal({
+                        title: "Success!",
+                        text: "Data updated successfully.",
+                        icon: "success",
+                        button: "OK",
+                    });
+
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error saving data and image:', error);
+                    // Handle error
+                }
+            });
+        }
+
+
+
+        $('#updatePasswordBtn').on('click', function() {
+            var oldPassword = $('#inputOldPassword').val();
+            var newPassword = $('#inputNewPassword').val();
+            var confirmPassword = $('#inputConfirmPassword').val();
+
+            if (newPassword !== confirmPassword) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'New password and Confirm password do not match.'
+                });
+                return;
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: 'change_password.php',
+                data: {
+                    oldPassword: oldPassword,
+                    newPassword: newPassword
+                },
+                success: function(response) {
+                    if (response === "Password updated successfully.") {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: response
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: response
+                        }).then(() => {
+                            // Clear input fields
+                            $('#inputOldPassword').val('');
+                
+                        });;
+                    }
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred: ' + error
+                    }).then(() => {
+                        // Clear input fields
+                        $('#inputOldPassword').val('');
+                        $('#inputNewPassword').val('');
+                        $('#inputConfirmPassword').val('');
+                    });;
+                }
+            });
+        });
     </script>
 </body>
 

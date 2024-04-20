@@ -12,12 +12,23 @@ if (isset($_SESSION['ownerId'])) {
     $query = "SELECT `file` FROM `user_resume` WHERE `app_id` = '$ownerId'";
     $result = mysqli_query($conn, $query); // Use $conn instead of $your_db_connection
 
-    if ($result) {
+    // Check if the query was successful and if it returned rows
+    if ($result && mysqli_num_rows($result) > 0) {
+        // Fetch the data from the result set
         $row = mysqli_fetch_assoc($result);
         $filePath = $row['file'];
+    } else {
+        // Set a default file path if no rows were returned by the query
+        $filePath = ''; // You can set it to any default value you want
     }
+} else {
+    // Handle the case when $_SESSION['ownerId'] is not set
+    // For example, you can redirect the user to a login page
+    header("Location: login.php");
+    exit(); // Make sure to exit after redirecting
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -94,16 +105,12 @@ if (isset($_SESSION['ownerId'])) {
                                     <ul>
                                         <li class="profile-dropdown">
                                             <div class="user-profile">
-                                                <?php if ($_SESSION['photo'] != "") { ?>
-                                                    <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt="User's Name">
-                                                <?php } else { ?>
-                                                    <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
-                                                <?php } ?>
+                                            <img id="user-profile-img" alt class="w-px-40 h-auto rounded-circle" />
                                             </div>
                                             <ul class="dropdown dropleft">
                                                 <li><a href="../user.php">MY PROFILE</a></li>
                                                 <?php if ($_SESSION['role'] == 3) { ?>
-                                                    <li><a href="user_module-main/index.php">CREATE RESUME</a></li>
+                                                    <li><a href="index.php">CREATE RESUME</a></li>
                                                 <?php } ?>
                                                 <?php if ($_SESSION['role'] == 2) { ?>
                                                     <li><a href="../manage.php">MANAGE BUSINESS</a></li>
@@ -223,7 +230,34 @@ if (isset($_SESSION['ownerId'])) {
                     // Display the file in the viewer
                     $('#fileViewer').html('<iframe src="' + filePath + '" width="100%" height="800px" style="border: none;"></iframe>');
                 <?php } ?>
+
+                fetchData();
             });
+
+            function fetchData() {
+            // Make an AJAX request to fetch data from the server
+            $.ajax({
+                url: '../fetchUserData.php', // Replace 'fetchUserData.php' with the actual file path to fetch data from your server
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+
+                    if (data.photo) {
+                        $('#user-profile-img').attr('src', '../' + data.photo);
+                     
+                    } else {
+                        $('#user-profile-img').attr('src', 'img/testimonial-author/unknown.jpg');
+                     
+                    }
+
+                
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    // Handle error
+                }
+            });
+        }
             $('#uploadBtn').click(function() {
             var fileInput = $('#fileInput')[0].files[0];
 

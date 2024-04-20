@@ -16,43 +16,11 @@ $sql = "SELECT bl.bus_id, bl.ownerId, bl.BusinessName, bl.Businesslogo, cl.categ
         INNER JOIN owner_list AS ol ON bl.ownerId = ol.ID
         WHERE bl.BusinessStatus = 1 OR bl.BusinessStatus = 4
         GROUP BY bl.bus_id, bl.ownerId, bl.BusinessName, bl.Businesslogo, cl.category, bl.BusinessDescrip, ol.Firstname, ol.MiddleName, ol.Surname
-        ORDER BY average_rating DESC;";
+        ORDER BY average_rating DESC LIMIT 10;";
 
 $result = $conn->query($sql);
 
-if ($result->num_rows > 0) {
-  $data = array();
-  while ($row = $result->fetch_assoc()) {
-    $data[] = $row;
-  }
 
-  // Convert the PHP array to JSON with proper formatting
-  $jsonData = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-
-    // Pass JSON data as a base64-encoded string to avoid issues with special characters
-    $base64_json_data = base64_encode(json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
-
-    // Construct the command with base64-encoded JSON data as a separate argument
-    $temp_file = tempnam(sys_get_temp_dir(), 'json_data');
-    file_put_contents($temp_file, $jsonData);
-    
-    // Construct the command with the path to the temporary file
-    $command = "python py-script/script.py " . escapeshellarg($temp_file);
-  
-  // Execute the command and capture both standard output and standard error
-  $output = shell_exec($command . ' 2>&1');
-  
-  // Remove the temporary file after execution
-  unlink($temp_file);
-
- 
-  $decoded_output = json_decode($output, true);
-
-
-
-} else {
-  echo "No results found";
-}
 // Close the database connection
 $conn->close();
 if (isset($_SESSION['role'])) {
@@ -60,12 +28,7 @@ if (isset($_SESSION['role'])) {
     header('Location: CEIPO/admin_dashboard/index.php');
   }
 }
-
-$sql = "SELECT * FROM category_list LIMIT 5";
 $pdo = Database::connection();
-$stmt = $pdo->prepare($sql);
-$stmt->execute();
-$datas = $stmt->fetchAll();
 
 $sql = "SELECT * FROM business_list AS bl
 INNER JOIN category_list AS cl ON bl.BusinessCategory = cl.ID
@@ -73,9 +36,11 @@ INNER JOIN brgyzone_list AS blg ON bl.BusinessBrgy = blg.ID
 INNER JOIN business_location AS bloc ON bl.bus_id = bloc.bus_id
 WHERE 
 bl.BusinessStatus = 4 OR 
-bl.BusinessStatus = 1 LIMIT 6";
+bl.BusinessStatus = 1 
+ORDER BY bl.bus_id DESC
+LIMIT 6";
 
-// Assuming you have previously created a PDO object named $pdo
+
 $stmt1 = $pdo->prepare($sql);
 
 if (!$stmt1->execute()) {
@@ -86,8 +51,18 @@ if (!$stmt1->execute()) {
 
   if (empty($datas1)) {
     echo "No results found.";
+  } else {
+    // Extract unique category IDs from the fetched businesses
+    $categoryIds = array_unique(array_column($datas1, 'BusinessCategory'));
+
+    // Prepare a new SQL query to fetch the categories based on the extracted IDs
+    $categorySql = "SELECT * FROM category_list WHERE ID IN (" . implode(',', $categoryIds) . ")";
+    $stmt2 = $pdo->prepare($categorySql);
+    $stmt2->execute();
+    $categories = $stmt2->fetchAll();
   }
 }
+
 
 
 ?>
@@ -202,11 +177,7 @@ if (!$stmt1->execute()) {
                     <ul>
                       <li class="profile-dropdown">
                         <div class="user-profile">
-                          <?php if ($_SESSION['photo'] != "") { ?>
-                            <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt="User's Name">
-                          <?php } else { ?>
-                            <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
-                          <?php } ?>
+                          <img id="user-profile-img" alt="User's Name">
                         </div>
                         <ul class="dropdown dropleft">
                           <li>
@@ -244,7 +215,9 @@ if (!$stmt1->execute()) {
             <nav class="nav-menu">
               <ul>
                 <li class="active"><a href="./index.php">Home</a></li>
+                <li><a href="./category.php">Categories</a></li>
                 <li><a href="./listing.php">Business Listing</a></li>
+
               </ul>
             </nav>
           </div>
@@ -271,7 +244,7 @@ if (!$stmt1->execute()) {
               <div class="forms-inputs mb-4">
                 <span>Password</span>
                 <input type="password" name="txtUserPass" id="password_log" required>
-                <h6><a href="#">Forgot Password?</a></h6>
+                <h6><a href="javascript:void(0);" onclick="forgotPasswordModalShow()">Forgot Password?</a></h6>
               </div>
               <div class="mb-3">
                 <button type="button" class="btn w-100" onclick="loginUser()">LOG IN</button>
@@ -295,6 +268,37 @@ if (!$stmt1->execute()) {
       </div>
     </div>
   </div>
+
+  <!-- modal for forgot password -->
+  <div class="modal fade" id="forgotPassModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Forgot Password</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row justify-content-center">
+            <div class="col-md-6"> <!-- Adjust the column size as needed -->
+              <div class="form-group">
+                <label for="inputEmail">Enter Your Email:</label>
+                <input type="email" id="inputEmail" class="form-control">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="submitForgotPass()">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
   <!-- modal for user create -->
   <div id="id02" class="modal">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
@@ -435,17 +439,13 @@ if (!$stmt1->execute()) {
         </div>
         <div class="col-lg-12 mt-3">
           <fieldset>
-            <?php foreach ($datas as $data) { ?>
-              <a href="<?php echo "listing.php?b=" . $data['ID'] ?>" class="oblong-button">
-                <?php echo $data['category'] ?>
-              </a>
-            <?php } ?>
-            <a class="btn btn-success oblong-button" href="./category.php"><strong>More</strong></a>
+            <!-- <a class="btn btn-success oblong-button" href="./category.php"><strong>More</strong></a> -->
           </fieldset>
         </div>
       </div>
     </div>
   </div>
+
 
   <section class="property-section latest-property-section spad">
     <div class="container">
@@ -460,11 +460,11 @@ if (!$stmt1->execute()) {
           <div class="property-controls">
             <ul>
               <li data-filter="all">All</li>
-              <?php foreach ($datas as $data) {
-                $sanitizedCategory = "cat" . str_replace([' ', '&'], ['_', ''], $data['ID']);
+              <?php foreach ($categories as $category) {
+                $sanitizedCategory = "cat" . str_replace([' ', '&'], ['_', ''], $category['ID']);
               ?>
                 <li data-filter=".<?php echo $sanitizedCategory; ?>">
-                  <?php echo $data['category']; ?>
+                  <?php echo $category['category']; ?>
                 </li>
               <?php } ?>
             </ul>
@@ -472,8 +472,7 @@ if (!$stmt1->execute()) {
         </div>
       </div>
       <div class="row property-filter">
-        <?php
-        foreach ($datas1 as $data1) {
+        <?php foreach ($datas1 as $data1) {
           $class = "cat" . str_replace([' ', '&'], ['_', ''], $data1['BusinessCategory']);
           $uniqueId = 'businessDescription_' . $data1['bus_id'];
         ?>
@@ -525,70 +524,70 @@ if (!$stmt1->execute()) {
           </div>
         </div>
       </div>
-      <?php 
-      
-        // Check if decoding was successful
-  if ($decoded_output !== null) {
-    // Access the extracted data as an associative array
-    foreach ($decoded_output as $business) {
-      // Access individual elements of each business
+      <?php
+
+      if ($result->num_rows > 0) {
+        $data = array();
+        while ($row = $result->fetch_assoc()) {
+          $data[] = $row;
+
       ?>
 
-      <div class="container-fluid">
-        <div class="row justify-content-center mb-3">
-          <div class="col-lg-12 col-xl-12">
-            <div class="card shadow-0 border rounded-3">
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-lg-12 col-lg-5 col-xl-5 mb-lg-0">
-                    <div class="bg-image hover-zoom ripple rounded ripple-surface">
-                      <img src="<?php echo 'img/logo/' . $business['Businesslogo'] ?>" class="w-100" />
-                      <a href="#!">
-                        <div class="hover-overlay">
-                          <div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>
+          <div class="container-fluid">
+            <div class="row justify-content-center mb-3">
+              <div class="col-lg-12 col-xl-12">
+                <div class="card shadow-0 border rounded-3">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-lg-12 col-lg-5 col-xl-5 mb-lg-0">
+                        <div class="bg-image hover-zoom ripple rounded ripple-surface">
+                          <img src="<?php echo 'img/logo/' . $row['Businesslogo'] ?>" class="w-100" />
+                          <a href="#!">
+                            <div class="hover-overlay">
+                              <div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>
+                            </div>
+                          </a>
                         </div>
-                      </a>
-                    </div>
-                  </div>
-                  <div class="col-md-6 col-lg-6 col-xl-6">
-                    <br>
-                    <h5><?php echo $business['BusinessName'] ?></h5>
-                    <h6><?php echo $business['Firstname'] . ' ' . $business['MiddleName'] . ' ' . $business['Surname'] ?></h6>
-                    <div class="d-flex flex-row">
-                      <div class="text-warning mb-1 me-2">
-                        <?php   
-                         $totalRating2 =(int)$business['average_rating'];
-                        if($totalRating2 != null){
-                                for ($j = 0; $j < $totalRating2; $j++) { 
-                                ?> 
-                              <i class="fa fa-star"></i>
-                              <?php }
-                              }  ?>
+                      </div>
+                      <div class="col-md-6 col-lg-6 col-xl-6">
+                        <br>
+                        <h5><?php echo $row['BusinessName'] ?></h5>
+                        <h6><?php echo $row['Firstname'] . ' ' . $row['MiddleName'] . ' ' . $row['Surname'] ?></h6>
+                        <div class="d-flex flex-row">
+                          <div class="text-warning mb-1 me-2">
+                            <?php
+                            $totalRating2 = (int)$row['average_rating'];
+                            if ($totalRating2 != null) {
+                              for ($j = 0; $j < $totalRating2; $j++) {
+                            ?>
+                                <i class="fa fa-star"></i>
+                            <?php }
+                            }  ?>
+                          </div>
+                        </div>
+                        <div class="mt-1 mb-0 text-muted small">
+                          <span>Category</span>
+                          <span class="text-primary"> • </span>
+                          <span><?php echo $row['category'] ?></span>
+                        </div>
+                        <p class="text-truncate mb-4 mb-md-0">
+                          <?php echo $row['BusinessDescrip'] ?>
+                        </p>
+                        <br>
+                        <a class="btn btn-success" href="details.php?ID=<?php echo $row['bus_id']; ?>" role="button"><i class="fa fa-eye"></i> View
+                          Info</a>
                       </div>
                     </div>
-                    <div class="mt-1 mb-0 text-muted small">
-                      <span>Category</span>
-                      <span class="text-primary"> • </span>
-                      <span><?php echo $business['category'] ?></span>
-                    </div>
-                    <p class="text-truncate mb-4 mb-md-0">
-                      <?php echo $business['BusinessDescrip'] ?>
-                    </p>
-                    <br>
-                    <a class="btn btn-success" href="details.php?ID=<?php echo $business['bus_id']; ?>" role="button"><i class="fa fa-eye"></i> View
-                      Info</a>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      <?php 
+      <?php
         }
       } else {
-          echo "Error decoding JSON data from Python script";
+        echo "No results found";
       }
       ?>
       <!-- <div class="container-fluid">
@@ -641,27 +640,28 @@ if (!$stmt1->execute()) {
           </div>
         </div>
       </div> -->
-      
-     
+
+
+
   </section>
 
   <!-- Footer Section Begin -->
   <footer class="footer-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-md-8">
-                    <div class="fs-about">
-                        <div class="fs-logo">
-                            <a href="#">
-                                <img src="img/flogo.png" alt="">
-                            </a>
-                        </div>
-                        <p>BuDS (Business Directory System of Caloocan City) is a convenient platform connecting residents and visitors with local businesses, offering easy access to essential information for fostering community engagement and economic growth.</p>
-                    </div>
-                </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-8">
+          <div class="fs-about">
+            <div class="fs-logo">
+              <a href="#">
+                <img src="img/flogo.png" alt="">
+              </a>
             </div>
+            <p>BuDS (Business Directory System of Caloocan City) is a convenient platform connecting residents and visitors with local businesses, offering easy access to essential information for fostering community engagement and economic growth.</p>
+          </div>
         </div>
-    </footer>
+      </div>
+    </div>
+  </footer>
 
   <!-- Footer Section End -->
 
@@ -708,6 +708,8 @@ if (!$stmt1->execute()) {
           // You can add your code to handle the unchecked state here
         }
       });
+
+      fetchData();
     });
 
     $('#id02, #id03').on('show.bs.modal', function(e) {
@@ -718,6 +720,31 @@ if (!$stmt1->execute()) {
       $('#id01').modal('show'); // Reopen the first modal when the second or third modal is closed
     });
 
+
+    function fetchData() {
+      // Make an AJAX request to fetch data from the server
+      $.ajax({
+        url: 'fetchUserData.php', // Replace 'fetchUserData.php' with the actual file path to fetch data from your server
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+
+          if (data.photo) {
+            $('#user-profile-img').attr('src', data.photo);
+
+          } else {
+            $('#user-profile-img').attr('src', 'img/testimonial-author/unknown.jpg');
+
+          }
+
+
+        },
+        error: function(xhr, status, error) {
+          console.error(xhr.responseText);
+          // Handle error
+        }
+      });
+    }
 
     function searchpage() {
       var searchVal = encodeURIComponent($('#searchVal').val()); // Encode the searchVal
@@ -958,6 +985,68 @@ if (!$stmt1->execute()) {
           descriptionElement.innerText = fullDescription.substring(0, 50);
           button.innerText = 'See More';
         }
+      }
+    }
+
+    const forgotPasswordModalShow = async () => {
+      $("#forgotPassModal").modal('show'); // Corrected jQuery selector
+      document.getElementById('id01').style.display = 'none';
+    }
+
+    const submitForgotPass = async () => {
+      try {
+        var email = $("#inputEmail").val();
+
+        var payload = {
+          email: email
+        };
+
+        if (email != "") {
+          const response = await $.ajax({
+            type: "POST",
+            url: 'controllers/users.php',
+            data: {
+              payload: JSON.stringify(payload),
+              setFunction: 'forgotPass'
+            }
+          });
+
+          // console.log('Response:', response); // Log the response to the console
+
+          const jsonResponse = JSON.parse(response);
+          Swal.fire({
+            title: jsonResponse.title,
+            text: jsonResponse.message,
+            icon: jsonResponse.icon,
+            customClass: {
+              confirmButton: 'swal-confirm-button',
+            },
+            showCancelButton: false,
+          }).then((result) => {
+            // Check if the request was successful and then redirect
+            if (result.isConfirmed) {
+              $("#inputEmail").val("");
+              $("#forgotPassModal").modal('hide');
+            }
+          });
+
+         
+    
+
+        } else {
+          Swal.fire({
+            title: 'Warning',
+            text: 'The input field is required',
+            icon: 'warning',
+            customClass: {
+              confirmButton: 'swal-confirm-button',
+            },
+            showCancelButton: false,
+          });
+        }
+      } catch (error) {
+        console.error('Error:', error); // Log any errors to the console
+        // You can add more code here to handle errors
       }
     }
   </script>

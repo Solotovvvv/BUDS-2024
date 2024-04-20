@@ -65,9 +65,9 @@ foreach ($datas as $data) {
     <div class="layout-container">
       <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
         <div class="app-brand demo">
-          <a href="http://localhost/BUDS-2024/index.php" class="app-brand-link">
+          <a href="index.php" class="app-brand-link">
             <span class="app-brand-logo demo">
-              <img src="img/logo-main.png" alt="" class="brand-image" width="45" height="50">
+              <img src="img/logo/buds-logo.png" alt="" class="brand-image" width="45" height="50">
             </span>
             <span class="text-uppercase text-white app-brand-text demo menu-text fw-bolder ms-2">BUSINESS</span>
           </a>
@@ -81,12 +81,12 @@ foreach ($datas as $data) {
             <span class="menu-header-text">Business Profile</span>
           </li>
 
-          <li class="menu-item">
+          <!-- <li class="menu-item">
             <a href="<?php echo "bulletin.php?a=" . $bus_id ?>" class="menu-link">
               <i class="menu-icon tf-icons bx bxs-pin"></i>
               <div data-i18n="Analytics">Bulletin Board</div>
             </a>
-          </li>
+          </li> -->
 
           <li class="menu-item active">
             <a href="<?php echo "BusinessPanel.php?a=" . $bus_id ?>" class="menu-link">
@@ -117,6 +117,14 @@ foreach ($datas as $data) {
               <div data-i18n="Analytics">Comments & Rating</div>
             </a>
           </li>
+
+          <li class="menu-item">
+            <a href="<?php echo "FAQ.php?a=" . $bus_id ?>" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-message-rounded"></i>
+              <div data-i18n="Analytics">FAQ</div>
+            </a>
+          </li>
+
           <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Business Document</span>
           </li>
@@ -155,11 +163,7 @@ foreach ($datas as $data) {
               <li class="nav-item navbar-dropdown dropdown-user dropdown">
                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                   <div class="avatar avatar-online">
-                    <?php if ($_SESSION['photo'] != "") { ?>
-                      <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt="User's Name">
-                    <?php } else { ?>
-                      <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
-                    <?php } ?>
+                    <img id="user-profile-img" alt="User's Name">
                   </div>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
@@ -168,11 +172,7 @@ foreach ($datas as $data) {
                       <div class="d-flex">
                         <div class="flex-shrink-0 me-3">
                           <div class="avatar avatar-online">
-                            <?php if ($_SESSION['photo'] != "") { ?>
-                              <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt="User's Name">
-                            <?php } else { ?>
-                              <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
-                            <?php } ?>
+                            <img id="user-profile-imgs" alt="User's Name">
                           </div>
                         </div>
                         <div class="flex-grow-1">
@@ -196,7 +196,7 @@ foreach ($datas as $data) {
             </ul>
           </div>
         </nav>
-        
+
         <div class="content-wrapper">
           <div class="container-xxl flex-grow-1 container-p-y">
             <div class="row">
@@ -208,19 +208,22 @@ foreach ($datas as $data) {
                       <img src="<?php echo "img/logo/" . $logo ?>" alt="user-avatar" class="d-block rounded-circle" height="100" width="100" id="uploadedAvatar" />
                       <div class="button-wrapper">
                         <form id="formAccountSettings" method="POST" enctype="multipart/form-data">
-                          <?php //if ($status == 4 || $status == 1) { ?>
-                            <!-- <label for="upload" class="btn btn-success me-2 mb-4" tabindex="0">
+                          <?php //if ($status == 4 || $status == 1) { 
+                          ?>
+                          <!-- <label for="upload" class="btn btn-success me-2 mb-4" tabindex="0">
                               <span class="d-none d-sm-block">Upload new photo</span>
                               <i class="bx bx-upload d-block d-sm-none"></i>
                               <input type="file" id="upload" name="bus_logo" class="account-file-input" hidden accept="image/png, image/jpeg" disabled />
                             </label> -->
-                          <?php //} else { ?>
-                            <label for="upload" class="btn btn-success me-2 mb-4" tabindex="0">
-                              <span class="d-none d-sm-block">Upload new photo</span>
-                              <i class="bx bx-upload d-block d-sm-none"></i>
-                              <input type="file" id="upload" name="bus_logo" class="account-file-input" hidden accept="image/png, image/jpeg" />
-                            </label>
-                          <?php //} ?>
+                          <?php //} else { 
+                          ?>
+                          <label for="upload" class="btn btn-success me-2 mb-4" tabindex="0">
+                            <span class="d-none d-sm-block">Upload new photo</span>
+                            <i class="bx bx-upload d-block d-sm-none"></i>
+                            <input type="file" id="upload" name="bus_logo" class="account-file-input" hidden accept="image/png, image/jpeg" />
+                          </label>
+                          <?php //} 
+                          ?>
                           <!-- <button type="button" class="btn btn-outline-secondary account-image-reset mb-4">
                           <i class="bx bx-reset d-block d-sm-none"></i>
                            <span class="d-none d-sm-block">Reset</span> -->
@@ -423,6 +426,41 @@ foreach ($datas as $data) {
   <script src="plugins/assets/js/main.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
+
+
+
+$(document).ready(function() {
+            // Fetch data when the page loads
+            fetchData();
+        });
+
+    function fetchData() {
+      // Make an AJAX request to fetch data from the server
+      $.ajax({
+        url: 'fetchUserData.php', // Replace 'fetchUserData.php' with the actual file path to fetch data from your server
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+
+          if (data.photo) {
+            $('#user-profile-img').attr('src', data.photo);
+            $('#user-profile-imgs').attr('src', data.photo);
+
+          } else {
+            $('#user-profile-img').attr('src', 'img/testimonial-author/unknown.jpg');
+            $('#user-profile-imgs').attr('src', 'img/testimonial-author/unknown.jpg');
+
+          }
+
+
+        },
+        error: function(xhr, status, error) {
+          console.error(xhr.responseText);
+          // Handle error
+        }
+      });
+    }
+
     function editBusiness() {
       var bus_name = $('#businessName').val();
       var number = $('#contactNumber').val();

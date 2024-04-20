@@ -14,7 +14,7 @@ class Database {
     private static $host = "localhost";
     private static $dbname = "buds_2023";
     private static $user = "root";
-    private static $pass = "";
+    private static $pass="";	
     // private static $host = "localhost";
     // private static $dbname = "ucc_admission";
     // private static $user = "ucc_admin";
