@@ -232,8 +232,10 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
     .link-button:focus {
       outline: none;
     }
+
     .hs-nav {
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* This adds a shadow */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      /* This adds a shadow */
     }
   </style>
 
@@ -602,7 +604,6 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
                                 <span id="<?php echo $uniqueId; ?>">
                                 <?php echo substr($data1['BusinessDescrip'], 0, 50); ?>
                                 </span>
-                                <button class="link-button center text-info" onclick="toggleDescription(this, '<?php echo $uniqueId; ?>', '<?php echo htmlspecialchars(json_encode($data1['BusinessDescrip'])); ?>')">See More</button>
                               </li>
                             </ul>
                           </p>
@@ -667,6 +668,7 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
               <div class="col-lg-8 bg-white p-2 border">
                 <div class="py-3 px-2 pb-1 border-bottom">
                   <div id="newFilteredUi">
+                    <!-- ito yung kenjie -->
                     <?php if ((isset($_GET['a']) && $_GET['a'] != null) || (isset($_GET['b']) && $_GET['b'] != null)
                       || (isset($_GET['c']) && $_GET['c'] != null) || (isset($_GET['d']) && $_GET['d'] != null)
                     ) { ?>
@@ -675,12 +677,12 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
                       ?>
                         <div class="row">
                           <div class="col-lg-4">
-                            <img src="<?php echo "img/logo/" . $data['Businesslogo'] ?>" style="border: 2px solid #355E3B; border-radius: 20px; width: 300px; height: 200px;" alt="no pic">
+                            <br><img src="<?php echo "img/logo/" . $data['Businesslogo'] ?>" style="border: 2px solid #355E3B; border-radius: 20px; width: 300px; height: 200px;" alt="no pic">
                           </div>
                           <div class="col-lg-8">
                             <div class="d-md-flex align-items-md-center">
                               <div class="name">
-                                <h4><a href=<?php echo "details.php?ID=" . $data['bus_id'] ?>><strong><?php echo $data['BusinessName'] ?></strong></a></h4>
+                              <br><h4><a href=<?php echo "details.php?ID=" . $data['bus_id'] ?>><strong><?php echo $data['BusinessName'] ?></strong></a></h4>
                                 <span class="city"><?php echo $data['BusinessAddress'] . ' Brgy ' . $data['BusinessBrgy'] ?></span>
                               </div>
                             </div>
@@ -724,13 +726,12 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
                               <span id="<?php echo $uniqueId; ?>">
                                 <?php echo substr($data['BusinessDescrip'], 0, 50); ?>
                               </span>
-                              <!-- <button class="link-button center text-info" onclick="toggleDescription(this, '<?php echo $uniqueId; ?>', '<?php echo htmlspecialchars(json_encode($data['BusinessDescrip'])); ?>')">See More</button> -->
                             </p>
                           </div>
                         </div>
                       <?php } ?>
                     <?php } else { ?>
-                      
+
                       <div id="newFilteredUi">
                         <?php echo $disp; ?>
                       </div>
@@ -744,7 +745,6 @@ if ((isset($_GET['a']) && $_GET['a'] != null)) {
                       </div>
                     </div>
   </section>
-
   </div>
   </div>
   </div>
