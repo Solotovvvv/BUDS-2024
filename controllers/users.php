@@ -77,7 +77,7 @@ function forgotPass($request = null)
     $mail->Body = "
     <p style='text-align: center;'>Click the button below to reset your password:</p>
     <div style='text-align: center;'>
-        <a href='http://localhost/BUDS/reset_pass.php?a=$hashed_id' style='background-color: #4CAF50; border: none; color: white; padding: 15px 32px; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer; border-radius: 5px;'>Reset Password</a>
+        <a href='http://localhost/BUDS-2024/reset_pass.php?a=$hashed_id' style='background-color: #4CAF50; border: none; color: white; padding: 15px 32px; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer; border-radius: 5px;'>Reset Password</a>
     </div>
     <p style='text-align: center;'>If you did not request a password reset, please ignore this email.</p>
 ";
