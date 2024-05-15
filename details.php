@@ -80,11 +80,11 @@ if ($rs = $conn->query($sql)) {
                     while ($faqRow = $rsfaq->fetch_assoc()) {
                         $FAQs .= '<div class="dropdown mb-2">
                                 <button class="btn btn-success dropdown-toggle" type="button" id="collapseDropdownButton' . $counter . '" data-toggle="collapse" data-target="#collapseContent' . $counter . '" aria-expanded="false" aria-controls="collapseContent' . $counter . '">
-                                Question #' . $counter . '. ' . $faqRow['questions'] . '
+                                Question #' . $counter . '. ' . $faqRow['Questions'] . '
                                 </button>
                                     <div class="c  ollapse" id="collapseContent' . $counter . '">
                                       <div class="card card-body" style="border: 1px solid rgba(0,0,0,.125)">
-                                            ' . $faqRow['answer'] . '
+                                            ' . $faqRow['Answer'] . '
                                         </div>
                                     </div>
                             </div>';
