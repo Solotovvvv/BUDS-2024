@@ -859,7 +859,7 @@ function uploadBusinessRequirements($request = null)
         $pdo = Database::connection();
 
         $sql = "
-            INSERT INTO requirements (
+            INSERT INTO business_requirement (
                 bus_id, 
                 bus_brgyclearance, 
                 bus_dtipermit, 
