@@ -3,7 +3,7 @@
 $server="localhost";//server name
 $user="root";		//user name
 $pass="";			//user password
-$db_name="buds_2023";//database name
+$db_name="buds";//database name
 // Establish database connection.
 $conn= new mysqli($server,$user,$pass,$db_name);
 if($conn->connect_error){
@@ -12,7 +12,7 @@ if($conn->connect_error){
 
 class Database {
     private static $host = "localhost";
-    private static $dbname = "buds_2023";
+    private static $dbname = "buds";
     private static $user = "root";
     private static $pass="";	
     // private static $host = "localhost";
