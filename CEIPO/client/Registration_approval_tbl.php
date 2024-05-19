@@ -7,6 +7,7 @@ $sql = "SELECT
             bl.*,
             br.*,
             ol.ID AS owner_id,
+            ol.contactNumber,
             CONCAT(ol.Firstname, ' ', ol.Middlename, ' ', ol.Surname) AS owner_name,
             bz.*,
             c.*,
@@ -32,18 +33,18 @@ if ($stmt->execute()) {
         if ($row['BusinessStatus'] == 3) {
             $businessStatus = 'Re-Evaluate';
         } elseif ($row['BusinessStatus'] == 1) {
-            $businessStatus = 'Passed';
+            $businessStatus = 'For Encryption';
         }elseif ($row['BusinessStatus']== 4){
             $businessStatus = 'Approved';
         }elseif ($row['BusinessStatus']== 2){
-            $businessStatus = 'Pending';
+            $businessStatus = 'For Review';
         }
 
         $storeButtonId = 'storeButton_' . $row['bus_id'];
         
         $subarray = [
-            '<td>' . $row['BusinessName'] . '</td>',
-            '<td>' . $row['owner_name'] . '</td>',
+            '<td>' . $row['BusinessName'] . '<br><small>' . $row['BusinessAddress'] . '</small></td>',
+            '<td>' . $row['owner_name'] . '<br><small>' . $row['contactNumber'] . '</small> </td>',
             '<td>' . $row['category'] . '</td>',
             '<td>' . $businessStatus. '</td>',
           
