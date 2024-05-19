@@ -893,7 +893,7 @@ function uploadBusinessRequirements($request = null)
         $msg['message'] = 'Database error: ' . $e->getMessage();
     }
 
-    echo json_encode($msg);
+    return json_encode($msg);
 };
 
 function edtDTIPermit($request = null)

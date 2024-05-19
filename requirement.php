@@ -159,6 +159,11 @@ $datas = $stmt1->fetchAll();
             padding: 6px 12px;
             cursor: pointer;
         }
+
+        .custom-transition-class {
+            transition: transform 0.15s ease-out;
+            transform: translateY(-100px) scale(0.8);
+        }
     </style>
 </head>
 
@@ -307,7 +312,7 @@ $datas = $stmt1->fetchAll();
                         <div class="row">
                             <div class="col-md-6">
                                 <!-- button for modal business requirements -->
-                                <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#staticBackdropRequiremnents">
                                     Upload Requirements
                                 </button>
 
@@ -351,12 +356,12 @@ $datas = $stmt1->fetchAll();
 
 
                 <!-- Modal for business requirements -->
-                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal fade" id="staticBackdropRequiremnents" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="staticBackdropLabel">Upload Requirements</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" id="closeModalButton" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <div class="mb-3">
@@ -397,6 +402,7 @@ $datas = $stmt1->fetchAll();
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -548,7 +554,7 @@ $datas = $stmt1->fetchAll();
             formData.append('bus_sanitarypermit', sanitaryPermitFile);
             formData.append('bus_cedula', cedulaFile);
             formData.append('bus_mayorpermit', mayorPermitsFile);
-  
+
 
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "controllers/business.php", true);
@@ -559,11 +565,27 @@ $datas = $stmt1->fetchAll();
                     if (xhr.status === 200) {
                         // Handle success response
                         var data = JSON.parse(xhr.responseText);
-                        // console.log("Data received:", data);
-                        swal.fire(data.title, data.message, data.icon);
-                        // setTimeout(function() {
-                        //     window.location.reload();
-                        // }, 2000);
+                        console.log("Data received:", data);
+
+                        if (data.title && data.message && data.icon) {
+                            Swal.fire({
+                                title: data.title,
+                                text: data.message,
+                                icon: data.icon
+                            })
+                                // Close the Bootstrap modal using Bootstrap's JavaScript API
+
+                                $('#staticBackdropRequiremnents').modal('hide');
+
+                                // Remove the 'show' class to hide the modal
+                                $('#staticBackdropRequiremnents').removeClass('show');
+                                // Set display to 'none' to ensure the modal is hidden
+                                $('#staticBackdropRequiremnents').css('display', 'none');
+                      
+
+                        } else {
+                            console.error("Response does not contain all required fields.");
+                        }
                     } else {
                         // Handle error
                         console.log("Error:", xhr.statusText);
