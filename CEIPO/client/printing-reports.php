@@ -99,7 +99,7 @@ if (empty($_SESSION['ownerId'])) {
                             <select class="form-select" id="Category" name="category" aria-label="Floating label select example">
                               <option selected value="0">Select</option>
                               <?php
-                           include '../../includes/config.php'; // Include your database connection code
+                              include '../../includes/config.php'; // Include your database connection code
                               $pdo = DATABASE::connection();
 
                               try {
@@ -174,6 +174,21 @@ if (empty($_SESSION['ownerId'])) {
                             <button id="printButton" class="btn btn-success me-sm-2" type="button"><i class="bx bx-printer"></i> Print</button>
                           </div>
                         </div>
+
+
+                        <div class="table-responsive mt-5">
+                          <table id="ReportsTbl" class="table table-bordered table-hover">
+                            <thead>
+                              <tr>
+                                <th>No.</th>
+                                <th>Business Name</th>
+                                <th>Business Barangay</th>
+                                <th>Capitalization</th>
+                                <th>Category And Subcategory</th>
+                              </tr>
+                            </thead>
+                          </table>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -197,42 +212,87 @@ if (empty($_SESSION['ownerId'])) {
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
           $(document).ready(function() {
-            $("#Category").change(function() {
+
+            var dataTable = $('#ReportsTbl').DataTable({
+              'serverside': true,
+              'processing': true,
+              'paging': true,
+              'columnDefs': [{
+                'className': 'dt-center',
+                'targets': '_all'
+              }],
+              'ajax': {
+                'url': 'reports_tbl.php',
+                'type': 'post',
+                'data': function(d) {
+                  d.category = $('#Category').val();
+                  d.subcategory = $('#SubCategory').val();
+                  d.barangay = $('#barangayFilter').val();
+                  d.capitalization = $('#capitalizationFilter').val();
+                }
+              }
+            });
+
+            // Function to reload DataTable with new parameters
+            function reloadDataTable() {
+              dataTable.ajax.reload();
+            }
+
+            // Event listener for Category dropdown change
+            $('#Category').change(function() {
               var categoryId = $(this).val();
 
               // Clear existing options in subcategory dropdown
-              $("#SubCategory").html("<option selected value='0'>Select</option>");
+              $('#SubCategory').html('<option selected value="0">Select</option>');
 
-              if (categoryId !== "0") {
+              if (categoryId !== '0') {
                 // Fetch subcategories based on the selected category using AJAX
                 $.ajax({
-                  url: "getSubcategories.php",
-                  type: "GET",
+                  url: 'getSubcategories.php',
+                  type: 'GET',
                   data: {
                     categoryId: categoryId
                   },
-                  dataType: "json",
+                  dataType: 'json',
                   success: function(data) {
                     if (!data.error) {
                       // Populate the subcategory dropdown with fetched data
                       $.each(data, function(index, subcategory) {
-                        $("#SubCategory").append("<option value='" + subcategory.ID + "'>" + subcategory.subCategory + "</option>");
+                        $('#SubCategory').append('<option value="' + subcategory.ID + '">' + subcategory.subCategory + '</option>');
                       });
 
                       // Enable the subcategory dropdown
-                      $("#SubCategory").prop("disabled", false);
+                      $('#SubCategory').prop('disabled', false);
                     } else {
-                      console.error("Error fetching subcategories: " + data.error);
+                      console.error('Error fetching subcategories: ' + data.error);
                     }
                   },
                   error: function(xhr, status, error) {
-                    console.error("AJAX error: " + error);
+                    console.error('AJAX error: ' + error);
                   }
                 });
               } else {
                 // Disable the subcategory dropdown if no category is selected
-                $("#SubCategory").prop("disabled", true);
+                $('#SubCategory').prop('disabled', true);
               }
+
+              // Reload the DataTable with the new category filter
+              reloadDataTable();
+            });
+
+            // Event listener for SubCategory dropdown change
+            $('#SubCategory').change(function() {
+              reloadDataTable();
+            });
+
+            // Event listener for Barangay dropdown change
+            $('#barangayFilter').change(function() {
+              reloadDataTable();
+            });
+
+            // Event listener for Capitalization dropdown change
+            $('#capitalizationFilter').change(function() {
+              reloadDataTable();
             });
 
             $("#printButton").click(function() {
@@ -312,7 +372,7 @@ if (empty($_SESSION['ownerId'])) {
                               },
                               row.BusinessName || 'N/A',
                               row.BusinessBrgy || 'N/A',
-                              row.capitalization || 'N/A',
+                              row.capitalization ? '₱' + new Intl.NumberFormat('en-PH').format(row.capitalization) : 'N/A',
                               (row.BusinessCategory + ' - ' + row.subCategory) || 'N/A'
                             ])
                           ]
