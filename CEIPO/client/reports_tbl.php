@@ -55,14 +55,15 @@ foreach ($params as $key => &$val) {
 }
 
 $data = [];
+$index = 1; // Initialize index to 1
 if ($stmt->execute()) {
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $capitalization = !empty($row['capitalization']) ? '₱' . number_format($row['capitalization']) : 'N/A';
 
 
         $subarray = [
+            $index++,
             $row['BusinessName'],
-            $row['owner_name'],
             $row['BusinessBrgy'],
             $capitalization,
             $row['BusinessCategory'] . ' - ' . $row['subCategory']
