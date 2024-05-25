@@ -851,8 +851,17 @@ function uploadBusinessRequirements($request = null)
         }
     }
 
+    // Create a new DateTime object with the current time
+    $date = new DateTime('now', new DateTimeZone('Asia/Manila'));
+
+    // Format the datetime as desired
+    $currentDatetime = $date->format('Y-m-d H:i:s');
+
+
     // Current datetime
-    $currentDatetime = date('Y-m-d H:i:s');
+    // $currentDatetime = date('Y-m-d H:i:s');
+
+
 
     // Save file information to the database using PDO
     try {

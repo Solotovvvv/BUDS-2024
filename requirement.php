@@ -30,6 +30,7 @@ $datas = $stmt1->fetchAll();
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="plugins/assets/vendor/css/core.css" class="template-customizer-core-css">
     <link rel="stylesheet" href="plugins/assets/vendor/css/theme-default.css" class="template-customizer-theme-css">
+    <link rel="stylesheet" href="plugins/assets/vendor/fonts/boxicons.css">
     <link rel="stylesheet" href="plugins/assets/css/demo.css">
     <link rel="stylesheet" href="plugins/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css">
     <script src="plugins/assets/vendor/js/helpers.js"></script>
@@ -317,19 +318,25 @@ $datas = $stmt1->fetchAll();
                                 </button>
 
                                 <div class="card mb-4">
-                                    <h5 class="card-header">Status</h5>
+                                    <!-- <h5 class="card-header">Status</h5> -->
                                     <hr class="my-0">
                                     <div class="card-body">
                                         <div class="job-listing">
                                             <?php
                                             foreach ($datas as $data) {
+                                                $date = new DateTime($data['created_at']);
+
+                                                // Format the DateTime object to the desired format
+                                                $formattedDate = $date->format('F j Y g:i A');
                                                 echo '
-                                                <div class="job-listing-item" onclick=\'showJobDetails(' . json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) . ')\'>
-                                                    <div class="job-details">
-                                                        <div class="job-title">' . htmlspecialchars($data['created_at']) . '</div>
-                                                    </div>
-                                                    <div class="job-action">
-                                                        <a href="javascript:void(0)">View Requirements</a>
+                                                <div id="job-listing-container mb-3">
+                                                    <div class="job-listing-item" onclick=\'showJobDetails(' . json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) . ')\'>
+                                                        <div class="job-details">
+                                                            <div class="job-title">' . htmlspecialchars($formattedDate) . '</div>
+                                                        </div>
+                                                        <div class="job-action">
+                                                            <a href="javascript:void(0)">View Requirements</a>
+                                                        </div>
                                                     </div>
                                                 </div>';
                                             }
@@ -573,15 +580,15 @@ $datas = $stmt1->fetchAll();
                                 text: data.message,
                                 icon: data.icon
                             })
-                                // Close the Bootstrap modal using Bootstrap's JavaScript API
+                            // Close the Bootstrap modal using Bootstrap's JavaScript API
+                            $('#staticBackdropRequiremnents').modal('hide');
+                            // Remove the 'show' class to hide the modal
+                            $('#staticBackdropRequiremnents').removeClass('show');
+                            // Set display to 'none' to ensure the modal is hidden
+                            $('#staticBackdropRequiremnents').css('display', 'none');
 
-                                $('#staticBackdropRequiremnents').modal('hide');
-
-                                // Remove the 'show' class to hide the modal
-                                $('#staticBackdropRequiremnents').removeClass('show');
-                                // Set display to 'none' to ensure the modal is hidden
-                                $('#staticBackdropRequiremnents').css('display', 'none');
-                      
+                            // Fetch and update the job listings
+                            updateJobListings();
 
                         } else {
                             console.error("Response does not contain all required fields.");
@@ -596,6 +603,52 @@ $datas = $stmt1->fetchAll();
             // Send the FormData object
             xhr.send(formData);
         };
+
+        function updateJobListings() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "controllers/getUpdatedJobListings.php", true);
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var updatedData = JSON.parse(xhr.responseText);
+                    var jobListingContainer = document.getElementById('job-listing-container');
+                    jobListingContainer.innerHTML = ''; // Clear current content
+
+                    updatedData.forEach(function(data) {
+                        var jobListingItem = document.createElement('div');
+                        jobListingItem.className = 'job-listing-item';
+                        jobListingItem.onclick = function() {
+                            showJobDetails(data);
+                        };
+
+                        var jobDetails = document.createElement('div');
+                        jobDetails.className = 'job-details';
+
+                        var jobTitle = document.createElement('div');
+                        jobTitle.className = 'job-title';
+                        jobTitle.textContent = data.created_at; // Adjust as necessary
+
+                        jobDetails.appendChild(jobTitle);
+
+                        var jobAction = document.createElement('div');
+                        jobAction.className = 'job-action';
+
+                        var viewRequirementsLink = document.createElement('a');
+                        viewRequirementsLink.href = 'javascript:void(0)';
+                        viewRequirementsLink.textContent = 'View Requirements';
+
+                        jobAction.appendChild(viewRequirementsLink);
+
+                        jobListingItem.appendChild(jobDetails);
+                        jobListingItem.appendChild(jobAction);
+
+                        jobListingContainer.appendChild(jobListingItem);
+                    });
+                }
+            };
+
+            xhr.send();
+        }
     </script>
 </body>
 
