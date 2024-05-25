@@ -22,6 +22,82 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['payload'])) {
     }
 }
 
+function editRequirements($request)
+{
+    // Assuming imagekey is lowercase in the request
+    $dataKey = $request->imagekey;
+    $id = $request->id;
+
+    // Access the uploaded file
+    $uploadedFile = $_FILES['image'];
+
+    // Check if file was uploaded successfully
+    if ($uploadedFile['error'] !== UPLOAD_ERR_OK) {
+        // Handle the upload error
+        echo "Error uploading file.";
+        return;
+    }
+
+    // Extract file information
+    $fileName = $uploadedFile['name'];
+    $fileTmpPath = $uploadedFile['tmp_name'];
+    $fileType = $uploadedFile['type'];
+    $fileSize = $uploadedFile['size'];
+
+    // Generate a new unique filename
+    $newFileName = uniqid() . '_' . $fileName; // You can use any method to generate a unique name
+
+    // Destination directory
+    $destinationDirectory = '../img/requirements/';
+
+    // Final destination path
+    $destination = $destinationDirectory . $newFileName;
+
+    // Move the uploaded file to the desired location with the new name
+    if (move_uploaded_file($fileTmpPath, $destination)) {
+        // Establish PDO connection
+        $pdo = Database::connection();
+
+        // Prepare SQL statement
+        $sql = "UPDATE business_requirement SET $dataKey = :newFileName WHERE bus_req_id = :id";
+
+        // Prepare and execute the statement
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':newFileName', $newFileName);
+        $stmt->bindParam(':id', $id);
+
+        if ($stmt->execute()) {
+            echo "DataKey updated successfully.";
+        } else {
+            echo "Error updating dataKey.";
+        }
+    } else {
+        // Failed to move the uploaded file, handle error
+        echo "Error moving uploaded file.";
+    }
+}
+
+function deleteRequirements($request = null)
+{
+    $dataKey = $request->imagekey;
+    $id = $request->id;
+
+    $pdo = Database::connection();
+
+    // Prepare SQL statement
+    $sql = "UPDATE business_requirement SET $dataKey = '' WHERE bus_req_id = :id";
+
+    // Prepare and execute the statement
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':id', $id);
+
+    if ($stmt->execute()) {
+        echo "DataKey updated successfully.";
+    } else {
+        echo "Error updating dataKey.";
+    }
+}
+
 // function addBusiness($request = null)
 // {
 //     $businessName = $request->businessName;

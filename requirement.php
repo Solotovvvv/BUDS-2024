@@ -329,7 +329,7 @@ $datas = $stmt1->fetchAll();
                                                 // Format the DateTime object to the desired format
                                                 $formattedDate = $date->format('F j Y g:i A');
                                                 echo '
-                                                <div id="job-listing-container mb-3">
+                                                <div class="job-listing-container">
                                                     <div class="job-listing-item" onclick=\'showJobDetails(' . json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) . ')\'>
                                                         <div class="job-details">
                                                             <div class="job-title">' . htmlspecialchars($formattedDate) . '</div>
@@ -438,217 +438,335 @@ $datas = $stmt1->fetchAll();
 
 
             jobDetailBody.innerHTML = `
-    <div>
-        <p><strong>Brgy Clearance:</strong></p>
-        <div class="text-center mb-3">
+            <div>
+            <p><strong>Brgy Clearance:</strong></p>
+            <div class="text-center mb-3">
             <img src="img/requirements/${jobData.bus_brgyclearance}" alt="Brgy Clearance" style="max-width: 500px; max-height: 500px;">
-        </div>
-        <div class="d-flex justify-content-center align-items-center">
-            <input type="file" class="custom-file-input" id="edit_brgyclearance" accept="image/*" onchange="handleImageUpload('bus_brgyclearance', this)">
-            <button class="btn btn-danger ms-2" onclick="deleteImage('bus_brgyclearance')">Delete</button>
-        </div>
-    </div>
-    <div>
-        <p><strong>Dti Permit:</strong></p>
-        <div class="text-center mb-3">
+            </div>
+            <div class="d-flex justify-content-center align-items-center">
+            <input type="file" class="custom-file-input" id="edit_brgyclearance" accept="image/*" onchange="handleImageUpload('bus_brgyclearance', this, ${jobData.bus_req_id})">
+            <button class="btn btn-danger ms-2" onclick="deleteImage('bus_brgyclearance', ${jobData.bus_req_id})">Delete</button>
+            </div>
+            </div>
+            <div>
+            <p><strong>Dti Permit:</strong></p>
+            <div class="text-center mb-3">
             <img src="img/requirements/${jobData.bus_dtipermit}" alt="Dti Permit" style="max-width: 500px; max-height: 500px;">
-        </div>
-        <div class="d-flex justify-content-center align-items-center">
-            <input type="file" class="custom-file-input" id="edit_dtipermit" accept="image/*" onchange="handleImageUpload('bus_dtipermit', this)">
-            <button class="btn btn-danger ms-2" onclick="deleteImage('bus_dtipermit')">Delete</button>
-        </div>
-    </div>
-    <div>
-        <p><strong>Sanitary Permit:</strong></p>
-        <div class="text-center mb-3">
+            </div>
+            <div class="d-flex justify-content-center align-items-center">
+            <input type="file" class="custom-file-input" id="edit_dtipermit" accept="image/*" onchange="handleImageUpload('bus_dtipermit', this, ${jobData.bus_req_id})">
+            <button class="btn btn-danger ms-2" onclick="deleteImage('bus_dtipermit', ${jobData.bus_req_id})">Delete</button>
+            </div>
+            </div>
+            <div>
+            <p><strong>Sanitary Permit:</strong></p>
+            <div class="text-center mb-3">
             <img src="img/requirements/${jobData.bus_sanitarypermit}" alt="Sanitary Permit" style="max-width: 500px; max-height: 500px;">
-        </div>
-        <div class="d-flex justify-content-center align-items-center">
-            <input type="file" class="custom-file-input" id="edit_sanitarypermit" accept="image/*" onchange="handleImageUpload('bus_sanitarypermit', this)">
-            <button class="btn btn-danger ms-2" onclick="deleteImage('bus_sanitarypermit')">Delete</button>
-        </div>
-    </div>
-    <div>
-        <p><strong>Cedula:</strong></p>
-        <div class="text-center mb-3">
+            </div>
+            <div class="d-flex justify-content-center align-items-center">
+            <input type="file" class="custom-file-input" id="edit_sanitarypermit" accept="image/*" onchange="handleImageUpload('bus_sanitarypermit', this, ${jobData.bus_req_id})">
+            <button class="btn btn-danger ms-2" onclick="deleteImage('bus_sanitarypermit', ${jobData.bus_req_id})">Delete</button>
+            </div>
+            </div>
+            <div>
+            <p><strong>Cedula:</strong></p>
+            <div class="text-center mb-3">
             <img src="img/requirements/${jobData.bus_cedula}" alt="Cedula" style="max-width: 500px; max-height: 500px;">
-        </div>
-        <div class="d-flex justify-content-center align-items-center">
-            <input type="file" class="custom-file-input" id="edit_cedula" accept="image/*" onchange="handleImageUpload('bus_cedula', this)">
-            <button class="btn btn-danger ms-2" onclick="deleteImage('bus_cedula')">Delete</button>
-        </div>
-    </div>
-    <div>
-        <p><strong>Mayor's Permit:</strong></p>
-        <div class="text-center mb-3">
+            </div>
+            <div class="d-flex justify-content-center align-items-center">
+            <input type="file" class="custom-file-input" id="edit_cedula" accept="image/*" onchange="handleImageUpload('bus_cedula', this, ${jobData.bus_req_id})">
+            <button class="btn btn-danger ms-2" onclick="deleteImage('bus_cedula', ${jobData.bus_req_id})">Delete</button>
+            </div>
+            </div>
+            <div>
+            <p><strong>Mayor's Permit:</strong></p>
+            <div class="text-center mb-3">
             <img src="img/requirements/${jobData.bus_mayorpermit}" alt="Mayor's Permit" style="max-width: 500px; max-height: 500px;">
-        </div>
-        <div class="d-flex justify-content-center align-items-center">
-            <input type="file" class="custom-file-input" id="edit_cedula" accept="image/*" onchange="handleImageUpload('bus_mayorpermit', this)">
-            <button class="btn btn-danger ms-2" onclick="deleteImage('bus_mayorpermit')">Delete</button>
-        </div>
-    </div>
-`;
+            </div>
+            <div class="d-flex justify-content-center align-items-center">
+            <input type="file" class="custom-file-input" id="edit_cedula" accept="image/*" onchange="handleImageUpload('bus_mayorpermit', this, ${jobData.bus_req_id})">
+            <button class="btn btn-danger ms-2" onclick="deleteImage('bus_mayorpermit', ${jobData.bus_req_id})">Delete</button>
+            </div>
+            </div>
+            `;
             jobDetailContainer.style.display = 'block';
         }
 
 
-        function handleImageUpload(imageKey, input) {
-            const file = input.files[0];
-            // Display confirmation dialog
-            Swal.fire({
-                title: 'Upload Image',
-                text: 'Are you sure you want to upload this image?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Upload',
-                cancelButtonText: 'Cancel'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // User confirmed, proceed with upload
-                    console.log(`Uploading ${file.name} for ${imageKey}`);
-                    // Here you can add your upload logic
-                    Swal.fire('Uploaded!', 'Your image has been uploaded.', 'success');
-                } else {
-                    // User canceled, clear file input
-                    input.value = ''; // Clear the file input to reset selection
-                    Swal.fire('Cancelled', 'Your image upload was cancelled.', 'info');
-                }
-            });
-        }
-
-        function applyOnCompanySite() {
-            // Write your function logic here
-            // For example:
-            console.log("Applying on company site...");
-            // You can redirect the user to the company site or perform any other action
-            // window.location.href = jobData.BusinessStatus;
-        }
-
-        function closeJobDetails() {
-            const jobDetailContainer = document.getElementById('job-detail-container');
-            jobDetailContainer.style.display = 'none';
-        }
-
-
-        function uploadRequirents() {
-            var payload = {};
-
-            var formData = new FormData();
-
-            // Append payload data as JSON
-            formData.append('payload', JSON.stringify(payload));
-            formData.append('setFunction', 'uploadBusinessRequirements');
-
-            // Get the selected file (input element)
-            var businessBrgyInput = $("input[name='barangayClearance']")[0]; // Assuming it's the first input element
-            var businessBrgyFile = businessBrgyInput.files[0];
-
-            var dtiPermitInput = $("input[name='DTIPermit']")[0]; // Assuming it's the first input element
-            var dtiPermitFile = dtiPermitInput.files[0];
-
-            var sanitaryPermitInput = $("input[name='sanitaryPermit']")[0]; // Assuming it's the first input element
-            var sanitaryPermitFile = dtiPermitInput.files[0];
-
-            var cedulaInput = $("input[name='edtCedula']")[0]; // Assuming it's the first input element
-            var cedulaFile = dtiPermitInput.files[0];
-
-            var mayorsPermitInput = $("input[name='mayorPermit']")[0]; // Assuming it's the first input element
-            var mayorPermitsFile = dtiPermitInput.files[0];
-
-            formData.append('bus_brgyclearance', businessBrgyFile);
-            formData.append('bus_dtipermit', dtiPermitFile);
-            formData.append('bus_sanitarypermit', sanitaryPermitFile);
-            formData.append('bus_cedula', cedulaFile);
-            formData.append('bus_mayorpermit', mayorPermitsFile);
-
-
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "controllers/business.php", true);
-
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4) {
-                    console.log("Server response:", xhr.responseText);
-                    if (xhr.status === 200) {
-                        // Handle success response
-                        var data = JSON.parse(xhr.responseText);
-                        console.log("Data received:", data);
-
-                        if (data.title && data.message && data.icon) {
-                            Swal.fire({
-                                title: data.title,
-                                text: data.message,
-                                icon: data.icon
-                            })
-                            // Close the Bootstrap modal using Bootstrap's JavaScript API
-                            $('#staticBackdropRequiremnents').modal('hide');
-                            // Remove the 'show' class to hide the modal
-                            $('#staticBackdropRequiremnents').removeClass('show');
-                            // Set display to 'none' to ensure the modal is hidden
-                            $('#staticBackdropRequiremnents').css('display', 'none');
-
-                            // Fetch and update the job listings
-                            updateJobListings();
-
-                        } else {
-                            console.error("Response does not contain all required fields.");
-                        }
-                    } else {
-                        // Handle error
-                        console.log("Error:", xhr.statusText);
-                    }
-                }
+        function deleteImage(key, id) {
+            var payload = {
+                imagekey: key,
+                id: id
             };
 
-            // Send the FormData object
-            xhr.send(formData);
-        };
+            Swal.fire({
+                    title: 'Delete Image',
+                    text: 'Are you sure you want to delete this image?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Delete',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Create FormData and append the file and other data
+                        const formData = new FormData();
+                        formData.append('payload', JSON.stringify(payload));
+                        formData.append('setFunction', 'deleteRequirements');
+                        // formData.append('imagekey', imageKey);
+                        // formData.append('id', id);
 
-        function updateJobListings() {
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", "controllers/getUpdatedJobListings.php", true);
+                        // Create XMLHttpRequest and send the FormData
+                        const xhr = new XMLHttpRequest();
+                        xhr.open("POST", "controllers/business.php", true);
 
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    var updatedData = JSON.parse(xhr.responseText);
-                    var jobListingContainer = document.getElementById('job-listing-container');
-                    jobListingContainer.innerHTML = ''; // Clear current content
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState === XMLHttpRequest.DONE) {
+                                if (xhr.status === 200) {
+                                    Swal.fire({
+                                        title: 'Deleted!',
+                                        text: 'Your image has been deleted.',
+                                        icon: 'success',
+                                        confirmButtonText: 'OK'
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            location.reload(); // Reload the DOM
+                                        }
+                                    });
 
-                    updatedData.forEach(function(data) {
-                        var jobListingItem = document.createElement('div');
-                        jobListingItem.className = 'job-listing-item';
-                        jobListingItem.onclick = function() {
-                            showJobDetails(data);
+                                } else {
+                                    Swal.fire('Error!', 'There was an error uploading your image.', 'error');
+                                    console.error('Error:', xhr.statusText);
+                                }
+                            }
                         };
 
-                        var jobDetails = document.createElement('div');
-                        jobDetails.className = 'job-details';
+                        xhr.send(formData);
+                    } else {
+                        // User canceled, clear file input
+                        input.value = ''; // Clear the file input to reset selection
+                        Swal.fire('Cancelled', 'Your image upload was cancelled.', 'info');
+                    }
+                });
 
-                        var jobTitle = document.createElement('div');
-                        jobTitle.className = 'job-title';
-                        jobTitle.textContent = data.created_at; // Adjust as necessary
+        }
+                
+            
 
-                        jobDetails.appendChild(jobTitle);
 
-                        var jobAction = document.createElement('div');
-                        jobAction.className = 'job-action';
+            function handleImageUpload(imageKey, input, id) {
+                const file = input.files[0];
+                var payload = {
+                    imagekey: imageKey,
+                    id: id
+                }; // You can populate this object with necessary data
 
-                        var viewRequirementsLink = document.createElement('a');
-                        viewRequirementsLink.href = 'javascript:void(0)';
-                        viewRequirementsLink.textContent = 'View Requirements';
+                // Display confirmation dialog
+                Swal.fire({
+                    title: 'Upload Image',
+                    text: 'Are you sure you want to upload this image?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Upload',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Create FormData and append the file and other data
+                        const formData = new FormData();
+                        formData.append('payload', JSON.stringify(payload));
+                        formData.append('setFunction', 'editRequirements');
+                        formData.append('image', file);
+                        // formData.append('imagekey', imageKey);
+                        // formData.append('id', id);
 
-                        jobAction.appendChild(viewRequirementsLink);
+                        // Create XMLHttpRequest and send the FormData
+                        const xhr = new XMLHttpRequest();
+                        xhr.open("POST", "controllers/business.php", true);
 
-                        jobListingItem.appendChild(jobDetails);
-                        jobListingItem.appendChild(jobAction);
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState === XMLHttpRequest.DONE) {
+                                if (xhr.status === 200) {
+                                    Swal.fire({
+                                        title: 'Uploaded!',
+                                        text: 'Your image has been uploaded.',
+                                        icon: 'success',
+                                        confirmButtonText: 'OK'
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            location.reload(); // Reload the DOM
+                                        }
+                                    });
 
-                        jobListingContainer.appendChild(jobListingItem);
-                    });
-                }
+                                } else {
+                                    Swal.fire('Error!', 'There was an error uploading your image.', 'error');
+                                    console.error('Error:', xhr.statusText);
+                                }
+                            }
+                        };
+
+                        xhr.send(formData);
+                    } else {
+                        // User canceled, clear file input
+                        input.value = ''; // Clear the file input to reset selection
+                        Swal.fire('Cancelled', 'Your image upload was cancelled.', 'info');
+                    }
+                });
+            }
+
+            function applyOnCompanySite() {
+                // Write your function logic here
+                // For example:
+                console.log("Applying on company site...");
+                // You can redirect the user to the company site or perform any other action
+                // window.location.href = jobData.BusinessStatus;
+            }
+
+            function closeJobDetails() {
+                const jobDetailContainer = document.getElementById('job-detail-container');
+                jobDetailContainer.style.display = 'none';
+            }
+
+
+            function uploadRequirents() {
+                var payload = {};
+
+                var formData = new FormData();
+
+                // Append payload data as JSON
+                formData.append('payload', JSON.stringify(payload));
+                formData.append('setFunction', 'uploadBusinessRequirements');
+
+                // Get the selected file (input element)
+                var businessBrgyInput = $("input[name='barangayClearance']")[0]; // Assuming it's the first input element
+                var businessBrgyFile = businessBrgyInput.files[0];
+
+                var dtiPermitInput = $("input[name='DTIPermit']")[0]; // Assuming it's the first input element
+                var dtiPermitFile = dtiPermitInput.files[0];
+
+                var sanitaryPermitInput = $("input[name='sanitaryPermit']")[0]; // Assuming it's the first input element
+                var sanitaryPermitFile = dtiPermitInput.files[0];
+
+                var cedulaInput = $("input[name='edtCedula']")[0]; // Assuming it's the first input element
+                var cedulaFile = dtiPermitInput.files[0];
+
+                var mayorsPermitInput = $("input[name='mayorPermit']")[0]; // Assuming it's the first input element
+                var mayorPermitsFile = dtiPermitInput.files[0];
+
+                formData.append('bus_brgyclearance', businessBrgyFile);
+                formData.append('bus_dtipermit', dtiPermitFile);
+                formData.append('bus_sanitarypermit', sanitaryPermitFile);
+                formData.append('bus_cedula', cedulaFile);
+                formData.append('bus_mayorpermit', mayorPermitsFile);
+
+
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "controllers/business.php", true);
+
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        console.log("Server response:", xhr.responseText);
+                        if (xhr.status === 200) {
+                            // Handle success response
+                            var data = JSON.parse(xhr.responseText);
+                            console.log("Data received:", data);
+
+                            if (data.title && data.message && data.icon) {
+                                Swal.fire({
+                                    title: data.title,
+                                    text: data.message,
+                                    icon: data.icon
+                                })
+                                // Close the Bootstrap modal using Bootstrap's JavaScript API
+                                $('#staticBackdropRequiremnents').modal('hide');
+                                // Remove the 'show' class to hide the modal
+                                $('#staticBackdropRequiremnents').removeClass('show');
+                                // Set display to 'none' to ensure the modal is hidden
+                                $('#staticBackdropRequiremnents').css('display', 'none');
+
+                                // Fetch and update the job listings
+                                // updateJobListings();
+                                location.reload(); // Reload the DOM
+
+                            } else {
+                                console.error("Response does not contain all required fields.");
+                            }
+                        } else {
+                            // Handle error
+                            console.log("Error:", xhr.statusText);
+                        }
+                    }
+                };
+
+                // Send the FormData object
+                xhr.send(formData);
             };
 
-            xhr.send();
-        }
+            function updateJobListings() {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "controllers/getUpdatedJobListings.php", true);
+
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        var updatedData = JSON.parse(xhr.responseText);
+                        var jobListingContainers = document.querySelectorAll('.job-listing-container');
+                        jobListingContainers.forEach(function(container) {
+                            container.innerHTML = ''; // Clear current content for each container
+                            // container.classList.add('mb-2'); // Add class
+                        });
+
+
+
+
+                        updatedData.forEach(function(data) {
+                            // Assuming data.created_at is in ISO 8601 format like "2024-05-26T12:30:00Z"
+                            var createdDate = new Date(data.created_at);
+
+                            // Format the date using toLocaleString
+                            var formattedDate = createdDate.toLocaleString('en-US', {
+                                month: 'long',
+                                day: 'numeric',
+                                year: 'numeric',
+                                hour: 'numeric',
+                                minute: 'numeric',
+                                hour12: true
+                            });
+
+                            var jobListingItem = document.createElement('div');
+                            jobListingItem.className = 'job-listing-item';
+                            jobListingItem.onclick = function() {
+                                showJobDetails(data);
+                            };
+
+                            var jobDetails = document.createElement('div');
+                            jobDetails.className = 'job-details';
+
+                            var jobTitle = document.createElement('div');
+                            jobTitle.className = 'job-title';
+                            jobTitle.textContent = formattedDate; // Adjust as necessary
+
+                            jobDetails.appendChild(jobTitle);
+
+                            var jobAction = document.createElement('div');
+                            jobAction.className = 'job-action';
+
+                            var viewRequirementsLink = document.createElement('a');
+                            viewRequirementsLink.href = 'javascript:void(0)';
+                            viewRequirementsLink.textContent = 'View Requirements';
+
+                            jobAction.appendChild(viewRequirementsLink);
+
+                            jobListingItem.appendChild(jobDetails);
+                            jobListingItem.appendChild(jobAction);
+
+                            // Append the job listing item to the appropriate container
+                            jobListingContainers[0].appendChild(jobListingItem); // Assuming there's only one container
+                        });
+                        // $('.job-listing-container').addClass('mb-2');
+                        document.querySelector('.job-listing').style.gap = '0'; // Set gap to 0px
+                    }
+                };
+
+                xhr.send();
+            }
     </script>
 </body>
 
