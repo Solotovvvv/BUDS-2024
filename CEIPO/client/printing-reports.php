@@ -312,7 +312,7 @@ if (empty($_SESSION['ownerId'])) {
                               },
                               row.BusinessName || 'N/A',
                               row.BusinessBrgy || 'N/A',
-                              row.capitalization || 'N/A',
+                              row.capitalization ? `₱${row.capitalization}` : 'N/A',
                               (row.BusinessCategory + ' - ' + row.subCategory) || 'N/A'
                             ])
                           ]

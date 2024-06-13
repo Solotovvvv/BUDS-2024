@@ -184,7 +184,7 @@ $_SESSION['bus_id'] = $_GET['a'];
               <div class="col-12">
                 <div class="card">
                   <div class="card-header">
-                    <h3 class="card-title">Job Applicants</h3>
+                    <h3 class="card-title">Job Positions</h3>
                     <div class="d-grid gap- d-sm-flex justify-content-md-start">
                       <button class="btn btn-success me-sm-2" type="button" data-bs-toggle="modal" data-bs-target="#modalCenter"><i class="bx bx-user-pin"></i> Add Position</button>
                     </div>

@@ -62,7 +62,8 @@ if (!$stmt1->execute()) {
     $categories = $stmt2->fetchAll();
   }
 }
-
+date_default_timezone_set('Asia/Manila');
+$today = date('Y-m-d');
 
 
 ?>
@@ -97,6 +98,7 @@ if (!$stmt1->execute()) {
     /* Add this CSS to your stylesheet */
     .swal-confirm-button {
       width: 100px;
+      background-color:#355E3B;
       /* Adjust the width as needed */
     }
 
@@ -184,12 +186,7 @@ if (!$stmt1->execute()) {
                           <img id="user-profile-img" alt="User's Name">
                         </div>
                         <ul class="dropdown dropleft">
-                          <li>
-                            <h2>
-                              <?php echo $_SESSION['lname'] . ' , ' . $_SESSION['fname'] ?>
-                            </h2>
-                          </li>
-                          <li><a href="user.php">MY PROFILE</a></li>
+                          <li><a href="user.php"><?php echo $_SESSION['lname'] . ' , ' . $_SESSION['fname'] ?></a></li>
                           <?php if ($_SESSION['role'] == 3) { ?>
                             <li><a href="user_module-main/index.php">CREATE RESUME</a></li>
                           <?php } ?>
@@ -380,7 +377,7 @@ if (!$stmt1->execute()) {
                 </div>
                 <div class="row">
                   <div class="col">
-                    <div class="forms-inputs mb-4"> <span>Birthday</span> <input type="date" name="birthday" required id="ownerBirthday"></div>
+                    <div class="forms-inputs mb-4"> <span>Birthday</span> <input type="date" name="birthday" max="<?php echo $today; ?>" id="ownerBirthday"></div>
                   </div>
                   <div class="col">
                     <div class="forms-inputs mb-4"> <span>Age</span> <input type="text" name="age" required id="ownerAge"></div>
@@ -389,7 +386,7 @@ if (!$stmt1->execute()) {
                 <div class="row">
                   <div class="col">
                     <div class="form-group form-check">
-                      <span>Sex</span>
+                      <span>Gender</span>
                       <br>
                       <input type="radio" id="Female" name="sex" value="Female" required> Female
                       <input type="radio" id="Male" name="sex" value="Male" required> Male
@@ -764,6 +761,7 @@ if (!$stmt1->execute()) {
       var email = $('#emailUser').val();
       var pass = $('#pass').val();
       var conpass = $('#con_pass').val();
+      var passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/;
 
       if (
         !fname ||
@@ -784,6 +782,18 @@ if (!$stmt1->execute()) {
         });
         return;
       }
+      if (!passwordRegex.test(pass)) {
+        Swal.fire({
+            title: 'Warning',
+            text: 'Password must contain at least 8 characters with a combination of alphabetical and numerical characters.',
+            icon: 'warning',
+            customClass: {
+                confirmButton: 'swal-confirm-button',
+            },
+            showCancelButton: false,
+        });
+        return;
+    }
 
       var payload = {
         fname: fname,
@@ -847,6 +857,8 @@ if (!$stmt1->execute()) {
       var ownerAddress = $('#ownerAddress').val();
       var ownerPass = $('#ownerPass').val();
       var ownerConPass = $('#ownerConPass').val();
+      // Regular expression for password validation
+    var passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/;
 
       if (
         !ownerEmail ||
@@ -872,6 +884,19 @@ if (!$stmt1->execute()) {
         });
         return;
       }
+      // Check if password meets the criteria
+    if (!passwordRegex.test(ownerPass)) {
+        Swal.fire({
+            title: 'Warning',
+            text: 'Password must contain at least 8 characters with a combination of alphabetical and numerical characters.',
+            icon: 'warning',
+            customClass: {
+                confirmButton: 'swal-confirm-button',
+            },
+            showCancelButton: false,
+        });
+        return;
+    }
 
       var payload = {
         ownerEmail: ownerEmail,

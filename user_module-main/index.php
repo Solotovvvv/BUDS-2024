@@ -108,7 +108,7 @@ if (isset($_SESSION['ownerId'])) {
                                             <img id="user-profile-img" alt class="w-px-40 h-auto rounded-circle" />
                                             </div>
                                             <ul class="dropdown dropleft">
-                                                <li><a href="../user.php">MY PROFILE</a></li>
+                                                <li><a href="../user.php"><?php echo $_SESSION['lname'] . ' , ' . $_SESSION['fname'] ?></a></li>
                                                 <?php if ($_SESSION['role'] == 3) { ?>
                                                     <li><a href="index.php">CREATE RESUME</a></li>
                                                 <?php } ?>
