@@ -16,7 +16,6 @@ if (isset($_SESSION['email'])) {
 
 $ownerId = $_SESSION['ownerId'];
 
-
 //Category and sub-Category
 $Category = "";
 $sql = "SELECT * FROM category_list";
@@ -29,8 +28,6 @@ if ($rs = $conn->query($sql)) {
 } else {
   die("Error:" . $conn->error);
 }
-//Category and sub-Category
-
 ?>
 
 <!DOCTYPE html>
@@ -77,9 +74,6 @@ if ($rs = $conn->query($sql)) {
       /* Adjust the width as needed */
     }
   </style>
-
-
-
 </head>
 
 <body>
@@ -100,7 +94,6 @@ if ($rs = $conn->query($sql)) {
       </a>
     </div>
     <div id="mobile-menu-wrap"></div>
-
   </div>
   <!-- Offcanvas Menu Wrapper End -->
 
@@ -112,7 +105,6 @@ if ($rs = $conn->query($sql)) {
           <div class="col-lg-2">
             <div class="logo">
               <a href="./index.php"><img src="img/logo-main.png" alt=""></a><br>
-              <!-- <ul>Business Directory</ul> -->
             </div>
           </div>
           <div class="col-lg-10">
@@ -152,7 +144,6 @@ if ($rs = $conn->query($sql)) {
             <nav class="nav-menu">
               <ul>
                 <li><a href="./index.php">Home</a></li>
-                <!-- <li><a href="./listing.html">BUSINESS LISTING</a></li> -->
               </ul>
             </nav>
           </div>
@@ -170,31 +161,18 @@ if ($rs = $conn->query($sql)) {
           </div>
         </div>
         <div class="col-lg-12">
-
           <br>
           <div class="property-submit-form">
-
             <form method="post" enctype="multipart/form-data">
-              <!-- <div class="pf-title">
-                              <h4>Location</h4>
-                               <select name="loc" class="form-select form-select-sm mt-3">
-                                <option value="" disabled selected > Select a Location. </option>
-                                 <option value="1">North</option>
-                                  <option value="2">South</option>
-                               </select>
-                            </div> -->
               <div class="pf-title">
                 <h4>Business Name</h4>
                 <input name="BusinessName" id="busName" type="text" placeholder="Enter Business Name">
               </div>
-
-              <h4>Business Email</h4>
+              <h4>Business Logo</h4>
               <div class="custom-file">
-                <!-- add this to form data -->
-                <input class="custom-file-input" name="BusinessLogo" id="BusinessLogo" type="file">
-                <label class="custom-file-label" for="BusinessLogo">Choose file...</label>
+                <input class="custom-file-input" name="businessLogo" id="businessLogo" type="file" >
+                <label class="custom-file-label" for="BusinessLogo">Choose files...</label>
               </div>
-
               <div class="pf-title">
                 <br>
                 <h4>Business Email</h4>
@@ -216,7 +194,7 @@ if ($rs = $conn->query($sql)) {
               </div>
               <div class="pf-title">
                 <h4>Business Contact Number</h4>
-                <input name="BusinessNumber" id="BusinessNumber" type="tell" placeholder="Enter Business Contact Number">
+                <input name="BusinessNumber" id="BusinessNumber" type="tel" placeholder="Enter Business Contact Number">
               </div>
               <div class="pf-location">
                 <h4>Business Office Hour</h4>
@@ -234,16 +212,10 @@ if ($rs = $conn->query($sql)) {
                   <br>
                   <input name="BusinessAddress" id="BusinessAddress" type="text" placeholder="Enter your Complete Address - [Unit No] [Building Name] [Street No] [Street Name] [City]."><br>
                   <br>
-
                   <input type="text" id="BusinessZone" placeholder="Enter Zone"> <br>
-
                   <br>
-
                   <input type="text" id="BusinessDistrict" placeholder="Enter District"> <br>
-
                   <br>
-
-
                   <select id="filter" name="BusinessBrgy">
                     <option value="" disabled selected>Select a Barangay</option>
                     <?php
@@ -256,7 +228,6 @@ if ($rs = $conn->query($sql)) {
                       <option value="<?php echo $data['ID'] ?>"><?php echo $data['barangay'] ?></option>';
                     <?php } ?>
                   </select>
-
                 </div>
               </div>
               <div class="pf-map">
@@ -267,10 +238,8 @@ if ($rs = $conn->query($sql)) {
                       <h4>Directions:</h4>
                       <p>First,
                         select the barangay. Then, pin the exact location of the business by simply dragging the pin on the map below to the desired location, ensuring it accurately reflects the business's position</p>
-                      <!-- <br><input id="Zone" name="BusinessZone" type="text" placeholder="Zone" readonly> -->
                       <input id="lat" type="hidden" name="Latitude" placeholder="Latitude" readonly>
-                      <input id="long" type="hidden" name="Longtitude" placeholder="Longitude" readonly>
-                      <!-- <input id="location" type="text" name="location" placeholder="Location: North or South" readonly> -->
+                      <input id="long" type="hidden" name="Longitude" placeholder="Longitude" readonly>
                     </div>
                   </div>
                   <div class="col-lg-8">
@@ -280,22 +249,17 @@ if ($rs = $conn->query($sql)) {
                   </div>
                 </div>
               </div>
-
               <div class="pf-location">
                 <h4>Business Websites Links</h4>
                 <h6>Note: Please input the link of your social media.</h6>
                 <div class="pf-title">
-                  <!-- <input type="text" placeholder="Enter your Complete Address - [Unit No] [Building Name] [Street No] [Street Name] [City]."> -->
                   <div class="location-inputs">
                     <br><input name="BusinessFb" id="BusinessFb" type="text" placeholder="Facebook">
-
-                    <!-- <input name="BusinessTwitter" type="text" placeholder="Twitter"> -->
                     <input name="BusinessIg" id="BusinessIg" type="text" placeholder="Instagram">
-                    <input name="BusinessIg" id="BusinessTiktok" type="text" placeholder="Tiktok">
+                    <input name="BusinessTiktok" id="BusinessTiktok" type="text" placeholder="Tiktok">
                   </div>
                 </div>
               </div>
-
               <div class="pf-title">
                 <h4>Category</h4>
                 <select id="category" name="BusinessCategory" onchange="get_subcategory()">
@@ -303,92 +267,55 @@ if ($rs = $conn->query($sql)) {
                   <?php echo $Category; ?>
                 </select>
               </div>
-
               <div class="pf-title">
-                <h4> Sub Category</h4>
+                <h4>Sub Category</h4>
                 <div id="dispSubClass">
                   <select id="subcategory" name="BusinessSubCategory">
                     <option value="">Select Sub Category</option>
                   </select>
                 </div>
               </div>
-
               <div class="property-details-inputs">
                 <h4>Upload Scan Picture of Barangay Clearance</h4>
                 <div class="custom-file">
-                  <!-- add this to form data -->
-                  <input class="custom-file-input" name="uploadBrgyClearance" id="uploadBrgyClearance" type="file">
-                  <label class="custom-file-label" for="uploadBrgyClearance">Choose file...</label>
+                  <input class="custom-file-input" name="uploadBrgyClearance[]" id="uploadBrgyClearance" type="file" multiple>
+                  <label class="custom-file-label" for="uploadBrgyClearance">Choose files...</label>
                 </div>
               </div>
               <div class="property-details-inputs">
                 <br>
                 <h4>Upload Scan Picture of DTI Permit</h4>
                 <div class="custom-file">
-                  <!-- add this to form data -->
-                  <input class="custom-file-input" name="uploadDTIPermit" id="uploadDTIPermit" type="file">
-                  <label class="custom-file-label" for="uploadDTIPermit">Choose file...</label>
+                  <input class="custom-file-input" name="uploadDTIPermit[]" id="uploadDTIPermit" type="file" multiple>
+                  <label class="custom-file-label" for="uploadDTIPermit">Choose files...</label>
                 </div>
               </div>
-
               <div class="property-details-inputs">
                 <br>
                 <h4>Upload Scan Picture of Sanitary Document</h4>
                 <div class="custom-file">
-                  <!-- add this to form data -->
-                  <input class="custom-file-input" name="uploadSanitaryPermit" id="uploadSanitaryPermit" type="file">
-                  <label class="custom-file-label" for="uploadSanitaryPermit">Choose file...</label>
+                  <input class="custom-file-input" name="uploadSanitaryPermit[]" id="uploadSanitaryPermit" type="file" multiple>
+                  <label class="custom-file-label" for="uploadSanitaryPermit">Choose files...</label>
                 </div>
               </div>
-
               <div class="property-details-inputs">
                 <br>
-                <h4>Upload Scan Picture of Sanitary Document</h4>
+                <h4>Upload Scan Picture of Cedula</h4>
                 <div class="custom-file">
-                  <!-- add this to form data -->
-                  <input class="custom-file-input" name="uploadCedula" id="uploadCedula" type="file">
-                  <label class="custom-file-label" for="uploadCedula">Choose file...</label>
+                  <input class="custom-file-input" name="uploadCedula[]" id="uploadCedula" type="file" multiple>
+                  <label class="custom-file-label" for="uploadCedula">Choose files...</label>
                 </div>
               </div>
-
               <div class="property-details-inputs">
                 <br>
                 <h4>Upload Scan Picture of Business Permit</h4>
                 <div class="custom-file">
-                  <!-- add this to form data -->
-                  <input class="custom-file-input" name="uploadBusinessPermit" id="uploadBusinessPermit" type="file">
-                  <label class="custom-file-label" for="uploadBusinessPermit">Choose file...</label>
+                  <input class="custom-file-input" name="uploadBusinessPermit[]" id="uploadBusinessPermit" type="file" multiple>
+                  <label class="custom-file-label" for="uploadBusinessPermit">Choose files...</label>
                 </div>
               </div>
-
-              <!-- <div class="property-details-inputs"> -->
-              <!-- <div class="property-details-inputs">
-                  <br><h4>Upload Scan Picture of Barangay Clearance</h4>
-                    <div type="file" class="feature-image-content" name="uploadBrgyClearance"></div>
-                    <input type="file" class="feature-image-content" name="uploadBrgyClearance">
-                  </div><br> -->
-              <!-- <div class="property-details-inputs">
-                    <h4>Upload Scan Picture of DTI Permit</h4>
-                    <div type="file" class="feature-image-content" name="uploadDTIPermit"></div>
-                    <input type="file" class="feature-image-content" name="uploadDTIPermit">
-                  </div><br> -->
-              <!-- <div class="property-details-inputs">
-                    <h4>Upload Scan Picture of Sanitary Document</h4>
-                    <div type="file"class="feature-image-content" name="uploadSanitaryPermit"></div>
-                    <input type="file" class="feature-image-content" name="uploadSanitaryPermit">
-                  </div><br> -->
-              <!-- <div class="property-details-inputs">
-                    <h4>Upload Scan Picture of Cedula</h4>
-                    <div type="file"class="feature-image-content" name="uploadSanitaryPermit"></div>
-                    <input type="file" class="feature-image-content" name="uploadCedula">
-                  </div><br> -->
-              <!-- <div class="property-details-inputs">
-                    <h4>Upload Scan Picture of Business Permit</h4>
-                    <div type="file" class="feature-image-content" name="uploadBusinessPermit"></div>
-                    <input type="file" class="feature-image-content" name="uploadBusinessPermit">
-                  </div> -->
-              <!-- </div> -->
-              <br><button name="SubmitProperty" type="button" onclick="addBusiness()" class="site-btn">Submit Property</button>
+              <br>
+              <button name="SubmitProperty" type="button" onclick="addBusiness()" class="site-btn">Submit Property</button>
           </div>
           </form>
         </div>
@@ -429,7 +356,7 @@ if ($rs = $conn->query($sql)) {
   <script src="js/image-uploader.min.js"></script>
   <script src="js/main.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
   <script>
     $(document).ready(function() {
@@ -441,12 +368,9 @@ if ($rs = $conn->query($sql)) {
         $(this).removeAttr('size'); // Remove the size attribute when focus is lost
       });
 
-
       fetchData();
     });
-  </script>
 
-  <script type="text/javascript">
     function get_subcategory() {
       var category = $('#category').val();
       $.ajax({
@@ -462,37 +386,6 @@ if ($rs = $conn->query($sql)) {
       });
     }
 
-    // function get_barangay() {
-    //   console.log('get_barangay() function called.');
-    //   var barangay = $('#filter').val();
-    //   $.ajax({
-    //     url: 'barangaylist.php',
-    //     method: 'POST',
-    //     data: {
-    //       barangay: barangay
-    //     },
-    //     success: function(response) {
-    //       console.log("AJAX success:", response);
-    //       var data = JSON.parse(response); // Parse the JSON response
-
-    //       if (data.length > 0) {
-    //         var zone = data[0].zone; // Assuming there's only one zone per barangay
-    //         var location = data[0].location;
-
-    //         $("#Zone").val(zone);
-    //         $("#location").val(location); // Display the location
-    //       } else {
-    //         $("#Zone").val(''); // Clear the zone input if no data is found
-    //         $("#location").val(''); // Clear the location input if no data is found
-    //       }
-    //     }
-    //   });
-    // }
-  </script>
-  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-  <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
-
-  <script>
     var map = L.map('map').setView([14.6577, 120.9842], 13);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -530,15 +423,6 @@ if ($rs = $conn->query($sql)) {
         $('#long').val(position.lng.toFixed(6));
       });
 
-
-
-      // $('#saveButton').click(function() {
-      //   var savedLat = draggableMarker.getLatLng().lat.toFixed(6);
-      //   var savedLong = draggableMarker.getLatLng().lng.toFixed(6);
-      //   $('#savedLat').val(savedLat);
-      //   $('#savedLong').val(savedLong);
-      // });
-
       map.fitBounds(caloocanBoundary.getBounds());
 
       $('#filter').change(function() {
@@ -547,204 +431,185 @@ if ($rs = $conn->query($sql)) {
         if (selectedBarangay) {
           caloocanBoundary.eachLayer(function(layer) {
             if (layer.feature.properties.NAME_3 === selectedBarangay) {
-              console.log("match layer found"); // Add this line to log the layer
+              console.log("match layer found");
               var center = layer.getBounds().getCenter();
               draggableMarker.setLatLng(center);
               $('#lat').val(center.lat.toFixed(6));
               $('#long').val(center.lng.toFixed(6));
-              // Update the map view to zoom in to the selected barangay's center
-              map.setView(center, 20); // You can adjust the zoom level (14 in this case) as needed
-
+              map.setView(center, 20);
               draggableMarker.bindPopup("Drag and pin this to your location").openPopup();
               return;
             }
           });
         } else {
-          // If no barangay is selected, fit the map to the bounds of the entire area
           map.fitBounds(caloocanBoundary.getBounds());
         }
       });
-
     });
 
     function addBusiness() {
-      var businessName = $('#busName').val();
-      var businessEmail = $('#BusinessEmail').val();
-      var businessBranch = $('#BusinessBranch').val();
-      var businessEstablish = $('#BusinessEstablish').val();
-      var businessDescrip = $('#BusinessDescrip').val();
-      var businessNumber = $('#BusinessNumber').val();
-      var businessOpenHour = $('#BusinessOpenHour').val();
-      var businessCloseHour = $('#BusinessCloseHour').val();
-      var businessAddress = $('#BusinessAddress').val();
-      var businessBarangay = $('#filter').val();
-      var businessLat = $('#lat').val();
-      var businessLong = $('#long').val();
-      var businessFb = $('#BusinessFb').val();
-      var businessIg = $('#BusinessIg').val();
-      var businessCategory = $('#category').val();
-      var subCategory = $('#subcategory').val();
-      var businessZone = $('#BusinessZone').val();
-      var businessDistrict = $('#BusinessDistrict').val();
-      var businessCapital = $('#BusinessCapital').val();
-      var businessTiktok = $('#BusinessTiktok').val();
+  // Collect form values
+  var businessName = $('#busName').val();
+  var businessEmail = $('#BusinessEmail').val();
+  var businessBranch = $('#BusinessBranch').val();
+  var businessEstablish = $('#BusinessEstablish').val();
+  var businessDescrip = $('#BusinessDescrip').val();
+  var businessNumber = $('#BusinessNumber').val();
+  var businessOpenHour = $('#BusinessOpenHour').val();
+  var businessCloseHour = $('#BusinessCloseHour').val();
+  var businessAddress = $('#BusinessAddress').val();
+  var businessBarangay = $('#filter').val();
+  var businessLat = $('#lat').val();
+  var businessLong = $('#long').val();
+  var businessFb = $('#BusinessFb').val();
+  var businessIg = $('#BusinessIg').val();
+  var businessCategory = $('#category').val();
+  var subCategory = $('#subcategory').val();
+  var businessZone = $('#BusinessZone').val();
+  var businessDistrict = $('#BusinessDistrict').val();
+  var businessCapital = $('#BusinessCapital').val();
+  var businessTiktok = $('#BusinessTiktok').val();
 
-      // Check if any of the required fields is empty
-      if (
-        !businessName ||
-        !businessEmail ||
-        !businessBranch ||
-        !businessEstablish ||
-        !businessDescrip ||
-        !businessNumber ||
-        !businessOpenHour ||
-        !businessCloseHour ||
-        !businessAddress ||
-        !businessBarangay ||
-        !businessLat ||
-        !businessLong ||
-        !businessCategory ||
-        !subCategory ||
-        !businessZone ||
-        !businessDistrict ||
-        !businessCapital
-      ) {
-        // Display an error message or alert to the user
-        Swal.fire({
-          title: 'Warning',
-          text: 'Please fill out all required fields except the requirements.',
-          icon: 'warning',
-          customClass: {
-            confirmButton: 'swal-confirm-button',
-          },
-          showCancelButton: false,
-        });
-        return; // Exit the function if any required field is empty
+  // Check if any required fields are empty
+  if (
+    !businessName ||
+    !businessEmail ||
+    !businessBranch ||
+    !businessEstablish ||
+    !businessDescrip ||
+    !businessNumber ||
+    !businessOpenHour ||
+    !businessCloseHour ||
+    !businessAddress ||
+    !businessBarangay ||
+    !businessLat ||
+    !businessLong ||
+    !businessCategory ||
+    !subCategory ||
+    !businessZone ||
+    !businessDistrict ||
+    !businessCapital
+  ) {
+    Swal.fire({
+      title: 'Warning',
+      text: 'Please fill out all required fields except the requirements.',
+      icon: 'warning',
+      customClass: {
+        confirmButton: 'swal-confirm-button',
+      },
+      showCancelButton: false,
+    });
+    return;
+  }
+
+  // Construct payload object
+  var payload = {
+    businessName: businessName,
+    businessEmail: businessEmail,
+    businessBranch: businessBranch,
+    businessEstablish: businessEstablish,
+    businessDescrip: businessDescrip,
+    businessNumber: businessNumber,
+    businessOpenHour: businessOpenHour,
+    businessCloseHour: businessCloseHour,
+    businessAddress: businessAddress,
+    businessBarangay: businessBarangay,
+    businessLat: businessLat,
+    businessLong: businessLong,
+    businessFb: businessFb,
+    businessIg: businessIg,
+    businessCategory: businessCategory,
+    subCategory: subCategory,
+    businessZone: businessZone,
+    businessDistrict: businessDistrict,
+    businessCapital: businessCapital,
+    businessTiktok: businessTiktok
+  };
+
+  var formData = new FormData();
+  formData.append('payload', JSON.stringify(payload));
+  formData.append('setFunction', 'addBusiness');
+
+  // Function to append files to FormData
+  function appendFiles(inputElement, formData, fieldName) {
+    if (inputElement && inputElement.files.length > 0) {
+      var files = inputElement.files;
+      for (var i = 0; i < files.length; i++) {
+        formData.append(fieldName + '[]', files[i]);
       }
+    } else if (inputElement) {
+      formData.append(fieldName, inputElement.files[0]);
+    }
+  }
 
-      // Construct payload object
-      var payload = {
-        businessName: businessName,
-        businessEmail: businessEmail,
-        businessBranch: businessBranch,
-        businessEstablish: businessEstablish,
-        businessDescrip: businessDescrip,
-        businessNumber: businessNumber,
-        businessOpenHour: businessOpenHour,
-        businessCloseHour: businessCloseHour,
-        businessAddress: businessAddress,
-        businessBarangay: businessBarangay,
-        businessLat: businessLat,
-        businessLong: businessLong,
-        businessFb: businessFb,
-        businessIg: businessIg,
-        businessCategory: businessCategory,
-        subCategory: subCategory,
-        businessZone: businessZone,
-        businessDistrict: businessDistrict,
-        businessCapital: businessCapital,
-        businessTiktok: businessTiktok
-      };
+  // Select input elements
+  var businessLogoInput = document.querySelector("input[name='businessLogo']");
+  // var businessLogoInput = $("input[name='BusinessLogo']")[0]; // Assuming it's the first input element
+  // var businessLogoFile = businessLogoInput.files[0];
 
-      var formData = new FormData();
+  var brgyClearanceInput = document.querySelector("input[name='uploadBrgyClearance[]']");
+  var dtiPermitInput = document.querySelector("input[name='uploadDTIPermit[]']");
+  var sanitaryPermitInput = document.querySelector("input[name='uploadSanitaryPermit[]']");
+  var cedulaInput = document.querySelector("input[name='uploadCedula[]']");
+  var businessPermitInput = document.querySelector("input[name='uploadBusinessPermit[]']");
 
-      // Append payload data as JSON
-      formData.append('payload', JSON.stringify(payload));
-      formData.append('setFunction', 'addBusiness');
+  // Append files to FormData
+  appendFiles(businessLogoInput, formData, 'businessLogo');
+  appendFiles(brgyClearanceInput, formData, 'brgyClearance');
+  appendFiles(dtiPermitInput, formData, 'DTIPermit');
+  appendFiles(sanitaryPermitInput, formData, 'sanitaryPermit');
+  appendFiles(cedulaInput, formData, 'cedula');
+  appendFiles(businessPermitInput, formData, 'businessPermit');
 
-      // Get the selected file (input element)
-      var businessLogoInput = $("input[name='BusinessLogo']")[0]; // Assuming it's the first input element
-      var businessLogoFile = businessLogoInput.files[0];
+  // Send formData via AJAX
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "controllers/business.php", true);
 
-      var uploadBrgyClearanceInput = $("input[name='uploadBrgyClearance']")[0];
-      var uploadBrgyClearanceFile = uploadBrgyClearanceInput.files[0];
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4) {
+      console.log("Server response:", xhr.responseText);
+      if (xhr.status === 200) {
+        var data = JSON.parse(xhr.responseText);
+        Swal.fire(data.title, data.message, data.icon);
+        setTimeout(function () {
+          window.location.reload(); // Reload the page after successful submission
+        }, 2000);
+      } else {
+        console.log("Error:", xhr.statusText);
+      }
+    }
+  };
 
-      var uploadDTIPermitInput = $("input[name='uploadDTIPermit']")[0];
-      var uploadDTIPermitFile = uploadDTIPermitInput.files[0];
-
-      var uploadSanitaryPermitInput = $("input[name='uploadSanitaryPermit']")[0];
-      var uploadSanitaryPermitFile = uploadSanitaryPermitInput.files[0];
-
-      var uploadCedulaInput = $("input[name='uploadCedula']")[0];
-      var uploadCedulaFile = uploadCedulaInput.files[0];
-
-      var uploadBusinessPermitInput = $("input[name='uploadBusinessPermit']")[0];
-      var uploadBusinessPermitFile = uploadBusinessPermitInput.files[0];
-
-      formData.append('businessLogo', businessLogoFile);
-      formData.append('brgyClearance', uploadBrgyClearanceFile);
-      formData.append('DTIPermit', uploadDTIPermitFile);
-      formData.append('sanitaryPermit', uploadSanitaryPermitFile);
-      formData.append('cedula', uploadCedulaFile);
-      formData.append('businessPermit', uploadBusinessPermitFile);
-
-      var xhr = new XMLHttpRequest();
-      xhr.open("POST", "controllers/business.php", true);
-
-      xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-          console.log("Server response:", xhr.responseText);
-          if (xhr.status === 200) {
-            // Handle success response
-            var data = JSON.parse(xhr.responseText);
-            // console.log("Data received:", data);
-            swal.fire(data.title, data.message, data.icon);
-            setTimeout(function() {
-              window.location.reload();
-            }, 2000);
-          } else {
-            // Handle error
-            console.log("Error:", xhr.statusText);
-          }
-        }
-      };
-
-      // Send the FormData object
-      xhr.send(formData);
-
-
-
-
-    };
+  xhr.send(formData);
+}
 
 
     function fetchData() {
-            // Make an AJAX request to fetch data from the server
-            $.ajax({
-                url: 'fetchUserData.php', // Replace 'fetchUserData.php' with the actual file path to fetch data from your server
-                type: 'GET',
-                dataType: 'json',
-                success: function(data) {
-
-                    if (data.photo) {
-                        $('#user-profile-img').attr('src', data.photo);
-              
-                    } else {
-                        $('#user-profile-img').attr('src', 'img/testimonial-author/unknown.jpg');
-                
-                    }
-
-                
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                    // Handle error
-                }
-            });
+      $.ajax({
+        url: 'fetchUserData.php',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+          if (data.photo) {
+            $('#user-profile-img').attr('src', data.photo);
+          } else {
+            $('#user-profile-img').attr('src', 'img/testimonial-author/unknown.jpg');
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error(xhr.responseText);
         }
-  </script>
+      });
+    }
 
-  <script>
     $(document).ready(function() {
       $('.custom-file-input').on('change', function() {
-        // Get the file name and display it in the label
         var fileName = $(this).val().split('\\').pop();
         $(this).next('.custom-file-label').addClass("selected").html(fileName);
       });
       fetchData();
     });
   </script>
-
 </body>
 
 </html>

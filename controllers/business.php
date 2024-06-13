@@ -7,9 +7,6 @@ if (isset($_SESSION['bus_id'])) {
     $_SESSION['bus_id'];
 }
 
-
-
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['payload'])) {
     $receivedData = json_decode($_POST['payload']);
     $receivedFunction = $_POST['setFunction'];
@@ -24,44 +21,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['payload'])) {
 
 function editRequirements($request)
 {
-    // Assuming imagekey is lowercase in the request
     $dataKey = $request->imagekey;
     $id = $request->id;
-
-    // Access the uploaded file
     $uploadedFile = $_FILES['image'];
 
-    // Check if file was uploaded successfully
     if ($uploadedFile['error'] !== UPLOAD_ERR_OK) {
-        // Handle the upload error
         echo "Error uploading file.";
         return;
     }
 
-    // Extract file information
     $fileName = $uploadedFile['name'];
     $fileTmpPath = $uploadedFile['tmp_name'];
-    $fileType = $uploadedFile['type'];
-    $fileSize = $uploadedFile['size'];
-
-    // Generate a new unique filename
-    $newFileName = uniqid() . '_' . $fileName; // You can use any method to generate a unique name
-
-    // Destination directory
+    $newFileName = uniqid() . '_' . $fileName;
     $destinationDirectory = '../img/requirements/';
-
-    // Final destination path
     $destination = $destinationDirectory . $newFileName;
 
-    // Move the uploaded file to the desired location with the new name
     if (move_uploaded_file($fileTmpPath, $destination)) {
-        // Establish PDO connection
         $pdo = Database::connection();
-
-        // Prepare SQL statement
         $sql = "UPDATE business_requirement SET $dataKey = :newFileName WHERE bus_req_id = :id";
-
-        // Prepare and execute the statement
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':newFileName', $newFileName);
         $stmt->bindParam(':id', $id);
@@ -72,7 +49,6 @@ function editRequirements($request)
             echo "Error updating dataKey.";
         }
     } else {
-        // Failed to move the uploaded file, handle error
         echo "Error moving uploaded file.";
     }
 }
@@ -83,11 +59,7 @@ function deleteRequirements($request = null)
     $id = $request->id;
 
     $pdo = Database::connection();
-
-    // Prepare SQL statement
     $sql = "UPDATE business_requirement SET $dataKey = '' WHERE bus_req_id = :id";
-
-    // Prepare and execute the statement
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':id', $id);
 
@@ -98,504 +70,134 @@ function deleteRequirements($request = null)
     }
 }
 
-// function addBusiness($request = null)
-// {
-//     $businessName = $request->businessName;
-//     $businessEmail = $request->businessEmail;
-//     $businessBranch = $request->businessBranch;
-//     $businessEstablish = $request->businessEstablish;
-//     $businessDescrip = $request->businessDescrip;
-//     $businessNumber = $request->businessNumber;
-//     $businessOpenHour = $request->businessOpenHour;
-//     $businessCloseHour = $request->businessCloseHour;
-//     $businessAddress = $request->businessAddress;
-//     $businessBarangay = $request->businessBarangay;
-//     $businessLat = $request->businessLat;
-//     $businessLong = $request->businessLong;
-//     $businessFb = $request->businessFb;
-//     $businessIg = $request->businessIg;
-//     $businessCategory = $request->businessCategory;
-//     $subCategory = $request->subCategory;
+function handleMultipleFileUploads($files, $targetDirectory) {
+    $uploadedFiles = [];
+    if (is_array($files['name'])) {
+        foreach ($files['name'] as $key => $name) {
+            $size = $files['size'][$key];
+            $tmp_name = $files['tmp_name'][$key];
+            $validImageExtensions = ['jpg', 'jpeg', 'png'];
+            $imageExtension = pathinfo($name, PATHINFO_EXTENSION);
+            $imageExtension = strtolower($imageExtension);
 
-//     $msg = array();
-//     // session_start();
-//     if (isset($_SESSION['ownerId'])) {
-//         $ownerId = $_SESSION['ownerId'];
-//     } else {
-//         // Handle the case where the session owner ID is not set
-//         $msg['title'] = "Error";
-//         $msg['message'] = "Session owner ID not set";
-//         $msg['icon'] = "error";
-//         echo json_encode($msg);
-//     }
+            if (!in_array($imageExtension, $validImageExtensions) || $size > 512000) {
+                $msg['title'] = "Warning";
+                $msg['message'] = "Invalid image or image size";
+                $msg['icon'] = "warning";
+                $msg['status'] = "error";
+                echo json_encode($msg);
+                exit();
+            }
 
+            $newImageName = uniqid() . '.' . $imageExtension;
+            $targetPath = $targetDirectory . $newImageName;
 
-//     if (!empty($_FILES['businessLogo']['name'])) {
-//         $filename = $_FILES['businessLogo']['name'];
-//         $size = $_FILES['businessLogo']['size'];
-//         $tmp_name = $_FILES['businessLogo']['tmp_name'];
+            if (!move_uploaded_file($tmp_name, $targetPath)) {
+                $msg['title'] = "Error";
+                $msg['message'] = "Failed to move uploaded image to destination";
+                $msg['icon'] = "error";
+                $msg['status'] = "error";
+                $msg['debug'] = $_FILES;
+                echo json_encode($msg);
+                exit();
+            }
 
-//         $validImageExtensions = ['jpg', 'jpeg', 'png'];
-//         $imageExtension = pathinfo($filename, PATHINFO_EXTENSION);
-//         $imageExtension = strtolower($imageExtension);
-
-//         if (!in_array($imageExtension, $validImageExtensions)) {
-//             $msg['title'] = "Warning";
-//             $msg['message'] = "Invalid image extension";
-//             $msg['icon'] = "warning";
-//             $msg['status'] = "error";
-//             echo json_encode($msg);
-//         } elseif ($size > 512000) {
-//             $msg['title'] = "Warning";
-//             $msg['message'] = "Image size is too large";
-//             $msg['icon'] = "warning";
-//             $msg['status'] = "error";
-//             echo json_encode($msg);
-//         }
-
-//         $newImageName = uniqid() . '.' . $imageExtension;
-//         $targetDirectory = '../img/logo/';
-//         $targetPath = $targetDirectory . $newImageName;
-
-//         if (move_uploaded_file($tmp_name, $targetPath)) {
-//             // Image uploaded successfully
-//             // ... Your existing database insertion logic ...
-
-//             $pdo = Database::connection();
-//             $sql = "INSERT INTO `business_list`(`ownerId`, `BusinessName`, `Businesslogo`, `BusinessEmail`, `BusinessBranch`, `BusinessEstablish`, `BusinessDescrip`, `BusinessNumber`, `BusinessOpenHour`, 
-//                 `BusinessCloseHour`, `BusinessAddress`, `BusinessBrgy`, `BusinessCategory`, `BusinessSubCategory`, `BusinessStatus`) 
-//                 VALUES (:owner, :busName, :logo, :email, :branch, :establish, :desc, :number, :open, :close, :address, :brgy, :category, :sub, :status)";
-//             $stmt = $pdo->prepare($sql);
-//             $stmt->execute(
-//                 array(
-//                     ':owner' => $ownerId,
-//                     ':busName' => $businessName,
-//                     ':logo' => $newImageName,
-//                     ':email' => $businessEmail,
-//                     ':branch' => $businessBranch,
-//                     ':establish' => $businessEstablish,
-//                     ':desc' => $businessDescrip,
-//                     ':number' => $businessNumber,
-//                     ':open' => $businessOpenHour,
-//                     ':close' => $businessCloseHour,
-//                     ':address' => $businessAddress,
-//                     ':brgy' => $businessBarangay,
-//                     ':category' => $businessCategory,
-//                     ':sub' => $subCategory,
-//                     ':status' => 2 // Assuming 2 represents a certain status
-//                 )
-//             );
-
-//             if ($stmt->errorCode() !== '00000') {
-//                 $errorInfo = $stmt->errorInfo();
-//                 $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
-//                 // Handle the error as needed (e.g., logging, displaying an error message)
-//                 $msg['title'] = "Error";
-//                 $msg['message'] = $errorMsg;
-//                 $msg['icon'] = "error";
-//                 echo json_encode($msg);
-//             } else {
-//                 // Get the newly inserted business ID
-//                 $selectId = "SELECT * FROM business_list WHERE BusinessName = :name AND BusinessBranch = :branch";
-//                 $pdo = Database::connection();
-//                 $stmt1 = $pdo->prepare($selectId);
-//                 $stmt1->bindValue(':name', $businessName, PDO::PARAM_STR);
-//                 $stmt1->bindValue(':branch', $businessBranch, PDO::PARAM_STR);
-//                 $stmt1->execute();
-//                 $datas1  = $stmt1->fetchAll();
-//                 foreach ($datas1 as $data) {
-//                     $id = $data['bus_id'];
-//                 }
-
-//                 $sql3 = "INSERT INTO business_location (`bus_id`, `bus_lat`, `bus_long`) 
-//                 VALUES ( :id, :lat, :long)";
-//                 $stmt1 = $pdo->prepare($sql3);
-//                 $stmt1->execute(
-//                     array(
-//                         ':id' => $id,
-//                         ':lat' => $businessLat,
-//                         ':long' => $businessLong,
-//                     )
-//                 );
-//                 if ($stmt1->errorCode() !== '00000') {
-//                     $errorInfo = $stmt->errorInfo();
-//                     $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
-//                     // Handle the error as needed (e.g., logging, displaying an error message)
-//                     $msg['title'] = "Error";
-//                     $msg['message'] = $errorMsg;
-//                     $msg['icon'] = "error";
-//                     echo json_encode($msg);
-//                 } else {
-
-//                     $sql2 = "INSERT INTO business_links (bus_id, bus_fb, bus_ig) 
-//                     VALUES ( :id, :fb, :ig)";
-//                     $stmt2 = $pdo->prepare($sql2);
-//                     $stmt2->execute(
-//                         array(
-//                             ':id' => $id,
-//                             ':fb' => $businessFb,
-//                             ':ig' => $businessIg,
-//                         )
-//                     );
-//                     if ($stmt2->errorCode() !== '00000') {
-//                         $errorInfo = $stmt->errorInfo();
-//                         $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
-//                         // Handle the error as needed (e.g., logging, displaying an error message)
-//                         $msg['title'] = "Error";
-//                         $msg['message'] = $errorMsg;
-//                         $msg['icon'] = "error";
-//                         echo json_encode($msg);
-//                     } else {
-//                         $targetDirectory = '../img/requirements/';
-
-//                         // Initialize variables to store file paths
-//                         $newImageName1 = '';
-//                         $newImageName2 = '';
-//                         $newImageName3 = '';
-//                         $newImageName4 = '';
-//                         $newImageName5 = '';
-
-//                         if (isset($_FILES['brgyClearance']['name']) && !empty($_FILES['brgyClearance']['name'])) {
-//                             $filename1 = $_FILES['brgyClearance']['name'];
-//                             $size1 = $_FILES['brgyClearance']['size'];
-//                             $tmp_name1 = $_FILES['brgyClearance']['tmp_name'];
-
-//                             $validImageExtensions = ['jpg', 'jpeg', 'png'];
-//                             $imageExtension1 = pathinfo($filename1, PATHINFO_EXTENSION);
-//                             $imageExtension1 = strtolower($imageExtension1);
-
-//                             if (!in_array($imageExtension1, $validImageExtensions)) {
-//                                 $msg['title'] = "Warning";
-//                                 $msg['message'] = "Invalid image extension for brgyClearance";
-//                                 $msg['icon'] = "warning";
-//                                 $msg['status'] = "error";
-//                                 echo json_encode($msg);
-//                                 exit(); // exit to stop further processing
-//                             }
-
-//                             if ($size1 > 512000) {
-//                                 $msg['title'] = "Warning";
-//                                 $msg['message'] = "Image size is too large for brgyClearance";
-//                                 $msg['icon'] = "warning";
-//                                 $msg['status'] = "error";
-//                                 echo json_encode($msg);
-//                                 exit(); // exit to stop further processing
-//                             }
-
-//                             // Generate a unique name for the file
-//                             $newImageName1 = uniqid() . '' . $id;
-//                             $targetPath1 = $targetDirectory . $newImageName1;
-
-//                             // Move the uploaded file
-//                             if (!move_uploaded_file($tmp_name1, $targetPath1)) {
-//                                 $msg['title'] = "Error";
-//                                 $msg['message'] = "Failed to move uploaded image for brgyClearance to destination";
-//                                 $msg['icon'] = "error";
-//                                 $msg['status'] = "error";
-//                                 $msg['debug'] = $_FILES; // Add this for debugging
-//                                 echo json_encode($msg);
-//                                 exit(); // exit to stop further processing
-//                             }
-//                         } else {
-//                             // DTIPermit
-//                             if (isset($_FILES['DTIPermit']['name']) && !empty($_FILES['DTIPermit']['name'])) {
-//                                 $filename2 = $_FILES['DTIPermit']['name'];
-//                                 $size2 = $_FILES['DTIPermit']['size'];
-//                                 $tmp_name2 = $_FILES['DTIPermit']['tmp_name'];
-
-//                                 $validImageExtensions = ['jpg', 'jpeg', 'png'];
-//                                 $imageExtension2 = pathinfo($filename2, PATHINFO_EXTENSION);
-//                                 $imageExtension2 = strtolower($imageExtension2);
-
-//                                 if (!in_array($imageExtension2, $validImageExtensions)) {
-//                                     $msg['title'] = "Warning";
-//                                     $msg['message'] = "Invalid image extension for DTIPermit";
-//                                     $msg['icon'] = "warning";
-//                                     $msg['status'] = "error";
-//                                     echo json_encode($msg);
-//                                     exit(); // exit to stop further processing
-//                                 }
-
-//                                 if ($size2 > 512000) {
-//                                     $msg['title'] = "Warning";
-//                                     $msg['message'] = "Image size is too large for DTIPermit";
-//                                     $msg['icon'] = "warning";
-//                                     $msg['status'] = "error";
-//                                     echo json_encode($msg);
-//                                     exit(); // exit to stop further processing
-//                                 }
-
-//                                 // Generate a unique name for the file
-//                                 $newImageName2 = uniqid() . '' . $id;
-//                                 $targetPath2 = $targetDirectory . $newImageName2;
-
-//                                 // Move the uploaded file
-//                                 if (!move_uploaded_file($tmp_name2, $targetPath2)) {
-//                                     $msg['title'] = "Error";
-//                                     $msg['message'] = "Failed to move uploaded image for DTIPermit to destination";
-//                                     $msg['icon'] = "error";
-//                                     $msg['status'] = "error";
-//                                     $msg['debug'] = $_FILES; // Add this for debugging
-//                                     echo json_encode($msg);
-//                                     exit(); // exit to stop further processing
-//                                 }
-//                             } else {
-//                                 // sanitaryPermit
-//                                 if (isset($_FILES['sanitaryPermit']['name']) && !empty($_FILES['sanitaryPermit']['name'])) {
-//                                     $filename3 = $_FILES['sanitaryPermit']['name'];
-//                                     $size3 = $_FILES['sanitaryPermit']['size'];
-//                                     $tmp_name3 = $_FILES['sanitaryPermit']['tmp_name'];
-
-//                                     $validImageExtensions = ['jpg', 'jpeg', 'png'];
-//                                     $imageExtension3 = pathinfo($filename3, PATHINFO_EXTENSION);
-//                                     $imageExtension3 = strtolower($imageExtension3);
-
-//                                     if (!in_array($imageExtension3, $validImageExtensions)) {
-//                                         $msg['title'] = "Warning";
-//                                         $msg['message'] = "Invalid image extension for sanitaryPermit";
-//                                         $msg['icon'] = "warning";
-//                                         $msg['status'] = "error";
-//                                         echo json_encode($msg);
-//                                         exit(); // exit to stop further processing
-//                                     }
-
-//                                     if ($size3 > 512000) {
-//                                         $msg['title'] = "Warning";
-//                                         $msg['message'] = "Image size is too large for sanitaryPermit";
-//                                         $msg['icon'] = "warning";
-//                                         $msg['status'] = "error";
-//                                         echo json_encode($msg);
-//                                         exit(); // exit to stop further processing
-//                                     }
-
-//                                     // Generate a unique name for the file
-//                                     $newImageName3 = uniqid() . '' . $id;
-//                                     $targetPath3 = $targetDirectory . $newImageName3;
-
-//                                     // Move the uploaded file
-//                                     if (!move_uploaded_file($tmp_name3, $targetPath3)) {
-//                                         $msg['title'] = "Error";
-//                                         $msg['message'] = "Failed to move uploaded image for sanitaryPermit to destination";
-//                                         $msg['icon'] = "error";
-//                                         $msg['status'] = "error";
-//                                         $msg['debug'] = $_FILES; // Add this for debugging
-//                                         echo json_encode($msg);
-//                                         exit(); // exit to stop further processing
-//                                     }
-//                                 } else {
-//                                     // cedula
-//                                     if (isset($_FILES['cedula']['name']) && !empty($_FILES['cedula']['name'])) {
-//                                         $filename4 = $_FILES['cedula']['name'];
-//                                         $size4 = $_FILES['cedula']['size'];
-//                                         $tmp_name4 = $_FILES['cedula']['tmp_name'];
-
-//                                         $validImageExtensions = ['jpg', 'jpeg', 'png'];
-//                                         $imageExtension4 = pathinfo($filename4, PATHINFO_EXTENSION);
-//                                         $imageExtension4 = strtolower($imageExtension4);
-
-//                                         if (!in_array($imageExtension4, $validImageExtensions)) {
-//                                             $msg['title'] = "Warning";
-//                                             $msg['message'] = "Invalid image extension for cedula";
-//                                             $msg['icon'] = "warning";
-//                                             $msg['status'] = "error";
-//                                             echo json_encode($msg);
-//                                             exit(); // exit to stop further processing
-//                                         }
-
-//                                         if ($size4 > 512000) {
-//                                             $msg['title'] = "Warning";
-//                                             $msg['message'] = "Image size is too large for cedula";
-//                                             $msg['icon'] = "warning";
-//                                             $msg['status'] = "error";
-//                                             echo json_encode($msg);
-//                                             exit(); // exit to stop further processing
-//                                         }
-
-//                                         // Generate a unique name for the file
-//                                         $newImageName4 = uniqid() . '' . $id;
-//                                         $targetPath4 = $targetDirectory . $newImageName4;
-
-//                                         // Move the uploaded file
-//                                         if (!move_uploaded_file($tmp_name4, $targetPath4)) {
-//                                             $msg['title'] = "Error";
-//                                             $msg['message'] = "Failed to move uploaded image for cedula to destination";
-//                                             $msg['icon'] = "error";
-//                                             $msg['status'] = "error";
-//                                             $msg['debug'] = $_FILES; // Add this for debugging
-//                                             echo json_encode($msg);
-//                                             exit(); // exit to stop further processing
-//                                         }
-//                                     } else {
-//                                         // businessPermit
-//                                         if (isset($_FILES['businessPermit']['name']) && !empty($_FILES['businessPermit']['name'])) {
-//                                             $filename5 = $_FILES['businessPermit']['name'];
-//                                             $size5 = $_FILES['businessPermit']['size'];
-//                                             $tmp_name5 = $_FILES['businessPermit']['tmp_name'];
-
-//                                             $validImageExtensions = ['jpg', 'jpeg', 'png'];
-//                                             $imageExtension5 = pathinfo($filename5, PATHINFO_EXTENSION);
-//                                             $imageExtension5 = strtolower($imageExtension5);
-
-//                                             if (!in_array($imageExtension5, $validImageExtensions)) {
-//                                                 $msg['title'] = "Warning";
-//                                                 $msg['message'] = "Invalid image extension for businessPermit";
-//                                                 $msg['icon'] = "warning";
-//                                                 $msg['status'] = "error";
-//                                                 echo json_encode($msg);
-//                                                 exit(); // exit to stop further processing
-//                                             }
-
-//                                             if ($size5 > 512000) {
-//                                                 $msg['title'] = "Warning";
-//                                                 $msg['message'] = "Image size is too large for businessPermit";
-//                                                 $msg['icon'] = "warning";
-//                                                 $msg['status'] = "error";
-//                                                 echo json_encode($msg);
-//                                                 exit(); // exit to stop further processing
-//                                             }
-
-//                                             // Generate a unique name for the file
-//                                             $newImageName5 = uniqid() . '' . $id;
-//                                             $targetPath5 = $targetDirectory . $newImageName5;
-
-//                                             // Move the uploaded file
-//                                             if (!move_uploaded_file($tmp_name5, $targetPath5)) {
-//                                                 $msg['title'] = "Error";
-//                                                 $msg['message'] = "Failed to move uploaded image for businessPermit to destination";
-//                                                 $msg['icon'] = "error";
-//                                                 $msg['status'] = "error";
-//                                                 $msg['debug'] = $_FILES; // Add this for debugging
-//                                                 echo json_encode($msg);
-//                                                 exit(); // exit to stop further processing
-//                                             }
-//                                         }
-//                                     }
-//                                 }
-//                             }
-//                         }
-
-//                         $finalQuery = "INSERT INTO business_requirement (bus_id, bus_brgyclearance, bus_dtipermit, bus_sanitarypermit,bus_cedula,bus_mayorpermit) 
-//                                 VALUES (:id, :photo1, :photo2, :photo3, :photo4, :photo5)";
-//                         $stmt5 = $pdo->prepare($finalQuery);
-//                         $stmt5->execute(
-//                             array(
-//                                 ':id' => $id,
-//                                 ':photo1' => $newImageName1,
-//                                 ':photo2' => $newImageName2,
-//                                 ':photo3' => $newImageName3,
-//                                 ':photo4' => $newImageName4,
-//                                 ':photo5' => $newImageName5
-//                             )
-//                         );
-//                         if ($stmt5->errorCode() !== '00000') {
-//                             $errorInfo = $stmt->errorInfo();
-//                             $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
-//                             // Handle the error as needed (e.g., logging, displaying an error message)
-//                             $msg['title'] = "Error";
-//                             $msg['message'] = $errorMsg;
-//                             $msg['icon'] = "error";
-//                             echo json_encode($msg);
-//                         } else {
-//                             $msg['title'] = "Successful";
-//                             $msg['message'] = "Business added successfully";
-//                             $msg['icon'] = "success";
-//                             $msg['status'] = "success";
-//                             echo json_encode($msg);
-//                         }
-//                     }
-//                 }
-//             }
-//         }
-//     } else {
-//         // Handle the case where no image is uploaded
-//         $msg['title'] = "Error";
-//         $msg['message'] = "No Business Logo";
-//         $msg['icon'] = "error";
-//         $msg['status'] = "error";
-//         echo json_encode($msg);
-//     }
-// }
-
-
-function handleFileUpload($file, $targetDirectory)
-{
-    $filename = $file['name'];
-    $size = $file['size'];
-    $tmp_name = $file['tmp_name'];
-
-    $validImageExtensions = ['jpg', 'jpeg', 'png'];
-    $imageExtension = pathinfo($filename, PATHINFO_EXTENSION);
-    $imageExtension = strtolower($imageExtension);
-
-    if (!in_array($imageExtension, $validImageExtensions) || $size > 512000) {
-        $msg['title'] = "Warning";
-        $msg['message'] = "Invalid image or image size";
-        $msg['icon'] = "warning";
-        $msg['status'] = "error";
-        echo json_encode($msg);
-        exit();
+            $uploadedFiles[] = $targetPath;
+        }
     }
-
-    $newImageName = uniqid() . '.' . $imageExtension;
-    $targetPath = $targetDirectory . $newImageName;
-
-    if (!move_uploaded_file($tmp_name, $targetPath)) {
-        $msg['title'] = "Error";
-        $msg['message'] = "Failed to move uploaded image to destination";
-        $msg['icon'] = "error";
-        $msg['status'] = "error";
-        $msg['debug'] = $_FILES;
-        echo json_encode($msg);
-        exit();
-    }
-
-    return $newImageName;
+    return $uploadedFiles;
 }
 
-function addBusiness($request = null)
-{
+function createPDF($images, $targetDirectory, $pdfName) {
+    $pdf = new \FPDF(); // Instantiate the FPDF class directly.
+    foreach ($images as $image) {
+        $pdf->AddPage();
+        $pdf->Image($image, 10, 10, 190, 0); // Adjust dimensions as needed
+    }
+    $pdfPath = $targetDirectory . $pdfName;
+    $pdf->Output('F', $pdfPath);
+    return $pdfPath;
+}
+function handleFileUpload($files, $targetDirectory) {
+    $uploadedPaths = []; // Array to store uploaded file paths
+
+    // Loop through each file in the array
+    foreach ($files['name'] as $key => $filename) {
+        $size = $files['size'][$key];
+        $tmp_name = $files['tmp_name'][$key];
+        $validImageExtensions = ['jpg', 'jpeg', 'png'];
+        $imageExtension = pathinfo($filename, PATHINFO_EXTENSION);
+        $imageExtension = strtolower($imageExtension);
+
+        if (!in_array($imageExtension, $validImageExtensions) || $size > 512000) {
+            $msg['title'] = "Warning";
+            $msg['message'] = "Invalid image or image size";
+            $msg['icon'] = "warning";
+            $msg['status'] = "error";
+            echo json_encode($msg);
+            exit();
+        }
+
+        $newImageName = uniqid() . '.' . $imageExtension;
+        $targetPath = $targetDirectory . $newImageName;
+
+        if (!move_uploaded_file($tmp_name, $targetPath)) {
+            $msg['title'] = "Error";
+            $msg['message'] = "Failed to move uploaded image to destination";
+            $msg['icon'] = "error";
+            $msg['status'] = "error";
+            $msg['debug'] = $_FILES;
+            echo json_encode($msg);
+            exit();
+        }
+
+        $uploadedPaths[] = $targetPath; // Add the path to the array
+    }
+
+    // Convert array of paths to a single string separated by commas
+    $uploadedPathsString = implode(',', $uploadedPaths);
+
+    return $uploadedPathsString; // Return the concatenated string of paths
+}
+
+
+function addBusiness($request = null) {
     try {
         $pdo = Database::connection();
-
         $msg = validateSession();
-
         if ($msg) {
             echo json_encode($msg);
             return;
         }
 
-        $newImageName = handleFileUpload($_FILES['businessLogo'], '../img/logo/');
+       $newImageName = handleFileUpload($_FILES['businessLogo'], '../img/logo/');
 
         $ownerId = $_SESSION['ownerId'];
-
         $sql = "INSERT INTO `business_list`(`ownerId`, `BusinessName`, `Businesslogo`, `BusinessEmail`, `BusinessBranch`, `BusinessEstablish`, `BusinessDescrip`, `BusinessNumber`, `BusinessOpenHour`, 
-            `BusinessCloseHour`, `BusinessAddress`, `BusinessBrgy`, `BusinessCategory`, `BusinessSubCategory`, `BusinessStatus`,zone,district,capitalization) 
+            `BusinessCloseHour`, `BusinessAddress`, `BusinessBrgy`, `BusinessCategory`, `BusinessSubCategory`, `BusinessStatus`, zone, district, capitalization) 
             VALUES (:owner, :busName, :logo, :email, :branch, :establish, :desc, :number, :open, :close, :address, :brgy, :category, :sub, :status, :zone, :district, :capital)";
 
         $stmt = $pdo->prepare($sql);
-
-        $stmt->execute(
-            array(
-                ':owner' => $ownerId,
-                ':busName' => $request->businessName,
-                ':logo' => $newImageName,
-                ':email' => $request->businessEmail,
-                ':branch' => $request->businessBranch,
-                ':establish' => $request->businessEstablish,
-                ':desc' => $request->businessDescrip,
-                ':number' => $request->businessNumber,
-                ':open' => $request->businessOpenHour,
-                ':close' => $request->businessCloseHour,
-                ':address' => $request->businessAddress,
-                ':brgy' => $request->businessBarangay,
-                ':category' => $request->businessCategory,
-                ':sub' => $request->subCategory,
-                ':status' => 2, // Assuming 2 represents a certain status
-                ':zone' => $request->businessZone,
-                ':district' => $request->businessDistrict,
-                ':capital' => $request->businessCapital
-            )
-        );
+        $stmt->execute(array(
+            ':owner' => $ownerId,
+            ':busName' => $request->businessName,
+            ':logo' => $newImageName,
+            ':email' => $request->businessEmail,
+            ':branch' => $request->businessBranch,
+            ':establish' => $request->businessEstablish,
+            ':desc' => $request->businessDescrip,
+            ':number' => $request->businessNumber,
+            ':open' => $request->businessOpenHour,
+            ':close' => $request->businessCloseHour,
+            ':address' => $request->businessAddress,
+            ':brgy' => $request->businessBarangay,
+            ':category' => $request->businessCategory,
+            ':sub' => $request->subCategory,
+            ':status' => 2,
+            ':zone' => $request->businessZone,
+            ':district' => $request->businessDistrict,
+            ':capital' => $request->businessCapital
+        ));
 
         if ($stmt->errorCode() !== '00000') {
             handleQueryError($stmt, $sql);
@@ -606,14 +208,11 @@ function addBusiness($request = null)
 
         $sqlLocation = "INSERT INTO business_location (`bus_id`, `bus_lat`, `bus_long`) VALUES (:id, :lat, :long)";
         $stmtLocation = $pdo->prepare($sqlLocation);
-
-        $stmtLocation->execute(
-            array(
-                ':id' => $id,
-                ':lat' => $request->businessLat,
-                ':long' => $request->businessLong,
-            )
-        );
+        $stmtLocation->execute(array(
+            ':id' => $id,
+            ':lat' => $request->businessLat,
+            ':long' => $request->businessLong,
+        ));
 
         if ($stmtLocation->errorCode() !== '00000') {
             handleQueryError($stmtLocation, $sqlLocation);
@@ -622,57 +221,57 @@ function addBusiness($request = null)
 
         $sqlLinks = "INSERT INTO business_links (bus_id, bus_fb, bus_ig, bus_tiktok) VALUES (:id, :fb, :ig, :tiktok)";
         $stmtLinks = $pdo->prepare($sqlLinks);
-
-        $stmtLinks->execute(
-            array(
-                ':id' => $id,
-                ':fb' => $request->businessFb,
-                ':ig' => $request->businessIg,
-                ':tiktok' => $request->businessTiktok
-            )
-        );
+        $stmtLinks->execute(array(
+            ':id' => $id,
+            ':fb' => $request->businessFb,
+            ':ig' => $request->businessIg,
+            ':tiktok' => $request->businessTiktok
+        ));
 
         if ($stmtLinks->errorCode() !== '00000') {
             handleQueryError($stmtLinks, $sqlLinks);
             return;
         }
 
-        $handleFileUpload = function ($file, $targetDirectory) use ($pdo, $id) {
-            if (isset($file['name']) && !empty($file['name'])) {
-                return handleFileUpload($file, $targetDirectory);
-            }
-            return ''; // Return an empty string if the file is not set
-        };
+        $uploadDirectory = '../img/requirements/';
+        $images = [];
 
-        $newImageName1 = $handleFileUpload($_FILES['brgyClearance'] ?? [], '../img/requirements/');
-        $newImageName2 = $handleFileUpload($_FILES['DTIPermit'] ?? [], '../img/requirements/');
-        $newImageName3 = $handleFileUpload($_FILES['sanitaryPermit'] ?? [], '../img/requirements/');
-        $newImageName4 = $handleFileUpload($_FILES['cedula'] ?? [], '../img/requirements/');
-        $newImageName5 = $handleFileUpload($_FILES['businessPermit'] ?? [], '../img/requirements/');
+        // Handling multiple file uploads for each field
+        if (isset($_FILES['brgyClearance']) && is_array($_FILES['brgyClearance']['name'])) {
+            $images = array_merge($images, handleMultipleFileUploads($_FILES['brgyClearance'], $uploadDirectory));
+        }
+        if (isset($_FILES['DTIPermit']) && is_array($_FILES['DTIPermit']['name'])) {
+            $images = array_merge($images, handleMultipleFileUploads($_FILES['DTIPermit'], $uploadDirectory));
+        }
+        if (isset($_FILES['sanitaryPermit']) && is_array($_FILES['sanitaryPermit']['name'])) {
+            $images = array_merge($images, handleMultipleFileUploads($_FILES['sanitaryPermit'], $uploadDirectory));
+        }
+        if (isset($_FILES['cedula']) && is_array($_FILES['cedula']['name'])) {
+            $images = array_merge($images, handleMultipleFileUploads($_FILES['cedula'], $uploadDirectory));
+        }
+        if (isset($_FILES['businessPermit']) && is_array($_FILES['businessPermit']['name'])) {
+            $images = array_merge($images, handleMultipleFileUploads($_FILES['businessPermit'], $uploadDirectory));
+        }
 
-        $sqlRequirements = "INSERT INTO business_requirement (bus_id, bus_brgyclearance, bus_dtipermit, bus_sanitarypermit, bus_cedula, bus_mayorpermit) 
-                VALUES (:id, :photo1, :photo2, :photo3, :photo4, :photo5)";
+        if (empty($images)) {
+            throw new Exception("No valid images were uploaded.");
+        }
+
+        $pdfPath = createPDF($images, $uploadDirectory, uniqid() . '.pdf');
+
+        $sqlRequirements = "INSERT INTO business_requirement (bus_id, bus_pdf) 
+                VALUES (:id, :pdf)";
         $stmtRequirements = $pdo->prepare($sqlRequirements);
-
-        $stmtRequirements->execute(
-            array(
-                ':id' => $id,
-                ':photo1' => $newImageName1,
-                ':photo2' => $newImageName2,
-                ':photo3' => $newImageName3,
-                ':photo4' => $newImageName4,
-                ':photo5' => $newImageName5
-            )
-        );
+        $stmtRequirements->execute(array(
+            ':id' => $id,
+            ':pdf' => $pdfPath
+        ));
 
         if ($stmtRequirements->errorCode() !== '00000') {
             handleQueryError($stmtRequirements, $sqlRequirements);
             return;
         }
 
-
-
-        // Trigger Pusher event after adding the business
         $pusher = new Pusher\Pusher(
             '5b1eb2892347a33d5be9',
             '0dbf6b6d40bb6a4ee500',
@@ -680,11 +279,8 @@ function addBusiness($request = null)
             array('cluster' => 'ap1')
         );
 
-        // Trigger the event without passing any data
         $pusher->trigger('business-channel', 'business-added', null);
-        // $pusher->trigger('business-channel', 'business-event', null);
         $pusher->trigger('business-channel', 'business-event', null);
-
 
         $msg['title'] = "Successful";
         $msg['message'] = "Business added successfully";
@@ -712,6 +308,7 @@ function validateSession()
 
     return null;
 }
+
 
 function handleQueryError($stmt, $sql)
 {
