@@ -22,6 +22,82 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['payload'])) {
     }
 }
 
+function editRequirements($request)
+{
+    // Assuming imagekey is lowercase in the request
+    $dataKey = $request->imagekey;
+    $id = $request->id;
+
+    // Access the uploaded file
+    $uploadedFile = $_FILES['image'];
+
+    // Check if file was uploaded successfully
+    if ($uploadedFile['error'] !== UPLOAD_ERR_OK) {
+        // Handle the upload error
+        echo "Error uploading file.";
+        return;
+    }
+
+    // Extract file information
+    $fileName = $uploadedFile['name'];
+    $fileTmpPath = $uploadedFile['tmp_name'];
+    $fileType = $uploadedFile['type'];
+    $fileSize = $uploadedFile['size'];
+
+    // Generate a new unique filename
+    $newFileName = uniqid() . '_' . $fileName; // You can use any method to generate a unique name
+
+    // Destination directory
+    $destinationDirectory = '../img/requirements/';
+
+    // Final destination path
+    $destination = $destinationDirectory . $newFileName;
+
+    // Move the uploaded file to the desired location with the new name
+    if (move_uploaded_file($fileTmpPath, $destination)) {
+        // Establish PDO connection
+        $pdo = Database::connection();
+
+        // Prepare SQL statement
+        $sql = "UPDATE business_requirement SET $dataKey = :newFileName WHERE bus_req_id = :id";
+
+        // Prepare and execute the statement
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':newFileName', $newFileName);
+        $stmt->bindParam(':id', $id);
+
+        if ($stmt->execute()) {
+            echo "DataKey updated successfully.";
+        } else {
+            echo "Error updating dataKey.";
+        }
+    } else {
+        // Failed to move the uploaded file, handle error
+        echo "Error moving uploaded file.";
+    }
+}
+
+function deleteRequirements($request = null)
+{
+    $dataKey = $request->imagekey;
+    $id = $request->id;
+
+    $pdo = Database::connection();
+
+    // Prepare SQL statement
+    $sql = "UPDATE business_requirement SET $dataKey = '' WHERE bus_req_id = :id";
+
+    // Prepare and execute the statement
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':id', $id);
+
+    if ($stmt->execute()) {
+        echo "DataKey updated successfully.";
+    } else {
+        echo "Error updating dataKey.";
+    }
+}
+
 // function addBusiness($request = null)
 // {
 //     $businessName = $request->businessName;
@@ -607,7 +683,7 @@ function addBusiness($request = null)
         // Trigger the event without passing any data
         $pusher->trigger('business-channel', 'business-added', null);
         // $pusher->trigger('business-channel', 'business-event', null);
-        $pusher->trigger('business-channel', 'business-event',null);
+        $pusher->trigger('business-channel', 'business-event', null);
 
 
         $msg['title'] = "Successful";
@@ -794,90 +870,115 @@ function edtBusinessDetails($request = null)
     }
 };
 
-function edtBusinessBrgyClear($request = null)
+function uploadBusinessRequirements($request = null)
 {
     $msg = array();
     $id = $_SESSION['bus_id'];
 
-    if (!empty($_FILES['businessBrgyClearance']['name'])) {
-        $filename = $_FILES['businessBrgyClearance']['name'];
-        $size = $_FILES['businessBrgyClearance']['size'];
-        $tmp_name = $_FILES['businessBrgyClearance']['tmp_name'];
+    $targetDirectory = '../img/requirements/';
+    $allowedExtensions = ['jpg', 'jpeg', 'png']; // Define allowed file extensions
 
-        $validImageExtensions = ['jpg', 'jpeg', 'png'];
-        $imageExtension = pathinfo($filename, PATHINFO_EXTENSION);
-        $imageExtension = strtolower($imageExtension);
 
-        if (!in_array($imageExtension, $validImageExtensions)) {
-            $msg['title'] = "Warning";
-            $msg['message'] = "Invalid image extension";
-            $msg['icon'] = "warning";
-            $msg['status'] = "error";
-            echo json_encode($msg);
-        } elseif ($size > 512000) {
-            $msg['title'] = "Warning";
-            $msg['message'] = "Image size is too large";
-            $msg['icon'] = "warning";
-            $msg['status'] = "error";
-            echo json_encode($msg);
-        }
+    $files = [
+        'bus_brgyclearance' => $_FILES['bus_brgyclearance'],
+        'bus_dtipermit' => $_FILES['bus_dtipermit'],
+        'bus_sanitarypermit' => $_FILES['bus_sanitarypermit'],
+        'bus_cedula' => $_FILES['bus_cedula'],
+        'bus_mayorpermit' => $_FILES['bus_mayorpermit']
+    ];
 
-        $newImageName = uniqid() . '.' . $imageExtension;
-        $targetDirectory = '../img/requirements/';
-        $targetPath = $targetDirectory . $newImageName;
+    $uploadedFiles = [];
 
-        if (move_uploaded_file($tmp_name, $targetPath)) {
-            $sql = "UPDATE business_requirement SET bus_brgyclearance = :clearance WHERE bus_id = :id";
-            $pdo = Database::connection();
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute(
-                array(
-                    ':clearance' => $newImageName,
-                    ':id' => $id
-                )
-            );
-            if ($stmt->errorCode() !== '00000') {
-                $errorInfo = $stmt->errorInfo();
-                $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql;
-                // Handle the error as needed (e.g., logging, displaying an error message)
-                $msg['title'] = "Error";
-                $msg['message'] = $errorMsg;
-                $msg['icon'] = "error";
-                echo json_encode($msg);
-            } else {
-                $sql2 = "UPDATE business_list set BusinessStatus = 2 WHERE bus_id = :id";
-                $stmt1 = $pdo->prepare($sql2);
-                $stmt1->bindParam(':id', $id, PDO::PARAM_INT);
-                if (!$stmt1->execute()) {
-                    $errorInfo = $stmt1->errorInfo();
-                    $errorMsg = "SQL Error: " . $errorInfo[2] . " in query: " . $sql2;
-                    $msg['title'] = "Error";
-                    $msg['message'] = $errorMsg;
-                    $msg['icon'] = "error";
-                    echo json_encode($msg);
+    foreach ($files as $columnName => $file) {
+        if ($file['error'] === UPLOAD_ERR_OK) {
+            $fileTmpPath = $file['tmp_name'];
+            $fileName = $file['name'];
+            $fileSize = $file['size'];
+            $fileType = $file['type'];
+            $fileNameCmps = explode(".", $fileName);
+            $fileExtension = strtolower(end($fileNameCmps));
+
+            // Check if file extension is allowed
+            if (in_array($fileExtension, $allowedExtensions)) {
+                // Generate a unique name for the file
+                $newImageName = uniqid() . '.' . $fileExtension;
+                $targetPath = $targetDirectory . $newImageName;
+
+                // Move the file to the target directory
+                if (move_uploaded_file($fileTmpPath, $targetPath)) {
+                    $uploadedFiles[$columnName] = $newImageName; // Store the new image name for database insertion
                 } else {
-                    $msg['title'] = "Successful";
-                    $msg['message'] = "Sucessfully Updated";
-                    $msg['icon'] = "success";
-                    $msg['status'] = "success";
+                    $msg['status'] = 'error';
+                    $msg['message'] = 'Failed to move the uploaded file for ' . $columnName;
                     echo json_encode($msg);
+                    return;
                 }
+            } else {
+                $msg['status'] = 'error';
+                $msg['message'] = 'Upload failed for ' . $columnName . '. Allowed file types: ' . implode(', ', $allowedExtensions);
+                echo json_encode($msg);
+                return;
             }
         } else {
-            $msg['title'] = "Error";
-            $msg['message'] = "Failed to move uploaded image to destination";
-            $msg['icon'] = "error";
-            $msg['status'] = "error";
-            $msg['debug'] = $_FILES; // Add this for debugging
+            $msg['status'] = 'error';
+            $msg['message'] = 'There was an error uploading the file for ' . $columnName;
             echo json_encode($msg);
+            return;
         }
-    } else {
-        $msg['title'] = "Error";
-        $msg['message'] = "No image uploaded (Barangay Clearance)";
-        $msg['icon'] = "error";
-        $msg['status'] = "error";
-        echo json_encode($msg);
     }
+
+    // Create a new DateTime object with the current time
+    $date = new DateTime('now', new DateTimeZone('Asia/Manila'));
+
+    // Format the datetime as desired
+    $currentDatetime = $date->format('Y-m-d H:i:s');
+
+
+    // Current datetime
+    // $currentDatetime = date('Y-m-d H:i:s');
+
+
+
+    // Save file information to the database using PDO
+    try {
+        $pdo = Database::connection();
+
+        $sql = "
+            INSERT INTO business_requirement (
+                bus_id, 
+                bus_brgyclearance, 
+                bus_dtipermit, 
+                bus_sanitarypermit, 
+                bus_cedula, 
+                bus_mayorpermit,
+                created_at
+            ) VALUES (:bus_id, :bus_brgyclearance, :bus_dtipermit, :bus_sanitarypermit, :bus_cedula, :bus_mayorpermit, :created_at)
+        ";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':bus_id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':bus_brgyclearance', $uploadedFiles['bus_brgyclearance'], PDO::PARAM_STR);
+        $stmt->bindParam(':bus_dtipermit', $uploadedFiles['bus_dtipermit'], PDO::PARAM_STR);
+        $stmt->bindParam(':bus_sanitarypermit', $uploadedFiles['bus_sanitarypermit'], PDO::PARAM_STR);
+        $stmt->bindParam(':bus_cedula', $uploadedFiles['bus_cedula'], PDO::PARAM_STR);
+        $stmt->bindParam(':bus_mayorpermit', $uploadedFiles['bus_mayorpermit'], PDO::PARAM_STR);
+        $stmt->bindParam(':created_at', $currentDatetime, PDO::PARAM_STR);
+
+        if ($stmt->execute()) {
+            $msg['title'] = "Successful";
+            $msg['icon'] = "success";
+            $msg['status'] = "success";
+            $msg['message'] = 'Files uploaded and saved successfully';
+        } else {
+            $msg['status'] = 'error';
+            $msg['message'] = 'Failed to save file information to the database';
+        }
+    } catch (PDOException $e) {
+        $msg['status'] = 'error';
+        $msg['message'] = 'Database error: ' . $e->getMessage();
+    }
+
+    return json_encode($msg);
 };
 
 function edtDTIPermit($request = null)
@@ -2185,7 +2286,7 @@ function reply($request = null)
 function searchBusinessFilter($request = null, $limit = 5)
 {
     // echo $limit;
-    if(isset($_POST['limit'])) {
+    if (isset($_POST['limit'])) {
         $limit = intval($_POST['limit']);
         // echo $limit;
     }
@@ -2304,7 +2405,6 @@ function searchBusinessFilter($request = null, $limit = 5)
                     </div>
                     </div>
                     </div>';
-                    
             }
             // Add "See More" button after displaying businesses
             $disp .= '
@@ -2321,5 +2421,3 @@ function searchBusinessFilter($request = null, $limit = 5)
     echo $disp;
     $limit = 5;
 }
-
-
