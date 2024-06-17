@@ -190,16 +190,7 @@ $today = date('Y-m-d');
         <div class="col-lg-12">
           <br>
           <div class="property-submit-form">
-
-            <form id="form" method="post" enctype="multipart/form-data">
-              <!-- <div class="pf-title">
-                              <h4>Location</h4>
-                               <select name="loc" class="form-select form-select-sm mt-3">
-                                <option value="" disabled selected > Select a Location. </option>
-                                 <option value="1">North</option>
-                                  <option value="2">South</option>
-                               </select>
-                            </div> -->
+            <form method="post" enctype="multipart/form-data">
               <div class="pf-title">
                 <h4 class="required">Name</h4>
                 <input name="BusinessName" id="busName" type="text" placeholder="Enter Business Name">
@@ -208,8 +199,8 @@ $today = date('Y-m-d');
               <h4 class="required">Logo</h4>
               <div class="custom-file">
                 <!-- add this to form data -->
-                <input class="custom-file-input" name="BusinessLogo" id="BusinessLogo" type="file" required>
-                <label class="custom-file-label" for="BusinessLogo">Choose file...</label>
+                <input class="custom-file-input" name="businessLogo" id="businessLogo" type="file" >
+                <label class="custom-file-label" for="BusinessLogo">Choose files...</label>
                 <div class="error"></div>
               </div>
               <div class="pf-title">
