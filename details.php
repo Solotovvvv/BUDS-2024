@@ -1,31 +1,28 @@
 <?php
 session_start();
-require_once('includes/config.php');
+require_once('./includes/config.php');
 
 // if (isset($_SESSION['role'])) {
 //     if ($_SESSION['role'] == 1) {
 //         header('Location: CEIPO/client/index');
 //     }
 // }
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(1);
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
+error_reporting(0);
 // print_r($_SESSION);
-$role = $_SESSION['role'];
 
 
 $id = $_GET['ID'];
 $_SESSION['bus_id'] = $_GET['ID'];
 //old query
 // $sql = "SELECT * FROM business_list WHERE bus_id = '$id'";
-$sql = "SELECT bl.*, bll.*, bzl.*, bloc.*, COALESCE(AVG(br.rating), 0) AS avg_rating
-        FROM business_list AS bl 
-        INNER JOIN business_links AS bll ON bl.bus_id = bll.bus_id
-        INNER JOIN brgyzone_list AS bzl ON bl.BusinessBrgy = bzl.ID
-        INNER JOIN business_location AS bloc ON bl.bus_id = bloc.bus_id
-        LEFT JOIN business_reviews AS br ON bl.bus_id = br.bus_id
-        WHERE bl.bus_id = $id
-        GROUP BY bl.bus_id";
+$sql = "SELECT * FROM business_list AS bl 
+INNER JOIN business_links AS bll ON bl.bus_id = bll.bus_id
+INNER JOIN brgyzone_list AS bzl ON bl.BusinessBrgy = bzl.ID
+INNER JOIN business_location AS bloc ON bl.bus_id = bloc.bus_id
+WHERE 
+bl.bus_id = $id";
 $disp = "";
 $overview = "";
 $FAQs = "";
@@ -48,7 +45,7 @@ if ($rs = $conn->query($sql)) {
                                 <div class="pi-pic">
                                   <img src="' . $imagePath . '" alt="' . $row['BusinessName'] . '">
                                     <div class="rating-point">
-                                    ' . $avg_rating . '
+                                        4.5
                                     </div>
                                 </div>
                                 <div class="pi-text">
@@ -71,39 +68,17 @@ if ($rs = $conn->query($sql)) {
                                 <h5>Mark Us!</h5>
                                 <form action="#">
                                     <div class="btn btn-success mx"><i class="fa fa-phone"></i> Call</div>
-                                    <div class="btn btn-success mx" id="rateUs"><i class="fa fa-star"></i> Rate Us!</div>
+                                    <div class="btn btn-success mx"><i class="fa fa-star"></i> Rate Us!</div>
                                 </form>
                             </div>
                         </div>
                     </div>';
             $overview .= '<div class="tab-desc">
                         <p>' . $row['BusinessDescrip'] . '</p>
-                </div>';
-            //business faqs updated
-            $sqlfaq = "SELECT * FROM business_faq WHERE bus_id = $id";
-            if ($rsfaq = $conn->query($sqlfaq)) {
-                if ($rsfaq->num_rows > 0) {
-                    $FAQs .= '<div class="tab-desc">';
-                    $counter = 1;
-                    while ($faqRow = $rsfaq->fetch_assoc()) {
-                        $FAQs .= '<div class="dropdown mb-2">
-                                <button class="btn btn-success dropdown-toggle" type="button" id="collapseDropdownButton' . $counter . '" data-toggle="collapse" data-target="#collapseContent' . $counter . '" aria-expanded="false" aria-controls="collapseContent' . $counter . '">
-                                Question #' . $counter . '. ' . $faqRow['Questions'] . '
-                                </button>
-                                    <div class="c  ollapse" id="collapseContent' . $counter . '">
-                                      <div class="card card-body" style="border: 1px solid rgba(0,0,0,.125)">
-                                            ' . $faqRow['Answer'] . '
-                                        </div>
-                                    </div>
-                            </div>';
-                        $counter++;
-                    }
-                    $FAQs .= '</div>';
-                } else {
-                    $FAQs = '<div class="tab-desc">No FAQs available</div>';
-                }
-            }
-
+                  </div>';
+            $FAQs .= '<div class="tab-desc">
+                <p>FAQs AREA</p>
+              </div>';
             $socialMedia .= '<div class="section-title sidebar-title">
                         <h5>FOLLOW US</h5>
                     </div>
@@ -132,8 +107,7 @@ if (isset($_SESSION['ownerId'])) {
     LEFT JOIN application_list AS ap ON ap.bus_app = bl.bus_applicant
     LEFT JOIN business_list AS bll ON bl.bus_id = bll.bus_id
     WHERE (bl.bus_id = :id AND bl.status = 1)
-    AND (ap.app_id IS NULL OR ap.app_id <> :app_id)
-   
+    AND (ap.app_id IS NULL OR ap.app_id <> :app_id);    
     ";
 } else {
     // Execute this block when 'ownerId' is not set in the session.
@@ -143,7 +117,6 @@ if (isset($_SESSION['ownerId'])) {
             LEFT JOIN business_list AS bll ON bl.bus_id = bll.bus_id
             WHERE bl.bus_id = :id AND bl.status = 1";
 }
-
 
 $pdo = Database::connection();
 $stmt = $pdo->prepare($sql);
@@ -166,14 +139,13 @@ if ($stmt->errorCode() !== '00000') {
 }
 
 
-$sql3 = "SELECT * FROM business_carousel WHERE bus_id = :bus_id";
+$sql3 = "SELECT * FROM business_carousel WHERE bus_id = :bus_id AND status = 1";
+$pdo = Database::connection();
 $stmt3 = $pdo->prepare($sql3);
 $stmt3->bindParam(':bus_id', $id, PDO::PARAM_STR);
 $stmt3->execute();
 $numRows1 = $stmt3->rowCount();
 $datas3 = $stmt3->fetchAll();
-
-
 
 $sql4 = "SELECT * FROM business_post WHERE bus_id = :id AND status = 1";
 $stmt4 = $pdo->prepare($sql4);
@@ -271,38 +243,6 @@ if (isset($_SESSION['ownerId'])) {
             width: 600px;
             height: 450px;
         }
-
-        .dropdown-toggle {
-            width: 100%;
-            /* Set the width to 100% */
-            white-space: normal;
-            background-color: #ffffff;
-            /* Set background color to white */
-            color: #000000;
-            /* Set text color to black */
-            text-align: left;
-            /* Align the text to the left */
-        }
-
-        .dropdown-toggle::after {
-            display: inline-block;
-            width: 0;
-            height: 0;
-            margin-left: .255em;
-            vertical-align: .255em;
-            content: "";
-            border-top: .3em solid;
-            border-right: .3em solid transparent;
-            border-bottom: 0;
-            border-left: .3em solid transparent;
-            position: absolute;
-            right: 15px;
-            /* Position the arrow to the right */
-            top: 50%;
-            /* Align the arrow vertically */
-            transform: translateY(-50%);
-            /* Center the arrow vertically */
-        }
     </style>
 
 </head>
@@ -359,10 +299,12 @@ if (isset($_SESSION['ownerId'])) {
                                     <nav class="nav-menu">
                                         <ul>
                                             <li class="profile-dropdown">
-                                                <div class="flex-shrink-0 me-3">
-                                                    <div class="avatar avatar-online">
-                                                        <img id="user-profile-img" alt="User's Name" class="w-px-40 h-auto rounded-circle" style="width: 40px; height: auto; border-radius: 50%;">
-                                                    </div>
+                                                <div class="user-profile">
+                                                    <?php if ($_SESSION['photo'] != "") { ?>
+                                                        <img src="<?php echo "img/profile-picture/" . $_SESSION['photo'] ?>" alt="User's Name">
+                                                    <?php } else { ?>
+                                                        <img src="img/testimonial-author/unknown.jpg" alt="User's Name">
+                                                    <?php } ?>
                                                 </div>
                                                 <ul class="dropdown dropleft">
                                                     <li>
@@ -393,7 +335,7 @@ if (isset($_SESSION['ownerId'])) {
                 </div>
             </div>
         </div>
-        <div class="hs-nav" style="border: 1px solid rgba(0,0,0,.125)">
+        <div class="hs-nav">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-9">
@@ -577,9 +519,6 @@ if (isset($_SESSION['ownerId'])) {
     <!-- Header End -->
 
     <!-- Property Details Section Begin -->
-
-
-
     <section class="property-section latest-property-section spad">
         <div class="container">
             <div class="row">
@@ -588,10 +527,9 @@ if (isset($_SESSION['ownerId'])) {
                         <h4>BUSINESS INFORMATION</h4>
                     </div>
                 </div>
-                <!-- Displaying business information -->
                 <div class="container">
                     <div class="profile-agent-content">
-                        <?php echo $disp; ?>
+                        <?php echo $disp ?>
                     </div>
                 </div>
 
@@ -602,7 +540,6 @@ if (isset($_SESSION['ownerId'])) {
                                 <div class="pd-board">
                                     <br>
                                     <div class="tab-board">
-                                        <!-- Tabs for Overview and FAQs -->
                                         <ul class="nav nav-tabs" role="tablist">
                                             <li class="nav-item">
                                                 <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">Overview</a>
@@ -610,25 +547,28 @@ if (isset($_SESSION['ownerId'])) {
                                             <li class="nav-item">
                                                 <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">FAQs</a>
                                             </li>
-                                        </ul>
-                                        <!-- Tab panes -->
+                                        </ul><!-- Tab panes -->
                                         <div class="tab-content">
                                             <div class="tab-pane active" id="tabs-1" role="tabpanel">
                                                 <?php echo $overview; ?>
                                             </div>
                                             <div class="tab-pane" id="tabs-2" role="tabpanel">
-                                                <?php echo $FAQs; ?>
+                                                <?php echo $FAQs ?>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
+
+
                                 <!-- Gallery Section -->
                                 <div class="pd-widget">
                                     <h4>GALLERY</h4>
                                     <?php if ($numRows1 > 0) { ?>
                                         <div class="fp-slider owl-carousel">
                                             <?php foreach ($datas3 as $image) : ?>
-                                                <div class="fp-item set-bg mb-4" data-setbg="img/gallery1/<?php echo $image['images']; ?>">
+                                                <div class="fp-item set-bg mb-4" data-setbg="img/gallery1/<?php echo basename($image['images']); ?>">
+
                                                     <div class="fp-text">
                                                         <h5 class="title">
                                                             <?php echo $bus_name; ?>
@@ -645,15 +585,16 @@ if (isset($_SESSION['ownerId'])) {
                                     <?php } ?>
                                 </div>
 
-                                <!-- Map Location Section -->
+
                                 <div class="pd-widget">
                                     <h4>Map Location</h4>
                                     <div class="map">
                                         <div id="map"></div>
-                                        <!-- Your map content or iframe -->
+                                        <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7720.486527481873!2d120.96689102135043!3d14.642127909103934!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397b54965fb6673%3A0x4c29f2c590dd763f!2sJollibee!5e0!3m2!1sen!2sph!4v1680867618471!5m2!1sen!2sph" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> -->
                                     </div>
                                 </div>
-                                <!-- Feature Post Section -->
+                                <br>
+
                                 <div class="blog-item-list"><br><br>
                                     <div class="pd-widget">
                                         <br>
@@ -666,17 +607,12 @@ if (isset($_SESSION['ownerId'])) {
                                                     <img src="<?php echo "img/post/" . $data2['photo'] ?>" style="" height="200" width="300" alt="">
                                                 </div>
                                                 <div class="bi-text">
-                                                    <h5>
-                                                        <?php echo $data2['post_title'] ?>
-                                                    </h5>
+                                                    <h5><?php echo $data2['post_title'] ?></h5>
                                                     <ul>
-                                                        <li>
-                                                            <?php echo $data2['post_desc'] ?>
-                                                        </li>
+                                                        <li><?php echo $data2['post_desc'] ?></li>
                                                     </ul>
-                                                    <p>
-                                                        <?php echo $data2['post_date'] ?>
-                                                    </p>
+                                                    <p><?php echo $data2['post_date'] ?></p>
+                                                    <!-- <a href="#" class="read-more">Call Now! <span class="arrow_right"></span></a> -->
                                                 </div>
                                             </div>
                                         <?php }
@@ -684,17 +620,15 @@ if (isset($_SESSION['ownerId'])) {
                                         <p class="h4 text-muted mb-5 mt-0 pt-0">No available post</p>
                                     <?php } ?>
                                 </div>
-                                <!-- Reviews Section -->
+                                <!-- ito edit -->
                                 <div class="blog-details-content">
                                     <div class="bc-widget">
-                                        <h4>
-                                            <?php echo $numRows3 . " REVIEWS" ?>
-                                        </h4>
+                                        <h4><?php echo $numRows3 . " REVIEWS" ?></h4>
                                         <div class="comment-option">
                                             <?php
                                             for ($i = 0; $i < 5 && $i < count($datas5); $i++) {
                                                 $data5 = $datas5[$i];
-                                                $dateString = $data5['curr_time'];
+                                                $dateString = $data5['curr_time']; // Assuming you have the date as a string in this format
                                                 $timestamp = strtotime($dateString);
                                                 $formattedDate = date('F j, Y', $timestamp);
                                             ?>
@@ -707,21 +641,15 @@ if (isset($_SESSION['ownerId'])) {
                                                         <?php } ?>
                                                     </div>
                                                     <div class="ci-text">
-                                                        <h5>
-                                                            <?php echo $data5['Firstname'] . ' ' . $data5['MiddleName'] . ' ' . $data5['Surname'] ?>
-                                                        </h5>
+                                                        <h5><?php echo $data5['Firstname'] . ' ' . $data5['MiddleName'] . ' ' . $data5['Surname'] ?></h5>
                                                         <div class="pr-rating">
                                                             <?php for ($j = 0; $j < $data5['rating']; $j++) { ?>
                                                                 <i class="fa fa-star"></i>
                                                             <?php } ?>
                                                         </div>
-                                                        <p>
-                                                            <?php echo $data5['comment'] ?>
-                                                        </p>
+                                                        <p><?php echo $data5['comment'] ?></p>
                                                         <ul>
-                                                            <li><i class="fa fa-clock-o">
-                                                                    <?php echo ' ' . $formattedDate ?>
-                                                                </i></li>
+                                                            <li><i class="fa fa-clock-o"><?php echo ' ' . $formattedDate ?></i></li>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -731,23 +659,20 @@ if (isset($_SESSION['ownerId'])) {
                                                             <img src="<?php echo "img/logo/" . $data5['Businesslogo'] ?>" alt="">
                                                         </div>
                                                         <div class="ci-text">
-                                                            <h5>
-                                                                <?php echo $data5['BusinessName'] ?>
-                                                            </h5>
-                                                            <p>
-                                                                <?php echo $data5['bus_reply'] ?>
-                                                            </p>
+                                                            <h5><?php echo $data5['BusinessName'] ?></h5>
+                                                            <p><?php echo $data5['bus_reply'] ?></p>
                                                         </div>
                                                     </div>
                                             <?php }
                                             }
                                             ?>
-                                            <div id="UIcommentAndRating"></div>
+                                            <div id="UIcommentAndRating">
+
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- Leave a Comment Section -->
-                                <div class="pd-widget" id="Ratee">
+                                <div class="pd-widget">
                                     <div class="col-sm-12">
                                         <div class="row">
                                             <h4>LEAVE A COMMENT</h4><br>
@@ -755,7 +680,6 @@ if (isset($_SESSION['ownerId'])) {
                                         <?php if ($numRows6 === 0 || !isset($_SESSION['ownerId'])) { ?>
                                             <div class="row">
                                                 <fieldset id="ratingUi" class="rating">
-                                                    <!-- Rating UI -->
                                                     <input type="radio" id="star5" name="rating" value="5" />
                                                     <label for="star5">5 stars</label>
                                                     <input type="radio" id="star4" name="rating" value="4" />
@@ -772,16 +696,16 @@ if (isset($_SESSION['ownerId'])) {
                                     </div>
                                     <form class="review-form">
                                         <textarea placeholder="Leave a Comment" id="commentVal"></textarea>
-                                        <?php // if (isset($_SESSION['ownerId'])) { 
+                                        <?php //if(isset($_SESSION['ownerId'])){ 
                                         ?>
                                         <input type="hidden" value="<?php echo $_SESSION['ownerId'] ?>" id="commentAndRatingId">
-                                        <?php // } 
+                                        <?php //} 
                                         ?>
                                         <input type="hidden" value="<?php echo $nameCommentRate ?>" id="nameUserComment">
-                                        <?php // if (isset($_SESSION['photo'])) { 
+                                        <?php //if(isset($_SESSION['photo'])){ 
                                         ?>
                                         <input type="hidden" value="<?php echo $_SESSION['photo'] ?>" id="photoCommentVal">
-                                        <?php // } 
+                                        <?php //} 
                                         ?>
                                         <input type="hidden" value="<?php echo $id ?>" id="commentRatingBusId">
                                         <button type="button" onclick="commentAndRating('<?php echo $numRows6 ?>')" class="site-btn">Send</button>
@@ -789,7 +713,7 @@ if (isset($_SESSION['ownerId'])) {
                                 </div>
                             </div>
                         </div>
-                        <!-- Sidebar Section -->
+
                         <div class="col-lg-4">
                             <div class="property-sidebar">
                                 <div class="blog-sidebar">
@@ -802,91 +726,83 @@ if (isset($_SESSION['ownerId'])) {
                                     <h5>We're Hiring!</h5>
                                 </div>
                                 <?php
-                                if ($role == 3 || $role == '') {
-                                    foreach ($datas as $index => $data) {
-                                        $businessLogo = $data['Businesslogo'];
-                                        $pos = $data['pos_vacant'];
-                                        $jobDes = $data['job_desc'];
-                                        $modalId = 'modal_' . $index;
-                                        $jobSpec = $data['job_spec'];
-                                        $degree = $data['degree'];
-                                        $salary = $data['salary'];
-                                        $yearExp = $data['year_exp'];
-                                        $bus_applicant_id = $data['bus_applicant'];
-                                        $user_id = $_SESSION['ownerId'];
+                                foreach ($datas as $index => $data) {
+                                    $businessLogo = $data['Businesslogo'];
+                                    $pos = $data['pos_vacant'];
+                                    $jobDes = $data['job_desc'];
+                                    $modalId = 'modal_' . $index; // Generate a unique modal ID
+                                    $jobSpec = $data['job_spec'];
+                                    $degree = $data['degree'];
+                                    $yearExp = $data['year_exp'];
+                                    $bus_applicant_id = $data['bus_applicant'];
+                                    $user_id = $_SESSION['ownerId'];
                                 ?>
-                                        <!-- Hiring Modal -->
-                                        <div class="single-sidebar m-0 p-0">
-                                            <div class="top-agent">
-                                                <div class="ta-item">
-                                                    <div class="ta-pic set-bg" data-setbg="img/job/381351858_340934731618300_4699644083071352903_n.png"></div>
-                                                    <div class="ta-text">
-                                                        <h6><a><?php echo $data['pos_vacant'] ?></a></h6>
-                                                        <!-- Pass the JavaScript variables as separate parameters to openModal -->
-                                                        <button onclick="openModal('<?php echo $businessLogo ?>', '<?php echo $pos ?>', '<?php echo $jobDes ?>', '<?php echo $modalId ?>', '<?php echo $jobSpec ?>', '<?php echo $degree ?>', '<?php echo $yearExp ?>', '<?php echo $salary ?>', `<?php echo $bus_applicant_id ?>`)" class="btn btn-success">Apply</button>
-                                                    </div>
+                                    <div class="single-sidebar m-0 p-0">
+                                        <div class="top-agent">
+                                            <div class="ta-item">
+                                                <div class="ta-pic set-bg" data-setbg="img/job/381351858_340934731618300_4699644083071352903_n.png">
+                                                </div>
+                                                <div class="ta-text">
+                                                    <h6><a>
+                                                            <?php echo $data['pos_vacant'] ?>
+                                                        </a></h6>
+                                                    <!-- Pass the JavaScript variables as separate parameters to openModal -->
+                                                    <button onclick="openModal('<?php echo $businessLogo ?>', '<?php echo $pos ?>', '<?php echo $jobDes ?>', '<?php echo $modalId ?>', '<?php echo $jobSpec ?>', '<?php echo $degree ?>', '<?php echo $yearExp ?>', `<?php echo $bus_applicant_id ?>`)" class="btn btn-success">Apply</button>
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- Modal -->
-                                        <div id="<?php echo $modalId ?>" style="z-index: 1000; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);" class="modal">
-                                            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                                                <div class="modal-content w-100">
-                                                    <div class="modal-header">
-                                                        <img src="img/company/jollibee.jpg" alt="Company Logo" class="circle-image" style="margin-right: 5px; border: 2px solid #355E3B;">
-                                                        <h3 class="text-center mb-6 font-weight-bold" style="margin-top: 7px;">We're Hiring!</h3>
-                                                        <span onclick="closeModal('<?php echo $modalId ?>')" class="close" title="Close Modal">&times;</span>
-                                                    </div>
-                                                    <div class="container mt-4">
-                                                        <div class="card px-2" id="jobBoardForm">
-                                                            <div class="job-board">
-                                                                <!-- Job Listings -->
-                                                                <div class="job-listing">
-                                                                    <h4 class="jobTitle"><strong>Manager</strong></h4>
-                                                                    <p id="des">The Restaurant Manager is responsible for
-                                                                        the development and achievement of the store business
-                                                                        objectives such as Sales and Profitability targets,
-                                                                        customer satisfaction & Food, Safety and Cleanliness
-                                                                        standards; People Management and Development; and
-                                                                        Stores adherence to operating systems and standards
-                                                                        and
-                                                                        compliance to all government requirements.</p>
-                                                                    <h6><strong>Job Specification</strong></h6>
-                                                                    <ul class="bullet-list">
-                                                                        <!-- Additional job specification details -->
-                                                                    </ul>
-                                                                </div>
-                                                                <br>
+                                    </div>
+                                    <div id="<?php echo $modalId ?>" style="z-index: 1000; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);" class="modal">
+                                        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                            <div class="modal-content w-100">
+                                                <div class="modal-header">
+                                                    <img src="img/company/jollibee.jpg" alt="Company Logo" class="circle-image" style="margin-right: 5px; border: 2px solid #355E3B;">
+                                                    <h3 class="text-center mb-6 font-weight-bold" style="margin-top: 7px;">
+                                                        We're Hiring!</h3>
+                                                    <span onclick="closeModal('<?php echo $modalId ?>')" class="close" title="Close Modal">&times;</span>
+                                                </div>
+                                                <div class="container mt-4">
+                                                    <div class="card px-2" id="jobBoardForm">
+                                                        <div class="job-board">
+                                                            <!-- Job Listings -->
+                                                            <div class="job-listing">
+                                                                <h4 class="jobTitle"><strong>Manager</strong></h4>
+                                                                <p id="des">The Restaurant Manager is responsible for the
+                                                                    development and achievement of the store business
+                                                                    objectives such as Sales and Profitability targets,
+                                                                    customer satisfaction & Food, Safety and Cleanliness
+                                                                    standards; People Management and Development; and
+                                                                    Stores adherence to operating systems and standards and
+                                                                    compliance to all government requirements.</p>
+                                                                <h6><strong>Job Specification</strong></h6>
+                                                                <ul class="bullet-list">
+                                                                </ul>
                                                             </div>
-                                                            <div class="col-lg-12">
-                                                                <h6><strong>Additional Information</strong></h6>
-                                                                <div class="row">
-                                                                    <div class="col">
-                                                                        <p class="degree"><strong>Degree:</strong>
-                                                                            Bachelor's Degree</p>
-                                                                    </div>
-                                                                    <div class="col">
-                                                                        <p class="experience"><strong>Years of
-                                                                                Experience:</strong> 3 years</p>
-                                                                    </div>
-                                                                    <div class="col">
-                                                                        <p class="salary"><strong>Years of
-                                                                                Experience:</strong> 3 years</p>
-                                                                    </div>
+                                                            <br>
+                                                        </div>
+                                                        <div class="col-lg-12">
+                                                            <h6><strong>Additional Information</strong></h6>
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <p class="degree"><strong>Degree:</strong> Bachelor's
+                                                                        Degree</p>
+                                                                </div>
+                                                                <div class="col">
+                                                                    <p class="experience"><strong>Years of
+                                                                            Experience:</strong> 3 years</p>
                                                                 </div>
                                                             </div>
-                                                            <div class="upload-button">
-                                                                <div class="row">
-                                                                    <div class="col">
-                                                                        <br>
-                                                                        <h4 style="margin-top: 7px;"><strong>Submit
-                                                                                Application</strong></h4>
-                                                                    </div>
-                                                                    <div class="col text-right">
-                                                                        <input type="hidden" id="app_id">
-                                                                        <br><button class="btn btn-success" onclick="applyUser('<?php echo $modalId ?>', '<?php echo $user_id ?>')" style="margin-bottom: 20px;">Submit
-                                                                            Resume</button>
-                                                                    </div>
+                                                        </div>
+                                                        <div class="upload-button">
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <br>
+                                                                    <h4 style="margin-top: 7px;"><strong>Submit
+                                                                            Application</strong></h4>
+                                                                </div>
+                                                                <div class="col text-right">
+                                                                    <input type="hidden" id="app_id">
+                                                                    <br><button class="btn btn-success" onclick="applyUser('<?php echo $modalId ?>', '<?php echo $user_id ?>')" style="margin-bottom: 20px;">Submit Resume</button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -894,20 +810,17 @@ if (isset($_SESSION['ownerId'])) {
                                                 </div>
                                             </div>
                                         </div>
-                                    <?php }
-                                } else {
-                                    ?>
-                                    <h3 class="mt-0 mb-5 text-success">This Feature is not available to you</h3>
-                                <?php  } ?>
-                                <!-- Related Business Section -->
+                                    </div>
+                                <?php }
+                                ?>
                                 <div class="single-sidebar">
                                     <?php
-                                    $selectRelatedBusiness = "SELECT * FROM business_list WHERE (BusinessCategory = :bus_category AND bus_id != :id) AND (BusinessStatus = 1 OR BusinessStatus = 4)  LIMIT 2";
+                                    $selectRelatedBusiness = "SELECT * FROM business_list WHERE BusinessCategory = :bus_category LIMIT 2";
+                                    // $pdo = Database::connection();
                                     $stmt7 = $pdo->prepare($selectRelatedBusiness);
-                                    $stmt7->bindParam(':id', $id, PDO::PARAM_STR);
                                     $stmt7->bindParam(':bus_category', $bus_category, PDO::PARAM_STR);
                                     $stmt7->execute();
-                                    $datas7 = $stmt7->fetchAll();
+                                    $datas7  = $stmt7->fetchAll();
                                     $numRows7 = $stmt7->rowCount();
                                     ?>
                                     <div class="section-title sidebar-title">
@@ -918,15 +831,11 @@ if (isset($_SESSION['ownerId'])) {
                                         foreach ($datas7 as $data7) { ?>
                                             <div class="top-agent">
                                                 <div class="ta-item">
-                                                    <div class="ta-pic set-bg" data-setbg=<?php echo 'img/logo/' . $data7['Businesslogo'] ?>></div>
-                                                    <div class="ta-text" style="height: fit-content;">
-                                                        <h6><a href=<?php echo './details.php?ID=' . $data7['bus_id'] ?>><?php echo $data7['BusinessName'] ?></a></h6>
-                                                        <span style="font-size: small;">
-                                                            <?php echo $data7['BusinessAddress'] ?>
-                                                        </span>
-                                                        <div class="ta-num">
-                                                            <?php echo $data7['BusinessNumber'] ?>
-                                                        </div>
+                                                    <div class="ta-pic set-bg" data-setbg=<?php echo  'img/logo/' . $data7['Businesslogo']   ?>></div>
+                                                    <div class="ta-text">
+                                                        <h6><a href=<?php echo './details.php?ID=' . $data7['bus_id'] ?>><?php echo $data7['BusinessName']  ?></a></h6>
+                                                        <span><?php echo $data7['BusinessAddress'] ?></span>
+                                                        <div class="ta-num"><?php echo $data7['BusinessNumber']  ?></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -942,20 +851,18 @@ if (isset($_SESSION['ownerId'])) {
     </section>
 
 
-
-
-
     <footer class="footer-section">
         <div class="container">
             <div class="row">
-                <div class="col-lg-8 col-md-8">
+                <div class="col-lg-6 col-md-6">
                     <div class="fs-about">
                         <div class="fs-logo">
                             <a href="#">
-                                <img src="img/flogo.png" alt="">
+                                <img src="img/logo-main.png" alt="">
                             </a>
                         </div>
-                        <p>BuDS (Business Directory System of Caloocan City) is a convenient platform connecting residents and visitors with local businesses, offering easy access to essential information for fostering community engagement and economic growth.</p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                            labore et dolore magna aliqua ut aliquip ex ea</p>
                     </div>
                 </div>
             </div>
@@ -983,8 +890,37 @@ if (isset($_SESSION['ownerId'])) {
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-76614800-1"></script>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script>
+
+
+
+$(document).ready(function() {
+            $('.fp-slider').owlCarousel({
+                loop: true,
+                margin: 10,
+                nav: true,
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    600: {
+                        items: 3
+                    },
+                    1000: {
+                        items: 5
+                    }
+                }
+            });
+
+            // Background image setup
+            $('.set-bg').each(function() {
+                var bg = $(this).data('setbg');
+                $(this).css('background-image', 'url(' + bg + ')');
+            });
+        });
+
+
+
         $(document).ready(function() {
             var map = L.map('map').setView([14.6577, 120.9842], 15);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -1049,15 +985,6 @@ if (isset($_SESSION['ownerId'])) {
                     // You can add your code to handle the unchecked state here
                 }
             });
-
-            fetchData();
-
-            $('#rateUs').click(function() {
-                $('html, body').animate({
-                    scrollTop: $('#Ratee').offset().top
-                }, 1000);
-            });
-
         });
 
         // for comment and ratings
@@ -1201,7 +1128,7 @@ if (isset($_SESSION['ownerId'])) {
         }
 
         // Function to open the modal
-        function openModal(logo, pos, des, modalId, jobspec, degree, exp, salary, id) {
+        function openModal(logo, pos, des, modalId, jobspec, degree, exp, id) {
             // console.log(logo);
             // console.log(pos);
             // console.log(id);
@@ -1243,10 +1170,6 @@ if (isset($_SESSION['ownerId'])) {
 
             var expElement = $("#" + modalId).find(".experience");
             expElement.html('<strong>Experience:</strong> ' + exp);
-
-
-            var expElement = $("#" + modalId).find(".salary");
-            expElement.html('<strong>Salary:</strong> ' + salary);
 
 
 
@@ -1526,35 +1449,29 @@ if (isset($_SESSION['ownerId'])) {
             });
 
 
-
+            
         };
 
 
-        function fetchData() {
-            // Make an AJAX request to fetch data from the server
-            $.ajax({
-                url: 'fetchUserData.php', // Replace 'fetchUserData.php' with the actual file path to fetch data from your server
-                type: 'GET',
-                dataType: 'json',
-                success: function(data) {
-
-                    if (data.photo) {
-                        $('#user-profile-img').attr('src', data.photo);
-
-                    } else {
-                        $('#user-profile-img').attr('src', 'img/testimonial-author/unknown.jpg');
-
-                    }
 
 
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                    // Handle error
-                }
-            });
-        }
     </script>
 </body>
 
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
