@@ -73,14 +73,39 @@ if ($rs = $conn->query($sql)) {
       width: 100px;
       /* Adjust the width as needed */
     }
+
+    .loader {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 50%;
+            top: 50%;
+            width: 50px;
+            height: 50px;
+            margin: -25px 0 0 -25px;
+            border: 16px solid #f3f3f3; /* Light grey */
+            border-radius: 50%;
+            border-top: 16px solid #3498db; /* Blue */
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
   </style>
 </head>
 
 <body>
-  <!-- Page Preloder -->
+
+<div id="loader" class="loader"></div>
+
+  <!-- Page Preloder
   <div id="preloder">
     <div class="loader"></div>
-  </div>
+  </div> -->
 
   <!-- Offcanvas Menu Wrapper Begin -->
   <div class="offcanvas-menu-overlay"></div>
@@ -448,6 +473,9 @@ if ($rs = $conn->query($sql)) {
     });
 
     function addBusiness() {
+  // Show the loader
+  document.getElementById('loader').style.display = 'block';
+
   // Collect form values
   var businessName = $('#busName').val();
   var businessEmail = $('#BusinessEmail').val();
@@ -499,6 +527,7 @@ if ($rs = $conn->query($sql)) {
       },
       showCancelButton: false,
     });
+    document.getElementById('loader').style.display = 'none'; // Hide loader
     return;
   }
 
@@ -537,16 +566,11 @@ if ($rs = $conn->query($sql)) {
       for (var i = 0; i < files.length; i++) {
         formData.append(fieldName + '[]', files[i]);
       }
-    } else if (inputElement) {
-      formData.append(fieldName, inputElement.files[0]);
     }
   }
 
   // Select input elements
   var businessLogoInput = document.querySelector("input[name='businessLogo']");
-  // var businessLogoInput = $("input[name='BusinessLogo']")[0]; // Assuming it's the first input element
-  // var businessLogoFile = businessLogoInput.files[0];
-
   var brgyClearanceInput = document.querySelector("input[name='uploadBrgyClearance[]']");
   var dtiPermitInput = document.querySelector("input[name='uploadDTIPermit[]']");
   var sanitaryPermitInput = document.querySelector("input[name='uploadSanitaryPermit[]']");
@@ -567,6 +591,7 @@ if ($rs = $conn->query($sql)) {
 
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4) {
+      document.getElementById('loader').style.display = 'none'; // Hide loader
       console.log("Server response:", xhr.responseText);
       if (xhr.status === 200) {
         var data = JSON.parse(xhr.responseText);
@@ -582,6 +607,7 @@ if ($rs = $conn->query($sql)) {
 
   xhr.send(formData);
 }
+
 
 
     function fetchData() {

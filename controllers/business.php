@@ -70,7 +70,8 @@ function deleteRequirements($request = null)
     }
 }
 
-function handleMultipleFileUploads($files, $targetDirectory) {
+function handleMultipleFileUploads($files, $targetDirectory)
+{
     $uploadedFiles = [];
     if (is_array($files['name'])) {
         foreach ($files['name'] as $key => $name) {
@@ -108,7 +109,8 @@ function handleMultipleFileUploads($files, $targetDirectory) {
     return $uploadedFiles;
 }
 
-function createPDF($images, $targetDirectory, $pdfName) {
+function createPDF($images, $targetDirectory, $pdfName)
+{
     $pdf = new \FPDF(); // Instantiate the FPDF class directly.
     foreach ($images as $image) {
         $pdf->AddPage();
@@ -118,7 +120,8 @@ function createPDF($images, $targetDirectory, $pdfName) {
     $pdf->Output('F', $pdfPath);
     return $pdfPath;
 }
-function handleFileUpload($files, $targetDirectory) {
+function handleFileUpload($files, $targetDirectory)
+{
     $uploadedPaths = []; // Array to store uploaded file paths
 
     // Loop through each file in the array
@@ -159,9 +162,26 @@ function handleFileUpload($files, $targetDirectory) {
 
     return $uploadedPathsString; // Return the concatenated string of paths
 }
+function checkDuplicateBusiness($pdo, $businessName, $businessEmail, $businessAddress, $businessBranch)
+{
+    $sql = "SELECT COUNT(*) FROM `business_list` 
+            WHERE `BusinessName` = :name 
+            AND `BusinessEmail` = :email 
+            AND (`BusinessAddress` = :address AND `BusinessBranch` = :branch)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(array(
+        ':name' => $businessName,
+        ':email' => $businessEmail,
+        ':address' => $businessAddress,
+        ':branch' => $businessBranch
+    ));
+    $count = $stmt->fetchColumn();
+    return $count > 0;
+}
 
 
-function addBusiness($request = null) {
+function addBusiness($request = null)
+{
     try {
         $pdo = Database::connection();
         $msg = validateSession();
@@ -170,7 +190,15 @@ function addBusiness($request = null) {
             return;
         }
 
-       $newImageName = handleFileUpload($_FILES['businessLogo'], '../img/logo/');
+        $newImageName = handleFileUpload($_FILES['businessLogo'], '../img/logo/');
+
+        if (checkDuplicateBusiness($pdo, $request->businessName, $request->businessEmail, $request->businessAddress, $request->businessBranch)) {
+            $msg['title'] = "Duplicate Error";
+            $msg['message'] = "A business with the same name, email, address, or branch already exists.";
+            $msg['icon'] = "error";
+            echo json_encode($msg);
+            return;
+        }
 
         $ownerId = $_SESSION['ownerId'];
         $sql = "INSERT INTO `business_list`(`ownerId`, `BusinessName`, `Businesslogo`, `BusinessEmail`, `BusinessBranch`, `BusinessEstablish`, `BusinessDescrip`, `BusinessNumber`, `BusinessOpenHour`, 

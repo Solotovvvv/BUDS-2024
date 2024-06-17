@@ -24,6 +24,13 @@ $datas = $stmt1->fetchAll();
 
 foreach ($datas as $data) {
   $logo = $data['Businesslogo'];
+    if (strpos($logo, '../') !== false) {
+        // Replace '../' with an empty string if it exists
+        $logo = str_replace('../', '', $logo);
+    } else {
+        // Otherwise, prepend 'img/logo/' to the filename
+        $logo = 'img/logo/' . $logo;
+    }
   $bus_name = $data['BusinessName'];
   $number = $data['BusinessNumber'];
   $address = $data['BusinessAddress'];
@@ -205,7 +212,8 @@ foreach ($datas as $data) {
                   <h3 class="card-header"><strong>Business Details</strong></h3>
                   <div class="card-body">
                     <div class="d-flex align-items-start align-items-sm-center gap-4">
-                      <img src="<?php echo "img/logo/" . $logo ?>" alt="user-avatar" class="d-block rounded-circle" height="100" width="100" id="uploadedAvatar" />
+                    <img src="<?php echo $logo; ?>" alt="user-avatar" class="d-block rounded-circle" height="100" width="100" id="uploadedAvatar" />
+
                       <div class="button-wrapper">
                         <form id="formAccountSettings" method="POST" enctype="multipart/form-data">
                           <?php //if ($status == 4 || $status == 1) { 

@@ -34,11 +34,19 @@ if ($rs = $conn->query($sql)) {
     if ($rs->num_rows > 0) {
         while ($row = $rs->fetch_assoc()) {
             $avg_rating = ($row['avg_rating']) ? number_format($row['avg_rating'], 1) : "N/A"; // Calculate average rating or set to "N/A" if there are no reviews
+            if (strpos($row['Businesslogo'], '../') !== false) {
+                // Replace '../' with an empty string if it exists
+                $imagePath = str_replace('../', '', $row['Businesslogo']);
+            } else {
+                // Otherwise, prepend 'img/logo/' to the filename
+                $imagePath = 'img/logo/' . $row['Businesslogo'];
+            }
+           
             $disp .= '<div class="row">
                         <div class="col-lg-4">
                             <div class="profile-agent-info">
                                 <div class="pi-pic">
-                                    <img src=" img/logo/' . $row['Businesslogo'] . '" alt="">
+                                  <img src="' . $imagePath . '" alt="' . $row['BusinessName'] . '">
                                     <div class="rating-point">
                                     ' . $avg_rating . '
                                     </div>

@@ -26,15 +26,14 @@ if (isset($_SESSION['email'])) {
     $row = $conn->query($sql);
     $data = $row->fetch_assoc();
 }
-
 $disp = "";
 $sql = "SELECT * FROM business_list AS bl 
-INNER JOIN owner_list AS ol ON bl.ownerId = $ownerId && ol.ID = $ownerId
-INNER JOIN brgyzone_list AS brgyl ON bl.BusinessBrgy = brgyl.ID
-INNER JOIN business_location AS bloc ON bl.bus_id = bloc.bus_id
-INNER JOIN business_links AS bll ON bl.bus_id = bll.bus_id
-WHERE 
-bl.ownerId = $ownerId";
+        INNER JOIN owner_list AS ol ON bl.ownerId = $ownerId && ol.ID = $ownerId
+        INNER JOIN brgyzone_list AS brgyl ON bl.BusinessBrgy = brgyl.ID
+        INNER JOIN business_location AS bloc ON bl.bus_id = bloc.bus_id
+        INNER JOIN business_links AS bll ON bl.bus_id = bll.bus_id
+        WHERE 
+        bl.ownerId = $ownerId";
 $x = -1;
 if ($rs = $conn->query($sql)) {
     if ($rs->num_rows > 0) {
@@ -45,29 +44,37 @@ if ($rs = $conn->query($sql)) {
             } else {
                 // echo "asd"
             }
-            $disp .= '<td class="col-md-4">
-              <div class="property-item" style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); padding: 20px;  border-radius: 15px;">
-                <div class="pi-pic set-bg rounded-circle text-center d-flex align-items-center justify-content-center" style="width: 150px; height: 150px; border: 2px solid #355E3B;" data-setbg="img/logo/' . $row['Businesslogo'] . '">
-                  <!-- Circular image with a border -->
-              </div>
-              <div class="pi-text">
-                  <h5><a href="#">' . $row['BusinessName'] . ' - ' . $row['BusinessBranch'] . '</a></h5>
-                  <p><span class="icon_pin_alt"></span>' . $row['BusinessAddress'] . ' ' . $row['barangay'] . ' Zone: ' . $row['zone'] . '</p>
-                  <div class="pi-agent">
-                      <div class="pa-item">
-                          <div class="pa-text">
-                              <a class="btn btn-success" href="details.php?ID=' . $row['bus_id'] . '" role="button"><i class="fa fa-eye"></i> View</a>
-                              <a class="btn btn-success" href="BusinessPanel.php?a=' . $row['bus_id'] . '" role="button"><i class="fa fa-pencil"></i> Edit</a>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-              </div>
+            if (strpos($row['Businesslogo'], '../') !== false) {
+                // Replace '../' with an empty string if it exists
+                $imagePath = str_replace('../', '', $row['Businesslogo']);
+            } else {
+                // Otherwise, prepend 'img/logo/' to the filename
+                $imagePath = 'img/logo/' . $row['Businesslogo'];
+            }
 
-      </td>';
+            $disp .= '<td class="col-md-4">
+                        <div class="property-item" style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); padding: 20px;  border-radius: 15px;">
+                            <div class="pi-pic set-bg rounded-circle text-center d-flex align-items-center justify-content-center" style="width: 150px; height: 150px; border: 2px solid #355E3B;" data-setbg="' . $imagePath . '">
+                                <!-- Circular image with a border -->
+                            </div>
+                            <div class="pi-text">
+                                <h5><a href="#">' . $row['BusinessName'] . ' - ' . $row['BusinessBranch'] . '</a></h5>
+                                <p><span class="icon_pin_alt"></span>' . $row['BusinessAddress'] . ' ' . $row['barangay'] . ' Zone: ' . $row['zone'] . '</p>
+                                <div class="pi-agent">
+                                    <div class="pa-item">
+                                        <div class="pa-text">
+                                            <a class="btn btn-success" href="details.php?ID=' . $row['bus_id'] . '" role="button"><i class="fa fa-eye"></i> View</a>
+                                            <a class="btn btn-success" href="BusinessPanel.php?a=' . $row['bus_id'] . '" role="button"><i class="fa fa-pencil"></i> Edit</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>';
         }
     }
 }
+
 
 ?>
 <!DOCTYPE html>
