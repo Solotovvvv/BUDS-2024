@@ -151,9 +151,7 @@ if ($rs = $conn->query($sql)) {
                                           
                                             </div>
                                             <ul class="dropdown dropleft">
-                                                <li>
-                                                    <h2><?php echo $data['Surname'] . ' , ' . $data['Firstname'] . ' ' . $data['MiddleName'] ?></h2>
-                                                <li><a href="user.php">MY PROFILE</a></li>
+                                                <li><a href="user.php"><?php echo $_SESSION['lname'] . ' , ' . $_SESSION['fname'] ?></a></li>
                                                 <li><a href="manage.php">MANAGE BUSINESS</a></li>
                                                 <li><a href="listing-form.php">ADD BUSINESS</a></li>
                                                 <li><a href="logout.php">LOGOUT</a></li>

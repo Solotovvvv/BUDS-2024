@@ -82,7 +82,7 @@ session_start();
                                             </div>
 
                                             <ul class="dropdown dropleft">
-                                                <li><a href="user.php">MY PROFILE</a></li>
+                                                <li><a href="user.php"><?php echo $_SESSION['lname'] . ' , ' . $_SESSION['fname'] ?></a></li>
                                                 <?php if ($_SESSION['role'] == 3) { ?>
                                                     <li><a href="user_module-main/index.php">CREATE RESUME</a></li>
                                                 <?php } ?>

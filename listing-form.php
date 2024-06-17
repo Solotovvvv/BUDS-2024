@@ -28,6 +28,11 @@ if ($rs = $conn->query($sql)) {
 } else {
   die("Error:" . $conn->error);
 }
+
+
+date_default_timezone_set('Asia/Manila');
+$today = date('Y-m-d');
+
 ?>
 
 <!DOCTYPE html>
@@ -141,11 +146,8 @@ if ($rs = $conn->query($sql)) {
                       <div class="user-profile">
                         <img id="user-profile-img" alt="User's Name">
                       </div>
-                      <ul class="dropdown dropleft">
-                        <li>
-                          <h2><?php echo $_SESSION['lname'] . ' , ' . $_SESSION['fname'] ?></h2>
-                        </li>
-                        <li><a href="user.php">MY PROFILE</a></li>
+                      <ul class="dropdown dropleft">  
+                        <li><a href="user.php"><?php echo $_SESSION['lname'] . ' , ' . $_SESSION['fname'] ?></a></li>
                         <li><a href="manage.php">MANAGE BUSINESS</a></li>
                         <li><a href="listing-form.php">ADD BUSINESS</a></li>
                         <li><a href="logout.php">LOGOUT</a></li>
@@ -182,66 +184,92 @@ if ($rs = $conn->query($sql)) {
       <div class="row">
         <div class="col-lg-5">
           <div class="section-title">
-            <h4>ADD LISTING FORM</h4>
+            <h4>BUSINESS FORM</h4>
           </div>
         </div>
         <div class="col-lg-12">
           <br>
           <div class="property-submit-form">
-            <form method="post" enctype="multipart/form-data">
+
+            <form id="form" method="post" enctype="multipart/form-data">
+              <!-- <div class="pf-title">
+                              <h4>Location</h4>
+                               <select name="loc" class="form-select form-select-sm mt-3">
+                                <option value="" disabled selected > Select a Location. </option>
+                                 <option value="1">North</option>
+                                  <option value="2">South</option>
+                               </select>
+                            </div> -->
               <div class="pf-title">
-                <h4>Business Name</h4>
+                <h4 class="required">Name</h4>
                 <input name="BusinessName" id="busName" type="text" placeholder="Enter Business Name">
               </div>
-              <h4>Business Logo</h4>
+
+              <h4 class="required">Logo</h4>
               <div class="custom-file">
-                <input class="custom-file-input" name="businessLogo" id="businessLogo" type="file" >
-                <label class="custom-file-label" for="BusinessLogo">Choose files...</label>
+                <!-- add this to form data -->
+                <input class="custom-file-input" name="BusinessLogo" id="BusinessLogo" type="file" required>
+                <label class="custom-file-label" for="BusinessLogo">Choose file...</label>
+                <div class="error"></div>
               </div>
               <div class="pf-title">
                 <br>
-                <h4>Business Email</h4>
-                <input name="BusinessEmail" id="BusinessEmail" type="email" placeholder="Enter Business Email">
+                <h4 class="required">Email</h4>
+                <input name="BusinessEmail" id="BusinessEmail" type="email" placeholder="Enter Business Email" required>
+                <div class="error"></div>
               </div>
               <div class="pf-title">
-                <h4>Business Branch</h4>
-                <input name="BusinessBranch" id="BusinessBranch" type="text" placeholder="Enter Business Branch">
+                <h4 class="required">Branch</h4>
+                <input name="BusinessBranch" id="BusinessBranch" type="text" placeholder="Enter Business Branch" required>
+                <div class="error"></div>
               </div>
               <div class="pf-title">
-                <h4>Business Year Established</h4>
-                <input name="BusinessEstablish" id="BusinessEstablish" type="date" placeholder="Enter Business Year Establish"> <br>
+                <h4 class="required">Year Established</h4>
+                <input name="BusinessEstablish" id="BusinessEstablish" type="date" placeholder="Enter Business Year Establish" max="<?php echo $today; ?>">
+                <div class="error"></div> <br>
                 <br>
-                <input id="BusinessCapital" type="text" placeholder="Enter the Estimated Capital.">
+                <h4 class="required">Capital</h4>
+                <input id="BusinessCapital" type="text" placeholder="Enter the Estimated Capital" required>
+                <div class="error"></div>
               </div>
               <div class="pf-summernote">
-                <h4>Business Description</h4>
-                <input name="BusinessDescrip" id="BusinessDescrip" type="text" placeholder="Enter your Business Description">
+                <h4 class="required">Description</h4>
+                <input name="BusinessDescrip" id="BusinessDescrip" type="text" placeholder="Enter your Business Description" required>
+                <div class="error"></div>
               </div>
               <div class="pf-title">
-                <h4>Business Contact Number</h4>
-                <input name="BusinessNumber" id="BusinessNumber" type="tel" placeholder="Enter Business Contact Number">
+                <h4 class="required">Contact Number</h4>
+                <input name="BusinessNumber" id="BusinessNumber" type="tell" placeholder="Enter Business Contact Number" required>
+                <div class="error"></div>
               </div>
               <div class="pf-location">
-                <h4>Business Office Hour</h4>
+                <h4 class="required">Office Hour</h4>
                 <div class="location-inputs">
                   <h6>Opening & Closing Time:</h6>
                   <br>
-                  <input name="BusinessOpenHour" id="BusinessOpenHour" placeholder="Opening Time" type="time">
-                  <input name="BusinessCloseHour" id="BusinessCloseHour" type="time" placeholder="Closing Time">
+                  <input name="BusinessOpenHour" id="BusinessOpenHour" placeholder="Opening Time" type="time" required>
+                  <div class="error"></div>
+                  <input name="BusinessCloseHour" id="BusinessCloseHour" type="time" placeholder="Closing Time" required>
+                  <div class="error"></div>
                 </div>
               </div>
               <div class="pf-location">
-                <h4>Business Location</h4>
+                <h4 class="required">Location</h4>
                 <div class="pf-title">
                   <h6>ADDRESS: </h6>
                   <br>
-                  <input name="BusinessAddress" id="BusinessAddress" type="text" placeholder="Enter your Complete Address - [Unit No] [Building Name] [Street No] [Street Name] [City]."><br>
+                  <input name="BusinessAddress" id="BusinessAddress" type="text" placeholder="Enter your Complete Address - [Unit No] [Building Name] [Street No] [Street Name] [City]." required>
+                  <div class="error"></div><br>
                   <br>
-                  <input type="text" id="BusinessZone" placeholder="Enter Zone"> <br>
+                  <input type="text" id="BusinessZone" placeholder="Enter Zone" required>
+                  <div class="error"></div> <br>
                   <br>
-                  <input type="text" id="BusinessDistrict" placeholder="Enter District"> <br>
+                  <input type="text" id="BusinessDistrict" placeholder="Enter District" required>
+                  <div class="error"></div><br>
                   <br>
-                  <select id="filter" name="BusinessBrgy">
+
+
+                  <select id="filter" name="BusinessBrgy" required>
                     <option value="" disabled selected>Select a Barangay</option>
                     <?php
                     $populateBrgy = "SELECT * FROM brgyzone_list";
@@ -253,10 +281,12 @@ if ($rs = $conn->query($sql)) {
                       <option value="<?php echo $data['ID'] ?>"><?php echo $data['barangay'] ?></option>';
                     <?php } ?>
                   </select>
+                  <div class="error"></div>
+
                 </div>
               </div>
               <div class="pf-map">
-                <h4>Map Location</h4>
+                <h4 class="required">Map Location</h4>
                 <div class="row">
                   <div class="col-lg-4">
                     <div class="map-inputs">
@@ -275,33 +305,41 @@ if ($rs = $conn->query($sql)) {
                 </div>
               </div>
               <div class="pf-location">
-                <h4>Business Websites Links</h4>
+                <h4 class="required">Websites</h4>
                 <h6>Note: Please input the link of your social media.</h6>
                 <div class="pf-title">
                   <div class="location-inputs">
-                    <br><input name="BusinessFb" id="BusinessFb" type="text" placeholder="Facebook">
-                    <input name="BusinessIg" id="BusinessIg" type="text" placeholder="Instagram">
-                    <input name="BusinessTiktok" id="BusinessTiktok" type="text" placeholder="Tiktok">
+                    <br><input name="BusinessFb" id="BusinessFb" type="text" placeholder="Facebook" required>
+                    <div class="error"></div>
+                    <!-- <input name="BusinessTwitter" type="text" placeholder="Twitter"> -->
+                    <input name="BusinessIg" id="BusinessIg" type="text" placeholder="Instagram" required>
+                    <div class="error"></div>
+                    <input name="BusinessTiktok" id="BusinessTiktok" type="text" placeholder="Tiktok" required>
+                    <div class="error"></div>
                   </div>
                 </div>
               </div>
               <div class="pf-title">
-                <h4>Category</h4>
-                <select id="category" name="BusinessCategory" onchange="get_subcategory()">
+                <h4 class="required">Category</h4>
+                <select id="category" name="BusinessCategory" onchange="get_subcategory()" required>
                   <option value="">Select Category</option>
                   <?php echo $Category; ?>
                 </select>
               </div>
+              <div class="error"></div>
+
               <div class="pf-title">
-                <h4>Sub Category</h4>
+                <h4 class="required"> Sub Category</h4>
                 <div id="dispSubClass">
-                  <select id="subcategory" name="BusinessSubCategory">
+                  <select id="subcategory" name="BusinessSubCategory" required>
                     <option value="">Select Sub Category</option>
                   </select>
                 </div>
               </div>
+              <div class="error"></div>
+
               <div class="property-details-inputs">
-                <h4>Upload Scan Picture of Barangay Clearance</h4>
+                <h4 class="required">Upload Scan Picture of Barangay Clearance</h4>
                 <div class="custom-file">
                   <input class="custom-file-input" name="uploadBrgyClearance[]" id="uploadBrgyClearance" type="file" multiple>
                   <label class="custom-file-label" for="uploadBrgyClearance">Choose files...</label>
@@ -309,7 +347,7 @@ if ($rs = $conn->query($sql)) {
               </div>
               <div class="property-details-inputs">
                 <br>
-                <h4>Upload Scan Picture of DTI Permit</h4>
+                <h4 class="required">Upload Scan Picture of DTI Permit</h4>
                 <div class="custom-file">
                   <input class="custom-file-input" name="uploadDTIPermit[]" id="uploadDTIPermit" type="file" multiple>
                   <label class="custom-file-label" for="uploadDTIPermit">Choose files...</label>
@@ -317,7 +355,7 @@ if ($rs = $conn->query($sql)) {
               </div>
               <div class="property-details-inputs">
                 <br>
-                <h4>Upload Scan Picture of Sanitary Document</h4>
+                <h4 class="required">Upload Scan Picture of Sanitary Document</h4>
                 <div class="custom-file">
                   <input class="custom-file-input" name="uploadSanitaryPermit[]" id="uploadSanitaryPermit" type="file" multiple>
                   <label class="custom-file-label" for="uploadSanitaryPermit">Choose files...</label>
@@ -333,7 +371,7 @@ if ($rs = $conn->query($sql)) {
               </div>
               <div class="property-details-inputs">
                 <br>
-                <h4>Upload Scan Picture of Business Permit</h4>
+                <h4 class="required">Upload Scan Picture of Business Permit</h4>
                 <div class="custom-file">
                   <input class="custom-file-input" name="uploadBusinessPermit[]" id="uploadBusinessPermit" type="file" multiple>
                   <label class="custom-file-label" for="uploadBusinessPermit">Choose files...</label>
@@ -380,6 +418,8 @@ if ($rs = $conn->query($sql)) {
   <script src="js/jquery.richtext.min.js"></script>
   <script src="js/image-uploader.min.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/validation.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
