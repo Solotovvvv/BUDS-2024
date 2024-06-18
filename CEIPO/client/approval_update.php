@@ -4,59 +4,79 @@ $pdo = DATABASE::connection();
 
 $response = array('status' => 'failed'); // Initialize response with a default status
 
-if (isset($_POST['views'])) {
-    $id = $_POST['views'];
-    $sql = "SELECT *
-    FROM business_list AS bl
-    INNER JOIN business_requirement AS br ON bl.bus_id = br.bus_id
-    INNER JOIN owner_list AS ol ON bl.ownerId = ol.ID
-    INNER JOIN brgyzone_list AS bz ON bl.BusinessBrgy = bz.ID
-    INNER JOIN category_list as c ON bl.BusinessCategory = c.ID
-    INNER JOIN subcategory_list as sc ON bl.BusinessSubCategory = sc.ID
-    INNER JOIN business_requirement as bsr on bl.bus_id = bsr.bus_id
-    WHERE bl.bus_id = :id";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['views'])) {
+        // Fetch data based on views parameter
+        $id = $_POST['views'];
+        $sql = "SELECT *
+                FROM business_list AS bl
+                INNER JOIN business_requirement AS br ON bl.bus_id = br.bus_id
+                INNER JOIN owner_list AS ol ON bl.ownerId = ol.ID
+                INNER JOIN brgyzone_list AS bz ON bl.BusinessBrgy = bz.ID
+                INNER JOIN category_list as c ON bl.BusinessCategory = c.ID
+                INNER JOIN subcategory_list as sc ON bl.BusinessSubCategory = sc.ID
+                INNER JOIN business_requirement as bsr on bl.bus_id = bsr.bus_id
+                WHERE bl.bus_id = :id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
-    if ($stmt->execute()) {
-        $userData = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($userData) {
-            $response = $userData;
+        if ($stmt->execute()) {
+            $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($userData) {
+                $response = $userData;
+            } else {
+                $response['message'] = 'Data not found';
+            }
         } else {
-            $response['message'] = 'Data not found';
+            $response['error'] = $stmt->errorInfo();
+        }
+    } elseif (isset($_POST['hiddendata'], $_POST['status'])) {
+        // Update BusinessStatus in business_list table
+        $hiddendata = $_POST['hiddendata'];
+        $status = intval($_POST['status']);
+        $remarksDataStep2 = isset($_POST['remarks']) ? htmlspecialchars($_POST['remarks']) : null;
+        $statusValue = ($status == 1) ? 1 : 3;
+
+        // Update BusinessStatus
+        $updateBusinessListSql = "UPDATE business_list SET BusinessStatus = :status WHERE bus_id = :hiddendata";
+        $updateBusinessListStmt = $pdo->prepare($updateBusinessListSql);
+        $executeBusinessList = $updateBusinessListStmt->execute([
+            ':status' => $statusValue,
+            ':hiddendata' => $hiddendata,
+        ]);
+
+        // Update remarks and status in business_requirement table
+        $updateBusinessRequirementSql = "UPDATE business_requirement 
+                                         SET remarks = :remarks, 
+                                             status = CASE WHEN :status = 1 THEN 1 ELSE 2 END 
+                                         WHERE bus_id = :hiddendata";
+        $updateBusinessRequirementStmt = $pdo->prepare($updateBusinessRequirementSql);
+        $executeBusinessRequirement = $updateBusinessRequirementStmt->execute([
+            ':remarks' => $remarksDataStep2,
+            ':status' => $status,
+            ':hiddendata' => $hiddendata,
+        ]);
+
+        if ($executeBusinessList && $executeBusinessRequirement) {
+            $response['status'] = 'success';
+            $response['message'] = 'Business status and remarks updated successfully.';
+        } else {
+            $response['status'] = 'error';
+            $response['message'] = 'Failed to update business status and remarks.';
+            $response['error'] = array_merge(
+                $updateBusinessListStmt->errorInfo(),
+                $updateBusinessRequirementStmt->errorInfo()
+            );
         }
     } else {
-        $response['error'] = $stmt->errorInfo();
-    }
-} elseif (isset($_POST['hiddendata'])) {
-    $hiddendata = $_POST['hiddendata'];
-
-    $remarksData = array();
-    for ($i = 2; $i <= 6; $i++) {
-        $remarksData[] = intval($_POST['remarksDataStep' . $i]);
-    }
-
-    // Calculate the sum of remarksDataStep2 to remarksDataStep6
-    $totalRemarks = array_sum($remarksData) / count($remarksData);
-
-    // Update BusinessStatus in the business_list table
-    $updateBusinessListSql = "UPDATE business_list SET BusinessStatus = :status WHERE bus_id = :hiddendata";
-    $updateBusinessListStmt = $pdo->prepare($updateBusinessListSql);
-
-    if ($updateBusinessListStmt->execute([
-        ':status' => ($totalRemarks == 1) ? 1 : 3,
-        ':hiddendata' => $hiddendata,
-    ])) {
-        $response['status'] = 'success';
-    } else {
-        $response['error'] = $updateBusinessListStmt->errorInfo();
+        // If the request is POST but neither views nor hiddendata/status are set
+        $response['status'] = 'error';
+        $response['message'] = 'Invalid request parameters';
     }
 } else {
-    $response = array(
-        'status' => 'failed status',
-        'message' => 'Invalid request'
-    );
-    $response['message'] = 'Invalid request';
+    // If the request method is not POST
+    $response['status'] = 'error';
+    $response['message'] = 'Invalid request method';
 }
 
 // Encode the response as JSON and output it
@@ -67,13 +87,7 @@ if (isset($response['status']) && $response['status'] === 'success') {
     // Include Pusher configuration
     require_once 'pusher_config.php';
 
-    // // Fetch the pending count or perform any other necessary logic
-    // $stmt = $pdo->prepare("SELECT COUNT(*) AS pendingCount FROM business_list WHERE BusinessStatus = 2");
-    // $stmt->execute();
-    // $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    // $pendingCount = $row['pendingCount'];
-
-    // Trigger a Pusher event with the pending count
-    $pusher->trigger('business-channel', 'business-event',null);
+    // Trigger a Pusher event (replace with your actual event details)
+    $pusher->trigger('business-channel', 'business-event', null);
 }
 ?>

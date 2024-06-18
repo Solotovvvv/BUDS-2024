@@ -103,6 +103,34 @@ if (empty($_SESSION['ownerId'])) {
       transform: rotate(360deg);
     }
   }
+
+
+
+  #fileViewer {
+    flex-grow: 1;
+    margin-bottom: 20px;
+  }
+
+  iframe#pdfViewer {
+    width: 100%;
+    height: 500px;
+    border: none;
+  }
+
+  .buttons-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  #step2_Status {
+    font-size: 24px;
+    margin-top: 10px;
+  }
+
+  #remarksStep2 {
+    margin-top: 10px;
+  }
 </style>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -199,166 +227,86 @@ if (empty($_SESSION['ownerId'])) {
                   <h3>DETAILS</h3>
                   <div class="row">
                     <div class="col mb-3">
-                      <label for="nameWithTitle" class="form-label">Business Name</label>
+                      <label for="business_name" class="form-label">Business Name</label>
                       <input type="text" id="business_name" class="form-control" placeholder="Enter Name" readonly />
                     </div>
                     <div class="col mb-3">
-                      <label for="nameWithTitle" class="form-label">Business Branch</label>
+                      <label for="branch" class="form-label">Business Branch</label>
                       <input type="text" id="branch" class="form-control" placeholder="Enter Name" readonly />
                     </div>
-
                     <div class="col mb-3">
-                      <label for="nameWithTitle" class="form-label">Cardinal Location</label>
+                      <label for="cardinal_location" class="form-label">Cardinal Location</label>
                       <input type="text" id="cardinal_location" class="form-control" placeholder="Enter Name" readonly />
                     </div>
                   </div>
-
                   <div class="row">
                     <div class="col mb-3">
-                      <label for="nameWithTitle" class="form-label">Business Category</label>
+                      <label for="category" class="form-label">Business Category</label>
                       <input type="text" id="category" class="form-control" placeholder="Enter Name" readonly />
                     </div>
                     <div class="col mb-3">
-                      <label for="nameWithTitle" class="form-label">Business Sub-Category</label>
+                      <label for="sub_category" class="form-label">Business Sub-Category</label>
                       <input type="text" id="sub_category" class="form-control" placeholder="Enter Name" readonly />
                     </div>
                   </div>
-
-
                   <div class="row">
                     <div class="col mb-3">
-                      <label for="nameWithTitle" class="form-label">Business Owner</label>
+                      <label for="owner" class="form-label">Business Owner</label>
                       <input type="text" id="owner" class="form-control" placeholder="Enter Name" readonly />
                     </div>
                     <div class="col mb-3">
-                      <label for="nameWithTitle" class="form-label">Established</label>
+                      <label for="date" class="form-label">Established</label>
                       <input type="text" id="date" class="form-control" placeholder="Enter Name" readonly />
                     </div>
-
                     <div class="col mb-3">
-                      <label for="nameWithTitle" class="form-label">Opening-Closing Hours</label>
+                      <label for="hours_operated" class="form-label">Opening-Closing Hours</label>
                       <input type="text" id="hours_operated" class="form-control" placeholder="Enter Name" readonly />
                     </div>
-
                   </div>
-
                   <div class="row">
                     <div class="col mb-3">
-                      <label for="nameWithTitle" class="form-label">Address</label>
+                      <label for="address" class="form-label">Address</label>
                       <input type="text" id="address" class="form-control" placeholder="Enter Name" readonly />
                     </div>
                     <div class="col mb-3">
-                      <label for="nameWithTitle" class="form-label">Barangay</label>
+                      <label for="barangay" class="form-label">Barangay</label>
                       <input type="text" id="barangay" class="form-control" placeholder="Enter Name" readonly />
                     </div>
-
                     <div class="col mb-3">
-                      <label for="nameWithTitle" class="form-label">Zone</label>
-                      <input type="text" id="zone" class="form-control  mt-2" placeholder="Enter Name" readonly />
+                      <label for="zone" class="form-label">Zone</label>
+                      <input type="text" id="zone" class="form-control" placeholder="Enter Name" readonly />
                     </div>
                   </div>
                 </div>
-
                 <!-- Step 2 -->
                 <div class="stepper-content" id="step2">
 
-                  <h3>Brgy Clearance</h3>
-                  <img id="busBrgyClearanceImage" src="" alt="Barangay Clearance" style="max-width: 100%; max-height: 100%; width: auto; height: auto;">
+                  <h3>Requirements</h3>
                   <p class="no-image-text" style="display: none;">No requirements found</p>
-                  <!-- Other content for Step 2 here -->
-
-                  <br>
-
-                  <div class="mt-4">
-                    <button type="button" class="btn btn-success" id="passedStep2">Approve</button>
-                    <button type="button" class="btn btn-danger" id="failedStep2">Decline</button>
-                    <span id="step2_Status" style="font-size: 100px; display: none;">APPROVED</span>
-                    <input type="text" class="form-control mt-2" id="remarksStep2" placeholder="Enter remarks" style="display: none;">
-
+                  <div class="row">
+                    <div class="col-md-4" id="fileViewer">
+                      <iframe id="pdfViewer" width="100%" height="400px" style="border: none;"></iframe>
+                    </div>
+                    <div class="col-md-4  justify-content-between mt-4">
+                      <div>
+                        <button type="button" class="btn btn-success mb-2" id="passedStep2">Approve</button>
+                        <button type="button" class="btn btn-danger mb-2" id="failedStep2">Decline</button>
+                      </div>
+                      <span id="step2_Status" style="font-size: 24px; display: none;">APPROVED</span>
+                      <input type="text" class="form-control mt-2" id="remarksStep2" placeholder="Enter remarks" style="display: none;">
+                    </div>
                   </div>
 
 
-
                 </div>
-
-                <!-- Step 3 -->
-                <div class="stepper-content" id="step3">
-                  <h3>DTI Permit</h3>
-                  <img id="busDtiPermitImage" src="" alt="DTI Permit" style="max-width: 100%; max-height: 100%; width: auto; height: auto;">
-                  <p class="no-image-text" style="display: none;">No requirements found</p>
-                  <!-- Other content for Step 3 here -->
-
-                  <br>
-                  <div class="mt-4">
-                    <button type="button" class="btn btn-success" id="passedStep3">Approve</button>
-                    <button type="button" class="btn btn-danger" id="failedStep3">Decline</button>
-                    <span id="step3_Status" style="font-size: 100px; display: none;">APPROVED</span>
-                    <input type="text" class="form-control mt-2" id="remarksStep3" placeholder="Enter remarks" style="display: none;">
-                  </div>
-                </div>
-
-                <!-- Step 4 -->
-                <div class="stepper-content" id="step4">
-                  <h3>Sanitary Permit</h3>
-                  <img id="busSanitaryPermitImage" src="" alt="Sanitary Permit" style="max-width: 100%; max-height: 100%; width: auto; height: auto;">
-                  <p class="no-image-text" style="display: none;">No requirements found</p>
-                  <!-- Other content for Step 4 here -->
-
-                  <br>
-                  <div class="mt-4">
-                    <button type="button" class="btn btn-success" id="passedStep4">Approve</button>
-                    <button type="button" class="btn btn-danger" id="failedStep4">Decline</button>
-                    <span id="step4_Status" style="font-size: 100px; display: none;">APPROVED</span>
-                    <input type="text" class="form-control mt-2" id="remarksStep4" placeholder="Enter remarks" style="display: none;">
-                  </div>
-                </div>
-
-                <!-- Step 5 -->
-                <div class="stepper-content" id="step5">
-                  <h3> Cedula </h3>
-                  <img id="busCedulaImage" src="" alt="Cedula" style="max-width: 100%; max-height: 100%; width: auto; height: auto;">
-                  <p class="no-image-text" style="display: none;">No requirements found</p>
-                  <!-- Other content for Step 5 here -->
-
-                  <br>
-                  <div class="mt-4">
-                    <button type="button" class="btn btn-success" id="passedStep5">Approve</button>
-                    <button type="button" class="btn btn-danger" id="failedStep5">Decline</button>
-                    <span id="step5_Status" style="font-size: 100px; display: none;">APPROVED</span>
-                    <input type="text" class="form-control mt-2" id="remarksStep5" placeholder="Enter remarks" style="display: none;">
-                  </div>
-                </div>
-
-                <!-- Step 6 -->
-                <div class="stepper-content" id="step6">
-                  <h3>Mayors Permit</h3>
-                  <img id="busMayorPermitImage" src="" alt="Mayor's Permit" style="max-width: 100%; max-height: 100%; width: auto; height: auto;">
-                  <p class="no-image-text" style="display: none;">No requirements found</p>
-                  <!-- Other content for Step 6 here -->
-
-                  <br>
-                  <div class="mt-4">
-                    <button type="button" class="btn btn-success" id="passedStep6">Approve</button>
-                    <button type="button" class="btn btn-danger " id="failedStep6">Decline</button>
-                    <br>
-                    <span id="step6_Status" style="font-size: 100px; display: none;">APPROVED</span>
-                    <input type="text" class="form-control mt-2" id="remarksStep6" placeholder="Enter remarks" style="display: none; ">
-                  </div>
-                </div>
-
-
-
-
                 <div class="progress">
                   <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
-
               </div>
               <div class="modal-footer">
                 <input type="hidden" id="hiddendata">
                 <button type="button" class="btn btn-success mt-3" id="prevStep">Previous</button>
                 <button type="button" class="btn btn-success mt-3" id="nextStep">Next</button>
-
                 <button type="button" class="btn btn-success mt-3" data-dismiss="modal" id="saveChangesButton" style="display: none;" onclick="update()">Save changes</button>
               </div>
             </div>
@@ -469,6 +417,7 @@ if (empty($_SESSION['ownerId'])) {
   <script>
     let contract;
     let currentAccount;
+
 
     document.addEventListener('DOMContentLoaded', async () => {
       const web3 = new Web3(Web3.givenProvider || 'http://127.0.0.1:7545');
@@ -638,25 +587,25 @@ if (empty($_SESSION['ownerId'])) {
     });
 
     $(document).ready(function() {
-//Realtime Pusher Js 
+      //Realtime Pusher Js 
       var pusher = new Pusher('5b1eb2892347a33d5be9', {
-            cluster: 'ap1',
-            encrypted: true
-        });
+        cluster: 'ap1',
+        encrypted: true
+      });
 
-        var channel = pusher.subscribe('business-channel');
+      var channel = pusher.subscribe('business-channel');
 
       channel.bind('business-added', function(data) {
         console.log("Received business-event");
         $('#approval_tbl').DataTable().ajax.reload();
         // Call AJAX request or perform any other action here
       });
-////////////////////////////
+      ////////////////////////////
 
 
       // Next button click event
       $("#nextStep").click(function() {
-        if (currentStep < 6) {
+        if (currentStep < 2) {
           currentStep++;
           showStep(currentStep);
         }
@@ -669,73 +618,40 @@ if (empty($_SESSION['ownerId'])) {
           showStep(currentStep);
         }
       });
-
-      // Passed button click event
-      $("[id^=passedStep]").click(function() {
-        // Extract the step number from the button's ID
-        var stepNumber = parseInt($(this).attr("id").replace("passedStep", ""));
-        $(this).prop("disabled", true);
-        // Remove the step from the failedSteps array
-        failedSteps = failedSteps.filter(step => step !== stepNumber);
-
-        // Loop through all steps and update remarksData for each step
-        for (var i = 2; i <= 6; i++) {
-          if (i === stepNumber) {
-            // Store the value "1" in remarksData for the step
-            remarksData["remarksStep" + i] = "1";
-            // Show the remarks input for the passed step and set its value to "1"
-            $("#remarksStep" + i).val("1").hide();
-          } else {
-            // Hide the remarks input for other steps
-            $("#remarksStep" + i).hide();
-            // Store an empty string in remarksData for other steps
-            remarksData["remarksStep" + i] = "";
-          }
-        }
-        $("#failedStep" + stepNumber).prop("disabled", false);
-
-      });
-
-      // Failed button click event
-      $("[id^=failedStep]").click(function() {
-        // Extract the step number from the button's ID
-        var stepNumber = parseInt($(this).attr("id").replace("failedStep", ""));
-        $(this).prop("disabled", true);
-        // Add the step to the failedSteps array
-        failedSteps.push(stepNumber);
-        // Show the remarks input for the failed step
-        $("#remarksStep" + stepNumber).val("");
-        $("#remarksStep" + stepNumber).show();
-
-        $("#passedStep" + stepNumber).prop("disabled", false);
-      });
-
-
-
-
       // Show the initial step
       showStep(currentStep);
 
-      // Reset failedSteps array and hide remarks on modal show
-      $('#view').on('show.bs.modal', function() {
-        failedSteps = [];
-        remarksData = {};
-        currentStep = 1; // Reset the step to 1 when the modal is shown
-        showStep(currentStep);
-        // Iterate over all passed steps and re-enable them
-        $("[id^=passedStep]").each(function() {
-          $(this).prop("disabled", false);
-        });
-        $("[id^=failedStep]").each(function() {
-          $(this).prop("disabled", false);
-        });
-      });
+
 
     });
+
     //step
     var currentStep = 1;
-    var failedSteps = []; // Array to store failed steps
-    var remarksData = {}; // Object to store remarks for each step
+    let statusStep2 = null;
+    var globalBusinessStatus = "";
+
+
+    // Function to handle "Approve" button click
+    $('#passedStep2').click(function() {
+      statusStep2 = 1; // Approved
+      $('#step2_Status').show().text('APPROVED');
+      $('#remarksStep2').hide(); // Hide the remarks input field
+      $('#remarksStep2').val(''); // Clear the remarks field
+      checkSaveChangesButton()
+    });
+
+    // Function to handle "Decline" button click
+    $('#failedStep2').click(function() {
+      statusStep2 = 2; // Declined
+      $('#step2_Status').hide();
+      $('#remarksStep2').show(); // Show the remarks input field
+      checkSaveChangesButton()
+    });
+
+
+
+
+
 
     // Function to show the current step
     function showStep(step) {
@@ -743,7 +659,7 @@ if (empty($_SESSION['ownerId'])) {
       var progressBar = $(".progress-bar");
 
       // Set the progress bar value to the current step
-      progressBar.css("width", ((step - 1) / 5) * 100 + "%");
+      progressBar.css("width", ((step - 1) / 1) * 100 + "%");
 
       // Hide all stepper content
       $(".stepper-content").removeClass("active");
@@ -758,71 +674,23 @@ if (empty($_SESSION['ownerId'])) {
         $("#prevStep").prop("disabled", false);
       }
 
-      if (step === 6) {
+      if (step === 2) {
         $("#nextStep").hide();
-        $("#saveChangesButton").show();
+
       } else {
         $("#nextStep").show();
-        $("#saveChangesButton").hide();
-      }
 
-      // Show remarks input if the step is in the failedSteps array
-      if (failedSteps.includes(step)) {
-        $("#remarksStep" + step).show();
+      }
+      if (step === 2 && globalBusinessStatus !== "1") {
+        $('#saveChangesButton').show();
       } else {
-        $("#remarksStep" + step).hide();
-      }
-    }
-
-
-
-
-
-    function update() {
-      // Get values from form fields
-      var remarksDataStep2 = $("#remarksStep2").val() || null;
-      var remarksDataStep3 = $("#remarksStep3").val() || null;
-      var remarksDataStep4 = $("#remarksStep4").val() || null;
-      var remarksDataStep5 = $("#remarksStep5").val() || null;
-      var remarksDataStep6 = $("#remarksStep6").val() || null;
-      var hiddendata = $('#hiddendata').val();
-
-      // Hide modal and clear form fields
-      $('#view').modal("hide");
-      for (var i = 2; i <= 6; i++) {
-        $("#remarksStep" + i).val("");
+        $('#saveChangesButton').hide();
       }
 
-      // Send AJAX request to update data
-      $.ajax({
-        type: "POST",
-        url: "approval_update.php",
-        data: {
-          remarksDataStep2: remarksDataStep2,
-          remarksDataStep3: remarksDataStep3,
-          remarksDataStep4: remarksDataStep4,
-          remarksDataStep5: remarksDataStep5,
-          remarksDataStep6: remarksDataStep6,
-          hiddendata: hiddendata
-        },
-        success: function(response) {
-          var jsons = JSON.parse(response);
-          var status = jsons.status;
-          if (status === 'success') {
-            // Reload DataTable upon successful update
-            $('#approval_tbl').DataTable().ajax.reload();
+      checkSaveChangesButton()
 
-            // // Alert user about successful save
-            // alert("Saved");
-
-          }
-        },
-        error: function(error) {
-          // Handle error response from the server
-          console.error(error);
-        }
-      });
     }
+
 
 
     //Viewing
@@ -845,140 +713,117 @@ if (empty($_SESSION['ownerId'])) {
         $('#address').val(userid.BusinessAddress);
         $('#barangay').val(userid.barangay);
         $('#zone').val(userid.zone);
-
-        $('#status option[value="' + userid.BusinessStatus + '"]').prop('selected', true);
         $('#remarks').val(userid.BusinessRemarks);
+        globalBusinessStatus = userid.BusinessStatus;
+        $('#pdfViewer').attr('src', '../' + userid.bus_pdf);
 
 
-        var imagePath = '../../img/requirements/';
-        if (userid.BusinessStatus === "1" || userid.BusinessStatus === "2") {
+        // Check BusinessStatus to determine UI changes
+        if (userid.BusinessStatus === "1") {
           // Hide the remarks input field
           $('#remarksRow').hide();
           $('#remarks').val("");
           $('#storeButton').prop('disabled', false);
-          console.log('Enabling button');
+          // Show the approved status message
+          $('#step2_Status').show().text('APPROVED');
+          // Assuming you want to set remarksStep2 to "1" when approved
+          $('#passedStep2').hide();
+          $('#failedStep2').hide();
+          $('#saveChangesButton').hide();
 
         } else {
           // Show the remarks input field
           $('#remarksRow').show();
           $('#storeButton').prop('disabled', true);
 
+          // Hide the approved status message
+          $('#step2_Status').hide();
+          $('#remarksStep2').val(""); // Adjust as needed
+
+          // if ($("#step2").hasClass("active")) {
+          //     $('#saveChangesButton').show();
+          // } else {
+          //     $('#saveChangesButton').hide();
+          // }
         }
 
-
-
-        // //fetching of appoving and declining of every requirements (OPTIMIZED)
-        function updateStep(status, passedId, failedId, statusId, remarksId) {
-          if (status === "1") {
-            $(passedId).hide();
-            $(failedId).hide();
-            $(statusId).show();
-            $(remarksId).val("1");
-          } else {
-            $(passedId).show();
-            $(failedId).show();
-            $(statusId).hide();
-            $(remarksId).val(""); // Adjust as needed
-          }
-        }
-
-        updateStep(userid.remarks_brgyClearance, '#passedStep2', '#failedStep2', '#step2_Status', '#remarksStep2');
-        updateStep(userid.remarks_dti, '#passedStep3', '#failedStep3', '#step3_Status', '#remarksStep3');
-        updateStep(userid.remarks_sanitary, '#passedStep4', '#failedStep4', '#step4_Status', '#remarksStep4');
-        updateStep(userid.remarks_cedula, '#passedStep5', '#failedStep5', '#step5_Status', '#remarksStep5');
-        updateStep(userid.remarks_mayorsPermit, '#passedStep6', '#failedStep6', '#step6_Status', '#remarksStep6');
-
-
-        // //fetching of appoving and declining of every requirements 
-        // if (userid.remarks_brgyClearance === "1") {
-        //   $('#passedStep2').hide();
-        //   $('#failedStep2').hide();
-        //   $("#step2_Status").show();
-        //   $('#remarksStep2').val("1");
-        // } else {
-        //   // If condition is false (revert changes)
-        //   $('#passedStep2').show();
-        //   $('#failedStep2').show();
-        //   $("#step2_Status").hide();
-        //   $('#remarksStep2').val(""); // Assuming you want to clear the value, change this line accordingly if needed
-        // }
-
-        // if (userid.remarks_dti === "1") {
-        //   $('#passedStep3').hide();
-        //   $('#failedStep3').hide();
-        //   $("#step3_Status").show();
-        //   $('#remarksStep3').val("1");
-        // }
-
-        // if (userid.remarks_sanitary === "1") {
-        //   $('#passedStep4').hide();
-        //   $('#failedStep4').hide();
-        //   $("#step4_Status").show();
-        //   $('#remarksStep4').val("1");
-        // }
-
-        // if (userid.remarks_cedula === "1") {
-        //   $('#passedStep5').hide();
-        //   $('#failedStep5').hide();
-        //   $("#step5_Status").show();
-        //   $('#remarksStep5').val("1");
-        // }
-
-        // if (userid.remarks_mayorsPermit === "1") {
-        //   $('#passedStep6').hide();
-        //   $('#failedStep6').hide();
-        //   $("#step6_Status").show();
-        //   $('#remarksStep6').val("1");
-        // }
-
-        // // Add an event listener to the #status element
-        // $('#status').on('change', function() {
-        //   // Check if the selected value is 3 and hide or show the #remarks field accordingly
-        //   if ($(this).val() === '3') {
-        //     $('#remarksRow').show();
-
-        //   } else {
-        //     $('#remarksRow').hide();
-        //     $('#remarks').val("");
-
-        //   }
-        // });
-
-
-        // Function to handle displaying images or "No requirements found" text
-        function displayImageOrText(imageId, imageName) {
-          var $imageElement = $('#' + imageId);
-
-          if (imageName && imageName.trim() !== '') {
-            $imageElement.attr('src', imagePath + imageName);
-            $imageElement.show();
-            $imageElement.siblings('.no-image-text').hide();
-          } else {
-            $imageElement.hide();
-            $imageElement.siblings('.no-image-text').show();
-          }
-        }
-
-        // Populate and handle images for each step
-        displayImageOrText('busBrgyClearanceImage', userid.bus_brgyclearance);
-        displayImageOrText('busDtiPermitImage', userid.bus_dtipermit);
-        displayImageOrText('busSanitaryPermitImage', userid.bus_sanitarypermit);
-        displayImageOrText('busCedulaImage', userid.bus_cedula);
-        displayImageOrText('busMayorPermitImage', userid.bus_mayorpermit);
-
-        // Show Step 1 initially
-        currentStep = 1;
+        // Show Step 1 initially (assuming you have a showStep function)
+        var currentStep = 1;
         showStep(currentStep);
       });
 
       $('#view').modal("show");
     }
 
+    function resetModalState() {
+      currentStep = 1; // Reset currentStep to 1
+      showStep(currentStep); // Show the initial step (step 1)
+      // Reset any other UI elements as needed
+    }
+
+    // View modal close event listener
+    $('#view').on('hidden.bs.modal', function() {
+      resetModalState();
+      statusStep2 = null;
+      $('#remarksStep2').hide(); // Hide the remarks input field
+      $('#remarksStep2').val(''); // Clear the remarks field
+      $('#passedStep2').show();
+      $('#failedStep2').show();
+    });
 
 
+    function checkSaveChangesButton() {
+      if (statusStep2 === null) {
+        $('#saveChangesButton').prop('disabled', true);
+      } else {
+        $('#saveChangesButton').prop('disabled', false);
+      }
+    }
+
+
+
+
+
+
+
+
+
+    function update() {
+      // Get values from form fields
+      var remarksDataStep2 = $("#remarksStep2").val() || null;
+      var hiddendata = $('#hiddendata').val();
+
+      // Hide modal and clear form fields
+      $('#view').modal("hide");
+      for (var i = 2; i <= 6; i++) {
+        $("#remarksStep" + i).val("");
+      }
+
+      // Send AJAX request to update data
+      $.ajax({
+        type: "POST",
+        url: "approval_update.php",
+        data: {
+          status: statusStep2,
+          remarks: remarksDataStep2,
+          hiddendata: hiddendata
+        },
+        success: function(response) {
+          var jsons = JSON.parse(response);
+          var status = jsons.status;
+          if (status === 'success') {
+            // Reload DataTable upon successful update
+            $('#approval_tbl').DataTable().ajax.reload();
+          }
+        },
+        error: function(error) {
+          // Handle error response from the server
+          console.error(error);
+        }
+      });
+    }
 
     //blockchain-crud
-
     function Store(id) {
       $('#hiddendata1').val(id);
       $.post("blockchain_approved.php", {
@@ -990,31 +835,9 @@ if (empty($_SESSION['ownerId'])) {
         $('#bc_branch').val(userids.BusinessBranch);
         $('#bc_owner').val(userids.owner_name);
         $('#bc_clearance').val(userids.bus_brgyclearance);
-        $('#bc_dti').val(userids.bus_dtipermit);
-        $('#bc_sanitary').val(userids.bus_sanitarypermit);
-        $('#bc_cedula').val(userids.bus_cedula);
-        $('#bc_permit').val(userids.bus_mayorpermit);
       });
       $('#blockchain').modal("show");
     }
-
-    // function save without blockchain
-
-    // function Save() {
-    //   var hiddendata1 = $('#hiddendata1').val();
-    //   $.post("blockchain_approved.php", {
-    //     hiddendata1: hiddendata1
-    //   }, function (data, status) {
-    //     var jsons = JSON.parse(data);
-    //     status = jsons.status;
-    //     if (status == 'success') {
-    //       var update = $('#approval_tbl').DataTable().ajax.reload();
-    //       alert("Store in blockchain");
-    //     }
-    //   });
-    //   $('#blockchain').modal("hide");
-    // }
-
 
     function showLoader() {
       console.log('Show Loader called');
@@ -1027,10 +850,7 @@ if (empty($_SESSION['ownerId'])) {
       $('<div class="loader"></div>').appendTo(loaderContainer);
       $('<p  style="font-size: 18px;" ><b>Please wait </b>, it will take a while...</p>').appendTo(loaderContainer);
     }
-
-
     //with blockchain 
-
     async function Save() {
       try {
         showLoader();
@@ -1123,8 +943,6 @@ if (empty($_SESSION['ownerId'])) {
         console.error('Error:', error);
       }
     }
-
-
 
     function hideLoader() {
       // Implement your loader hiding logic here

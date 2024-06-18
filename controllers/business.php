@@ -81,7 +81,7 @@ function handleMultipleFileUploads($files, $targetDirectory)
             $imageExtension = pathinfo($name, PATHINFO_EXTENSION);
             $imageExtension = strtolower($imageExtension);
 
-            if (!in_array($imageExtension, $validImageExtensions) || $size > 512000) {
+            if (!in_array($imageExtension, $validImageExtensions)) {
                 $msg['title'] = "Warning";
                 $msg['message'] = "Invalid image or image size";
                 $msg['icon'] = "warning";
@@ -109,17 +109,25 @@ function handleMultipleFileUploads($files, $targetDirectory)
     return $uploadedFiles;
 }
 
-function createPDF($images, $targetDirectory, $pdfName)
+function createPDF($imageGroups, $targetDirectory, $pdfName)
 {
     $pdf = new \FPDF(); // Instantiate the FPDF class directly.
-    foreach ($images as $image) {
-        $pdf->AddPage();
-        $pdf->Image($image, 10, 10, 190, 0); // Adjust dimensions as needed
+
+    foreach ($imageGroups as $title => $images) {
+        foreach ($images as $image) {
+            $pdf->AddPage();
+            $pdf->SetFont('Arial', 'B', 16);
+            $pdf->Cell(0, 10, $title, 0, 1, 'C');
+            $pdf->Image($image, 10, 20, 190, 0); // Adjust dimensions as needed
+        }
     }
+
     $pdfPath = $targetDirectory . $pdfName;
     $pdf->Output('F', $pdfPath);
+
     return $pdfPath;
 }
+
 function handleFileUpload($files, $targetDirectory)
 {
     $uploadedPaths = []; // Array to store uploaded file paths
@@ -132,7 +140,7 @@ function handleFileUpload($files, $targetDirectory)
         $imageExtension = pathinfo($filename, PATHINFO_EXTENSION);
         $imageExtension = strtolower($imageExtension);
 
-        if (!in_array($imageExtension, $validImageExtensions) || $size > 512000) {
+        if (!in_array($imageExtension, $validImageExtensions)) {
             $msg['title'] = "Warning";
             $msg['message'] = "Invalid image or image size";
             $msg['icon'] = "warning";
@@ -261,31 +269,69 @@ function addBusiness($request = null)
             return;
         }
 
+        // $uploadDirectory = '../img/requirements/';
+        // $images = [];
+
+        // // Handling multiple file uploads for each field
+        // if (isset($_FILES['brgyClearance']) && is_array($_FILES['brgyClearance']['name'])) {
+        //     $images = array_merge($images, handleMultipleFileUploads($_FILES['brgyClearance'], $uploadDirectory));
+        // }
+        // if (isset($_FILES['DTIPermit']) && is_array($_FILES['DTIPermit']['name'])) {
+        //     $images = array_merge($images, handleMultipleFileUploads($_FILES['DTIPermit'], $uploadDirectory));
+        // }
+        // if (isset($_FILES['sanitaryPermit']) && is_array($_FILES['sanitaryPermit']['name'])) {
+        //     $images = array_merge($images, handleMultipleFileUploads($_FILES['sanitaryPermit'], $uploadDirectory));
+        // }
+        // if (isset($_FILES['cedula']) && is_array($_FILES['cedula']['name'])) {
+        //     $images = array_merge($images, handleMultipleFileUploads($_FILES['cedula'], $uploadDirectory));
+        // }
+        // if (isset($_FILES['businessPermit']) && is_array($_FILES['businessPermit']['name'])) {
+        //     $images = array_merge($images, handleMultipleFileUploads($_FILES['businessPermit'], $uploadDirectory));
+        // }
+
+        // if (empty($images)) {
+        //     throw new Exception("No valid images were uploaded.");
+        // }
+
+        // $pdfPath = createPDF($images, $uploadDirectory, uniqid() . '.pdf');
+
+
         $uploadDirectory = '../img/requirements/';
-        $images = [];
+$imageGroups = [
+    'Barangay Clearance' => [],
+    'DTI Permit' => [],
+    'Sanitary Permit' => [],
+    'Cedula' => [],
+    'Business Permit' => []
+];
 
-        // Handling multiple file uploads for each field
-        if (isset($_FILES['brgyClearance']) && is_array($_FILES['brgyClearance']['name'])) {
-            $images = array_merge($images, handleMultipleFileUploads($_FILES['brgyClearance'], $uploadDirectory));
-        }
-        if (isset($_FILES['DTIPermit']) && is_array($_FILES['DTIPermit']['name'])) {
-            $images = array_merge($images, handleMultipleFileUploads($_FILES['DTIPermit'], $uploadDirectory));
-        }
-        if (isset($_FILES['sanitaryPermit']) && is_array($_FILES['sanitaryPermit']['name'])) {
-            $images = array_merge($images, handleMultipleFileUploads($_FILES['sanitaryPermit'], $uploadDirectory));
-        }
-        if (isset($_FILES['cedula']) && is_array($_FILES['cedula']['name'])) {
-            $images = array_merge($images, handleMultipleFileUploads($_FILES['cedula'], $uploadDirectory));
-        }
-        if (isset($_FILES['businessPermit']) && is_array($_FILES['businessPermit']['name'])) {
-            $images = array_merge($images, handleMultipleFileUploads($_FILES['businessPermit'], $uploadDirectory));
-        }
+// Handling multiple file uploads for each field
+if (isset($_FILES['brgyClearance']) && is_array($_FILES['brgyClearance']['name'])) {
+    $imageGroups['Barangay Clearance'] = handleMultipleFileUploads($_FILES['brgyClearance'], $uploadDirectory);
+}
+if (isset($_FILES['DTIPermit']) && is_array($_FILES['DTIPermit']['name'])) {
+    $imageGroups['DTI Permit'] = handleMultipleFileUploads($_FILES['DTIPermit'], $uploadDirectory);
+}
+if (isset($_FILES['sanitaryPermit']) && is_array($_FILES['sanitaryPermit']['name'])) {
+    $imageGroups['Sanitary Permit'] = handleMultipleFileUploads($_FILES['sanitaryPermit'], $uploadDirectory);
+}
+if (isset($_FILES['cedula']) && is_array($_FILES['cedula']['name'])) {
+    $imageGroups['Cedula'] = handleMultipleFileUploads($_FILES['cedula'], $uploadDirectory);
+}
+if (isset($_FILES['businessPermit']) && is_array($_FILES['businessPermit']['name'])) {
+    $imageGroups['Business Permit'] = handleMultipleFileUploads($_FILES['businessPermit'], $uploadDirectory);
+}
 
-        if (empty($images)) {
-            throw new Exception("No valid images were uploaded.");
-        }
+// Filter out empty groups
+$imageGroups = array_filter($imageGroups, function($images) {
+    return !empty($images);
+});
 
-        $pdfPath = createPDF($images, $uploadDirectory, uniqid() . '.pdf');
+if (empty($imageGroups)) {
+    throw new Exception("No valid images were uploaded.");
+}
+
+$pdfPath = createPDF($imageGroups, $uploadDirectory, uniqid() . '.pdf');
 
         $sqlRequirements = "INSERT INTO business_requirement (bus_id, bus_pdf) 
                 VALUES (:id, :pdf)";
