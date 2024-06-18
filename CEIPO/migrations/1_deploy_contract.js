@@ -1,6 +1,6 @@
 const Store = artifacts.require("Store");
 
 module.exports = function (deployer) {
-  const deployerAccount = "0x2C6D0f0C14f2120703500819974F2E29edc17b30"; // Replace with your account
+  const deployerAccount = "0xA80576Ee78690452B0578a4017B1dF3191FEB2Ca"; // Replace with your account
   deployer.deploy(Store, { from: deployerAccount });
 };

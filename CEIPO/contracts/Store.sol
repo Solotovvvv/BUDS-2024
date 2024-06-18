@@ -7,11 +7,7 @@ contract Store {
         string businessName;
         string businessBranch;
         string ownerName;
-        string cedula;
-        string businessPermit;
-        string brgyClearance;
-        string sanitaryPermit;
-        string mayorsPermit;
+        string req; // Single field for required data
         uint256 timestamp;
     }
 
@@ -23,22 +19,14 @@ contract Store {
         string memory _businessName,
         string memory _businessBranch,
         string memory _ownerName,
-        string memory _cedula,
-        string memory _businessPermit,
-        string memory _brgyClearance,
-        string memory _sanitaryPermit,
-        string memory _mayorsPermit
+        string memory _req
     ) public {
         Data memory newData = Data({
             id: _id,
             businessName: _businessName,
             businessBranch: _businessBranch,
             ownerName: _ownerName,
-            cedula: _cedula,
-            businessPermit: _businessPermit,
-            brgyClearance: _brgyClearance,
-            sanitaryPermit: _sanitaryPermit,
-            mayorsPermit: _mayorsPermit,
+            req: _req,
             timestamp: block.timestamp
         });
 
@@ -47,10 +35,6 @@ contract Store {
 
     // Function to retrieve data
     function getData(address user) external view returns (
-        string memory,
-        string memory,
-        string memory,
-        string memory,
         string memory,
         string memory,
         string memory,
@@ -65,11 +49,7 @@ contract Store {
             userData.businessName,
             userData.businessBranch,
             userData.ownerName,
-            userData.cedula,
-            userData.businessPermit,
-            userData.brgyClearance,
-            userData.sanitaryPermit,
-            userData.mayorsPermit,
+            userData.req,
             userData.timestamp
         );
     }

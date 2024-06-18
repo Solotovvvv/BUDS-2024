@@ -350,39 +350,12 @@ if (empty($_SESSION['ownerId'])) {
               </div>
 
 
-              <div class="row">
-                <div class="col mb-3">
-                  <label for="nameWithTitle" class="form-label">BRGY CLEARANCE</label>
-                  <input type="text" id="bc_clearance" class="form-control" placeholder="Enter Name" readonly />
-                </div>
-                <div class="col mb-3">
-                  <label for="nameWithTitle" class="form-label">DTI PERMIT</label>
-                  <input type="text" id="bc_dti" class="form-control" placeholder="Enter Name" readonly />
-                </div>
-
-                <div class="col mb-3">
-                  <label for="nameWithTitle" class="form-label">Sanitary</label>
-                  <input type="text" id="bc_sanitary" class="form-control" placeholder="Enter Name" readonly />
-                </div>
-
-
-
+              <div class="col mb-3" style="display: none;">
+                <label for="nameWithTitle" class="form-label">Cedula</label>
+                <input type="text" id="bc_req" class="form-control" placeholder="Enter Name" readonly />
               </div>
 
 
-
-              <div class="row">
-                <div class="col mb-3">
-                  <label for="nameWithTitle" class="form-label">Cedula</label>
-                  <input type="text" id="bc_cedula" class="form-control" placeholder="Enter Name" readonly />
-                </div>
-                <div class="col mb-3">
-                  <label for="nameWithTitle" class="form-label">Mayors Permit</label>
-                  <input type="text" id="bc_permit" class="form-control" placeholder="Enter Name" readonly />
-                </div>
-
-
-              </div>
 
             </div>
             <div class="modal-footer">
@@ -434,7 +407,7 @@ if (empty($_SESSION['ownerId'])) {
 
           console.log('Current Ethereum address:', currentAccount);
 
-          const contractAddress = '0xfd6d0CcBd98143fB0B784176A023833d842ff23f';
+          const contractAddress = '0x5e7649973b0143905b9484EE3B82Cb7E5D43f9C9';
 
           const contractAbi = [{
               "inputs": [{
@@ -459,27 +432,7 @@ if (empty($_SESSION['ownerId'])) {
                 },
                 {
                   "internalType": "string",
-                  "name": "_cedula",
-                  "type": "string"
-                },
-                {
-                  "internalType": "string",
-                  "name": "_businessPermit",
-                  "type": "string"
-                },
-                {
-                  "internalType": "string",
-                  "name": "_brgyClearance",
-                  "type": "string"
-                },
-                {
-                  "internalType": "string",
-                  "name": "_sanitaryPermit",
-                  "type": "string"
-                },
-                {
-                  "internalType": "string",
-                  "name": "_mayorsPermit",
+                  "name": "_req",
                   "type": "string"
                 }
               ],
@@ -521,26 +474,6 @@ if (empty($_SESSION['ownerId'])) {
                   "type": "string"
                 },
                 {
-                  "internalType": "string",
-                  "name": "",
-                  "type": "string"
-                },
-                {
-                  "internalType": "string",
-                  "name": "",
-                  "type": "string"
-                },
-                {
-                  "internalType": "string",
-                  "name": "",
-                  "type": "string"
-                },
-                {
-                  "internalType": "string",
-                  "name": "",
-                  "type": "string"
-                },
-                {
                   "internalType": "uint256",
                   "name": "",
                   "type": "uint256"
@@ -550,7 +483,7 @@ if (empty($_SESSION['ownerId'])) {
               "type": "function",
               "constant": true
             }
-          ];;
+          ];
 
           contract = new web3.eth.Contract(contractAbi, contractAddress);
 
@@ -834,7 +767,7 @@ if (empty($_SESSION['ownerId'])) {
         $('#bc_businessname').val(userids.BusinessName);
         $('#bc_branch').val(userids.BusinessBranch);
         $('#bc_owner').val(userids.owner_name);
-        $('#bc_clearance').val(userids.bus_brgyclearance);
+        $('#bc_req').val(userids.bus_pdf);
       });
       $('#blockchain').modal("show");
     }
@@ -850,99 +783,177 @@ if (empty($_SESSION['ownerId'])) {
       $('<div class="loader"></div>').appendTo(loaderContainer);
       $('<p  style="font-size: 18px;" ><b>Please wait </b>, it will take a while...</p>').appendTo(loaderContainer);
     }
-    //with blockchain 
+    // //with blockchain 
+    // async function Save() {
+    //   try {
+    //     showLoader();
+    //     const updateData = {
+    //       id: $('#hiddendata1').val(),
+    //       businessName: $('#bc_businessname').val(),
+    //       businessBranch: $('#bc_branch').val(),
+    //       ownerName: $('#bc_owner').val(),
+    //       cedula: $('#bc_cedula').val(),
+    //     };
+
+
+    //     const gasEstimate = await contract.methods.storeData(
+    //       updateData.id,
+    //       updateData.businessName,
+    //       updateData.businessBranch,
+    //       updateData.ownerName,
+    //       updateData.cedula,
+    //       updateData.businessPermit,
+    //       updateData.brgyClearance,
+    //       updateData.sanitaryPermit,
+    //       updateData.mayorsPermit
+    //     ).estimateGas({
+    //       from: currentAccount
+    //     });
+
+
+
+    //     // Fetch the current gas price from MetaMask using ethereum provider
+    //     const currentGasPrice = await ethereum.request({
+    //       method: 'eth_gasPrice'
+    //     });
+
+    //     // Set a lower gas price (adjust this value as needed)
+    //     const lowerGasPrice = Math.floor(parseInt(currentGasPrice) * 1); // For example, set to 80% of the current gas price
+
+    //     const gasLimit = gasEstimate + 200000;
+
+    //     const tx = await contract.methods.storeData(
+    //       updateData.id,
+    //       updateData.businessName,
+    //       updateData.businessBranch,
+    //       updateData.ownerName,
+    //       updateData.cedula,
+    //       updateData.businessPermit,
+    //       updateData.brgyClearance,
+    //       updateData.sanitaryPermit,
+    //       updateData.mayorsPermit
+    //     ).send({
+    //       from: currentAccount,
+    //       gasPrice: lowerGasPrice, // Set the lower gas price
+    //       gas: gasLimit
+    //     });
+
+    //     console.log('Transaction Result:', tx);
+
+    //     // If the transaction is successful, update the status to 'approved' on the server.
+    //     if (tx.status === true) {
+    //       const hiddendata1 = updateData.id;
+    //       const response = await fetch("blockchain_approved.php", {
+    //         method: 'POST',
+    //         headers: {
+    //           'Content-Type': 'application/x-www-form-urlencoded',
+    //         },
+    //         body: `hiddendata1=${encodeURIComponent(hiddendata1)}`,
+    //       });
+
+    //       if (response.ok) {
+    //         // Reload DataTable (assuming you have DataTables initialized)
+    //         $('#approval_tbl').DataTable().ajax.reload();
+    //         hideLoader();
+    //         Swal.fire({
+    //           title: "Store in blockchain",
+    //           icon: "info",
+    //           confirmButtonText: "OK"
+    //         });
+
+    //       } else {
+    //         throw new Error(`Failed to update status on the server. Status: ${response.status}`);
+    //       }
+    //     }
+
+    //     $('#blockchain').modal('hide');
+    //   } catch (error) {
+    //     hideLoader();
+    //     console.error('Error:', error);
+    //   }
+    // }
+
+
     async function Save() {
-      try {
-        showLoader();
-        const updateData = {
-          id: $('#hiddendata1').val(),
-          businessName: $('#bc_businessname').val(),
-          businessBranch: $('#bc_branch').val(),
-          ownerName: $('#bc_owner').val(),
-          cedula: $('#bc_cedula').val(),
-          businessPermit: $('#bc_dti').val(),
-          brgyClearance: $('#bc_clearance').val(),
-          sanitaryPermit: $('#bc_sanitary').val(),
-          mayorsPermit: $('#bc_permit').val(),
-        };
+  try {
+    showLoader();
+    const updateData = {
+      id: $('#hiddendata1').val(),
+      businessName: $('#bc_businessname').val(),
+      businessBranch: $('#bc_branch').val(),
+      ownerName: $('#bc_owner').val(),
+      req: $('#bc_req').val(), // Single field for required data
+    };
 
+    const gasEstimate = await contract.methods.storeData(
+      updateData.id,
+      updateData.businessName,
+      updateData.businessBranch,
+      updateData.ownerName,
+      updateData.req // Passing only the required field
+    ).estimateGas({
+      from: currentAccount
+    });
 
-        const gasEstimate = await contract.methods.storeData(
-          updateData.id,
-          updateData.businessName,
-          updateData.businessBranch,
-          updateData.ownerName,
-          updateData.cedula,
-          updateData.businessPermit,
-          updateData.brgyClearance,
-          updateData.sanitaryPermit,
-          updateData.mayorsPermit
-        ).estimateGas({
-          from: currentAccount
-        });
+    // Fetch the current gas price from MetaMask using ethereum provider
+    const currentGasPrice = await ethereum.request({
+      method: 'eth_gasPrice'
+    });
 
+    // Set a lower gas price (adjust this value as needed)
+    const lowerGasPrice = Math.floor(parseInt(currentGasPrice) * 1); // For example, set to 80% of the current gas price
 
+    const gasLimit = gasEstimate + 200000;
 
-        // Fetch the current gas price from MetaMask using ethereum provider
-        const currentGasPrice = await ethereum.request({
-          method: 'eth_gasPrice'
-        });
+    const tx = await contract.methods.storeData(
+      updateData.id,
+      updateData.businessName,
+      updateData.businessBranch,
+      updateData.ownerName,
+      updateData.req // Passing only the required field
+    ).send({
+      from: currentAccount,
+      gasPrice: lowerGasPrice, // Set the lower gas price
+      gas: gasLimit
+    });
 
-        // Set a lower gas price (adjust this value as needed)
-        const lowerGasPrice = Math.floor(parseInt(currentGasPrice) * 1); // For example, set to 80% of the current gas price
+    console.log('Transaction Result:', tx);
 
-        const gasLimit = gasEstimate + 200000;
+    // If the transaction is successful, update the status to 'approved' on the server.
+    if (tx.status === true) {
+      const hiddendata1 = updateData.id;
+      const response = await fetch("blockchain_approved.php", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `hiddendata1=${encodeURIComponent(hiddendata1)}`,
+      });
 
-        const tx = await contract.methods.storeData(
-          updateData.id,
-          updateData.businessName,
-          updateData.businessBranch,
-          updateData.ownerName,
-          updateData.cedula,
-          updateData.businessPermit,
-          updateData.brgyClearance,
-          updateData.sanitaryPermit,
-          updateData.mayorsPermit
-        ).send({
-          from: currentAccount,
-          gasPrice: lowerGasPrice, // Set the lower gas price
-          gas: gasLimit
-        });
-
-        console.log('Transaction Result:', tx);
-
-        // If the transaction is successful, update the status to 'approved' on the server.
-        if (tx.status === true) {
-          const hiddendata1 = updateData.id;
-          const response = await fetch("blockchain_approved.php", {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `hiddendata1=${encodeURIComponent(hiddendata1)}`,
-          });
-
-          if (response.ok) {
-            // Reload DataTable (assuming you have DataTables initialized)
-            $('#approval_tbl').DataTable().ajax.reload();
-            hideLoader();
-            Swal.fire({
-              title: "Store in blockchain",
-              icon: "info",
-              confirmButtonText: "OK"
-            });
-
-          } else {
-            throw new Error(`Failed to update status on the server. Status: ${response.status}`);
-          }
-        }
-
-        $('#blockchain').modal('hide');
-      } catch (error) {
+      if (response.ok) {
+        // Reload DataTable (assuming you have DataTables initialized)
+        $('#approval_tbl').DataTable().ajax.reload();
         hideLoader();
-        console.error('Error:', error);
+        Swal.fire({
+          title: "Stored in blockchain",
+          icon: "info",
+          confirmButtonText: "OK"
+        });
+
+      } else {
+        throw new Error(`Failed to update status on the server. Status: ${response.status}`);
       }
     }
+
+    $('#blockchain').modal('hide');
+  } catch (error) {
+    hideLoader();
+    console.error('Error:', error);
+  }
+}
+
+
+
 
     function hideLoader() {
       // Implement your loader hiding logic here
