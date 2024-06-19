@@ -70,9 +70,54 @@ function deleteRequirements($request = null)
     }
 }
 
+// function handleMultipleFileUploads($files, $targetDirectory)
+// {
+//     $uploadedFiles = [];
+//     if (is_array($files['name'])) {
+//         foreach ($files['name'] as $key => $name) {
+//             $size = $files['size'][$key];
+//             $tmp_name = $files['tmp_name'][$key];
+//             $validImageExtensions = ['jpg', 'jpeg', 'png'];
+//             $imageExtension = pathinfo($name, PATHINFO_EXTENSION);
+//             $imageExtension = strtolower($imageExtension);
+
+//             if (!in_array($imageExtension, $validImageExtensions)) {
+//                 $msg['title'] = "Warning";
+//                 $msg['message'] = "Invalid image or image size";
+//                 $msg['icon'] = "warning";
+//                 $msg['status'] = "error";
+//                 echo json_encode($msg);
+//                 exit();
+//             }
+
+//             $newImageName = uniqid() . '.' . $imageExtension;
+//             $targetPath = $targetDirectory . $newImageName;
+
+//             if (!move_uploaded_file($tmp_name, $targetPath)) {
+//                 $msg['title'] = "Error";
+//                 $msg['message'] = "Failed to move uploaded image to destination";
+//                 $msg['icon'] = "error";
+//                 $msg['status'] = "error";
+//                 $msg['debug'] = $_FILES;
+//                 echo json_encode($msg);
+//                 exit();
+//             }
+
+//             $uploadedFiles[] = $targetPath;
+//         }
+//     }
+//     return $uploadedFiles;
+// }
+
 function handleMultipleFileUploads($files, $targetDirectory)
 {
     $uploadedFiles = [];
+
+    // Ensure the target directory exists and is writable
+    if (!is_dir($targetDirectory)) {
+        mkdir($targetDirectory, 0777, true);
+    }
+
     if (is_array($files['name'])) {
         foreach ($files['name'] as $key => $name) {
             $size = $files['size'][$key];
@@ -80,6 +125,9 @@ function handleMultipleFileUploads($files, $targetDirectory)
             $validImageExtensions = ['jpg', 'jpeg', 'png'];
             $imageExtension = pathinfo($name, PATHINFO_EXTENSION);
             $imageExtension = strtolower($imageExtension);
+
+            // Debug information
+            error_log("Processing file: $name with size: $size");
 
             if (!in_array($imageExtension, $validImageExtensions)) {
                 $msg['title'] = "Warning";
@@ -93,6 +141,9 @@ function handleMultipleFileUploads($files, $targetDirectory)
             $newImageName = uniqid() . '.' . $imageExtension;
             $targetPath = $targetDirectory . $newImageName;
 
+            // Debug information
+            error_log("Target path: $targetPath");
+
             if (!move_uploaded_file($tmp_name, $targetPath)) {
                 $msg['title'] = "Error";
                 $msg['message'] = "Failed to move uploaded image to destination";
@@ -103,11 +154,16 @@ function handleMultipleFileUploads($files, $targetDirectory)
                 exit();
             }
 
+            // Debug information
+            error_log("File uploaded successfully: $newImageName");
+
             $uploadedFiles[] = $targetPath;
         }
     }
+
     return $uploadedFiles;
 }
+
 
 function createPDF($imageGroups, $targetDirectory, $pdfName)
 {
@@ -297,41 +353,41 @@ function addBusiness($request = null)
 
 
         $uploadDirectory = '../img/requirements/';
-$imageGroups = [
-    'Barangay Clearance' => [],
-    'DTI Permit' => [],
-    'Sanitary Permit' => [],
-    'Cedula' => [],
-    'Business Permit' => []
-];
+        $imageGroups = [
+            'Barangay Clearance' => [],
+            'DTI Permit' => [],
+            'Sanitary Permit' => [],
+            'Cedula' => [],
+            'Business Permit' => []
+        ];
 
-// Handling multiple file uploads for each field
-if (isset($_FILES['brgyClearance']) && is_array($_FILES['brgyClearance']['name'])) {
-    $imageGroups['Barangay Clearance'] = handleMultipleFileUploads($_FILES['brgyClearance'], $uploadDirectory);
-}
-if (isset($_FILES['DTIPermit']) && is_array($_FILES['DTIPermit']['name'])) {
-    $imageGroups['DTI Permit'] = handleMultipleFileUploads($_FILES['DTIPermit'], $uploadDirectory);
-}
-if (isset($_FILES['sanitaryPermit']) && is_array($_FILES['sanitaryPermit']['name'])) {
-    $imageGroups['Sanitary Permit'] = handleMultipleFileUploads($_FILES['sanitaryPermit'], $uploadDirectory);
-}
-if (isset($_FILES['cedula']) && is_array($_FILES['cedula']['name'])) {
-    $imageGroups['Cedula'] = handleMultipleFileUploads($_FILES['cedula'], $uploadDirectory);
-}
-if (isset($_FILES['businessPermit']) && is_array($_FILES['businessPermit']['name'])) {
-    $imageGroups['Business Permit'] = handleMultipleFileUploads($_FILES['businessPermit'], $uploadDirectory);
-}
+        // Handling multiple file uploads for each field
+        if (isset($_FILES['brgyClearance']) && is_array($_FILES['brgyClearance']['name'])) {
+            $imageGroups['Barangay Clearance'] = handleMultipleFileUploads($_FILES['brgyClearance'], $uploadDirectory);
+        }
+        if (isset($_FILES['DTIPermit']) && is_array($_FILES['DTIPermit']['name'])) {
+            $imageGroups['DTI Permit'] = handleMultipleFileUploads($_FILES['DTIPermit'], $uploadDirectory);
+        }
+        if (isset($_FILES['sanitaryPermit']) && is_array($_FILES['sanitaryPermit']['name'])) {
+            $imageGroups['Sanitary Permit'] = handleMultipleFileUploads($_FILES['sanitaryPermit'], $uploadDirectory);
+        }
+        if (isset($_FILES['cedula']) && is_array($_FILES['cedula']['name'])) {
+            $imageGroups['Cedula'] = handleMultipleFileUploads($_FILES['cedula'], $uploadDirectory);
+        }
+        if (isset($_FILES['businessPermit']) && is_array($_FILES['businessPermit']['name'])) {
+            $imageGroups['Business Permit'] = handleMultipleFileUploads($_FILES['businessPermit'], $uploadDirectory);
+        }
 
-// Filter out empty groups
-$imageGroups = array_filter($imageGroups, function($images) {
-    return !empty($images);
-});
+        // Filter out empty groups
+        $imageGroups = array_filter($imageGroups, function ($images) {
+            return !empty($images);
+        });
 
-if (empty($imageGroups)) {
-    throw new Exception("No valid images were uploaded.");
-}
+        if (empty($imageGroups)) {
+            throw new Exception("No valid images were uploaded.");
+        }
 
-$pdfPath = createPDF($imageGroups, $uploadDirectory, uniqid() . '.pdf');
+        $pdfPath = createPDF($imageGroups, $uploadDirectory, uniqid() . '.pdf');
 
         $sqlRequirements = "INSERT INTO business_requirement (bus_id, bus_pdf) 
                 VALUES (:id, :pdf)";
@@ -541,74 +597,158 @@ function edtBusinessDetails($request = null)
     }
 };
 
-function uploadBusinessRequirements($request = null)
-{
+// function uploadBusinessRequirements($request = null)
+// {
+//     $msg = array();
+//     $id = $_SESSION['bus_id'];
+
+//     $targetDirectory = '../img/requirements/';
+//     $allowedExtensions = ['jpg', 'jpeg', 'png']; // Define allowed file extensions
+
+
+//     $files = [
+//         'bus_brgyclearance' => $_FILES['bus_brgyclearance'],
+//         'bus_dtipermit' => $_FILES['bus_dtipermit'],
+//         'bus_sanitarypermit' => $_FILES['bus_sanitarypermit'],
+//         'bus_cedula' => $_FILES['bus_cedula'],
+//         'bus_mayorpermit' => $_FILES['bus_mayorpermit']
+//     ];
+
+//     $uploadedFiles = [];
+
+//     foreach ($files as $columnName => $file) {
+//         if ($file['error'] === UPLOAD_ERR_OK) {
+//             $fileTmpPath = $file['tmp_name'];
+//             $fileName = $file['name'];
+//             $fileSize = $file['size'];
+//             $fileType = $file['type'];
+//             $fileNameCmps = explode(".", $fileName);
+//             $fileExtension = strtolower(end($fileNameCmps));
+
+//             // Check if file extension is allowed
+//             if (in_array($fileExtension, $allowedExtensions)) {
+//                 // Generate a unique name for the file
+//                 $newImageName = uniqid() . '.' . $fileExtension;
+//                 $targetPath = $targetDirectory . $newImageName;
+
+//                 // Move the file to the target directory
+//                 if (move_uploaded_file($fileTmpPath, $targetPath)) {
+//                     $uploadedFiles[$columnName] = $newImageName; // Store the new image name for database insertion
+//                 } else {
+//                     $msg['status'] = 'error';
+//                     $msg['message'] = 'Failed to move the uploaded file for ' . $columnName;
+//                     echo json_encode($msg);
+//                     return;
+//                 }
+//             } else {
+//                 $msg['status'] = 'error';
+//                 $msg['message'] = 'Upload failed for ' . $columnName . '. Allowed file types: ' . implode(', ', $allowedExtensions);
+//                 echo json_encode($msg);
+//                 return;
+//             }
+//         } else {
+//             $msg['status'] = 'error';
+//             $msg['message'] = 'There was an error uploading the file for ' . $columnName;
+//             echo json_encode($msg);
+//             return;
+//         }
+//     }
+
+//     // Create a new DateTime object with the current time
+//     $date = new DateTime('now', new DateTimeZone('Asia/Manila'));
+
+//     // Format the datetime as desired
+//     $currentDatetime = $date->format('Y-m-d H:i:s');
+
+
+//     // Current datetime
+//     // $currentDatetime = date('Y-m-d H:i:s');
+
+
+
+//     // Save file information to the database using PDO
+//     try {
+//         $pdo = Database::connection();
+
+//         $sql = "
+//             INSERT INTO business_requirement (
+//                 bus_id, 
+//                 bus_brgyclearance, 
+//                 bus_dtipermit, 
+//                 bus_sanitarypermit, 
+//                 bus_cedula, 
+//                 bus_mayorpermit,
+//                 created_at
+//             ) VALUES (:bus_id, :bus_brgyclearance, :bus_dtipermit, :bus_sanitarypermit, :bus_cedula, :bus_mayorpermit, :created_at)
+//         ";
+
+//         $stmt = $pdo->prepare($sql);
+//         $stmt->bindParam(':bus_id', $id, PDO::PARAM_INT);
+//         $stmt->bindParam(':bus_brgyclearance', $uploadedFiles['bus_brgyclearance'], PDO::PARAM_STR);
+//         $stmt->bindParam(':bus_dtipermit', $uploadedFiles['bus_dtipermit'], PDO::PARAM_STR);
+//         $stmt->bindParam(':bus_sanitarypermit', $uploadedFiles['bus_sanitarypermit'], PDO::PARAM_STR);
+//         $stmt->bindParam(':bus_cedula', $uploadedFiles['bus_cedula'], PDO::PARAM_STR);
+//         $stmt->bindParam(':bus_mayorpermit', $uploadedFiles['bus_mayorpermit'], PDO::PARAM_STR);
+//         $stmt->bindParam(':created_at', $currentDatetime, PDO::PARAM_STR);
+
+//         if ($stmt->execute()) {
+//             $msg['title'] = "Successful";
+//             $msg['icon'] = "success";
+//             $msg['status'] = "success";
+//             $msg['message'] = 'Files uploaded and saved successfully';
+//         } else {
+//             $msg['status'] = 'error';
+//             $msg['message'] = 'Failed to save file information to the database';
+//         }
+//     } catch (PDOException $e) {
+//         $msg['status'] = 'error';
+//         $msg['message'] = 'Database error: ' . $e->getMessage();
+//     }
+
+//     return json_encode($msg);
+// };
+
+function uploadBusinessRequirements($request = null) {
     $msg = array();
     $id = $_SESSION['bus_id'];
 
     $targetDirectory = '../img/requirements/';
     $allowedExtensions = ['jpg', 'jpeg', 'png']; // Define allowed file extensions
 
-
-    $files = [
-        'bus_brgyclearance' => $_FILES['bus_brgyclearance'],
-        'bus_dtipermit' => $_FILES['bus_dtipermit'],
-        'bus_sanitarypermit' => $_FILES['bus_sanitarypermit'],
-        'bus_cedula' => $_FILES['bus_cedula'],
-        'bus_mayorpermit' => $_FILES['bus_mayorpermit']
+    // Initialize the image groups
+    $imageGroups = [
+        'Barangay Clearance' => [],
+        'DTI Permit' => [],
+        'Sanitary Permit' => [],
+        'Cedula' => [],
+        'Business Permit' => []
     ];
 
-    $uploadedFiles = [];
-
-    foreach ($files as $columnName => $file) {
-        if ($file['error'] === UPLOAD_ERR_OK) {
-            $fileTmpPath = $file['tmp_name'];
-            $fileName = $file['name'];
-            $fileSize = $file['size'];
-            $fileType = $file['type'];
-            $fileNameCmps = explode(".", $fileName);
-            $fileExtension = strtolower(end($fileNameCmps));
-
-            // Check if file extension is allowed
-            if (in_array($fileExtension, $allowedExtensions)) {
-                // Generate a unique name for the file
-                $newImageName = uniqid() . '.' . $fileExtension;
-                $targetPath = $targetDirectory . $newImageName;
-
-                // Move the file to the target directory
-                if (move_uploaded_file($fileTmpPath, $targetPath)) {
-                    $uploadedFiles[$columnName] = $newImageName; // Store the new image name for database insertion
-                } else {
-                    $msg['status'] = 'error';
-                    $msg['message'] = 'Failed to move the uploaded file for ' . $columnName;
-                    echo json_encode($msg);
-                    return;
-                }
-            } else {
-                $msg['status'] = 'error';
-                $msg['message'] = 'Upload failed for ' . $columnName . '. Allowed file types: ' . implode(', ', $allowedExtensions);
-                echo json_encode($msg);
-                return;
-            }
-        } else {
-            $msg['status'] = 'error';
-            $msg['message'] = 'There was an error uploading the file for ' . $columnName;
-            echo json_encode($msg);
-            return;
-        }
+    // Handling multiple file uploads for each field
+    if (isset($_FILES['brgyClearance']) && is_array($_FILES['brgyClearance']['name'])) {
+        $imageGroups['Barangay Clearance'] = handleMultipleFileUploads($_FILES['brgyClearance'], $targetDirectory);
     }
+    if (isset($_FILES['DTIPermit']) && is_array($_FILES['DTIPermit']['name'])) {
+        $imageGroups['DTI Permit'] = handleMultipleFileUploads($_FILES['DTIPermit'], $targetDirectory);
+    }
+    if (isset($_FILES['sanitaryPermit']) && is_array($_FILES['sanitaryPermit']['name'])) {
+        $imageGroups['Sanitary Permit'] = handleMultipleFileUploads($_FILES['sanitaryPermit'], $targetDirectory);
+    }
+    if (isset($_FILES['cedula']) && is_array($_FILES['cedula']['name'])) {
+        $imageGroups['Cedula'] = handleMultipleFileUploads($_FILES['cedula'], $targetDirectory);
+    }
+    if (isset($_FILES['businessPermit']) && is_array($_FILES['businessPermit']['name'])) {
+        $imageGroups['Business Permit'] = handleMultipleFileUploads($_FILES['businessPermit'], $targetDirectory);
+    }
+
 
     // Create a new DateTime object with the current time
     $date = new DateTime('now', new DateTimeZone('Asia/Manila'));
-
-    // Format the datetime as desired
     $currentDatetime = $date->format('Y-m-d H:i:s');
 
-
-    // Current datetime
-    // $currentDatetime = date('Y-m-d H:i:s');
-
-
+    // Create a PDF from the uploaded images
+    $pdfName = uniqid() . '.pdf';
+    $pdfPath = createPDF($imageGroups, $targetDirectory, $pdfName);
 
     // Save file information to the database using PDO
     try {
@@ -617,22 +757,14 @@ function uploadBusinessRequirements($request = null)
         $sql = "
             INSERT INTO business_requirement (
                 bus_id, 
-                bus_brgyclearance, 
-                bus_dtipermit, 
-                bus_sanitarypermit, 
-                bus_cedula, 
-                bus_mayorpermit,
+                bus_pdf,
                 created_at
-            ) VALUES (:bus_id, :bus_brgyclearance, :bus_dtipermit, :bus_sanitarypermit, :bus_cedula, :bus_mayorpermit, :created_at)
+            ) VALUES (:bus_id, :bus_pdf, :created_at)
         ";
 
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':bus_id', $id, PDO::PARAM_INT);
-        $stmt->bindParam(':bus_brgyclearance', $uploadedFiles['bus_brgyclearance'], PDO::PARAM_STR);
-        $stmt->bindParam(':bus_dtipermit', $uploadedFiles['bus_dtipermit'], PDO::PARAM_STR);
-        $stmt->bindParam(':bus_sanitarypermit', $uploadedFiles['bus_sanitarypermit'], PDO::PARAM_STR);
-        $stmt->bindParam(':bus_cedula', $uploadedFiles['bus_cedula'], PDO::PARAM_STR);
-        $stmt->bindParam(':bus_mayorpermit', $uploadedFiles['bus_mayorpermit'], PDO::PARAM_STR);
+        $stmt->bindParam(':bus_pdf', $pdfPath, PDO::PARAM_STR);
         $stmt->bindParam(':created_at', $currentDatetime, PDO::PARAM_STR);
 
         if ($stmt->execute()) {
@@ -649,8 +781,8 @@ function uploadBusinessRequirements($request = null)
         $msg['message'] = 'Database error: ' . $e->getMessage();
     }
 
-    return json_encode($msg);
-};
+    echo json_encode($msg);
+}
 
 function edtDTIPermit($request = null)
 {
