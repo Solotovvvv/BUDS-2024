@@ -308,6 +308,54 @@ $datas = $stmt1->fetchAll();
                     </div>
                     <div class="content-backdrop fade"></div>
                 </div>
+
+                <!-- Modal for business requirements -->
+                <div class="modal fade" id="staticBackdropRequiremnents" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">Upload Requirements</h5>
+                                <button type="button" id="closeModalButton" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <h5 class="card-title"><b>Barangay Clearance</b></h5>
+                                    <div class="">
+                                        <input type="file" name="uploadBrgyClearance[]" class="form-control" id="fileUpload" multiple>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <h5 class="card-title"><b>Dti Permit</b></h5>
+                                    <div class="">
+                                        <input type="file" name="uploadDTIPermit[]" class="form-control" id="fileUpload" multiple>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <h5 class="card-title"><b>Sanitary Permit</b></h5>
+                                    <div class="">
+                                        <input type="file" name="uploadSanitaryPermit[]" class="form-control" id="fileUpload" multiple>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <h5 class="card-title"><b>Cedula</b></h5>
+                                    <div class="">
+                                        <input type="file" name="uploadCedula[]" class="form-control" id="fileUpload" multiple>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <h5 class="card-title"><b>Mayor's Permit</b></h5>
+                                    <div class="">
+                                        <input type="file" name="uploadBusinessPermit[]" class="form-control" id="fileUpload" multiple>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" onclick="uploadRequirents()">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
