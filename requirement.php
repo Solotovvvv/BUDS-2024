@@ -662,8 +662,8 @@ $datas = $stmt1->fetchAll();
                                 icon: data.icon
                             });
                             // Close the Bootstrap modal
-                            // $('#staticBackdropRequiremnents').modal('hide');
-                            // location.reload(); // Reload the DOM
+                            $('#staticBackdropRequiremnents').modal('hide');
+                            location.reload(); // Reload the DOM
 
                         } else {
                             console.error("Response does not contain all required fields.");
